@@ -198,11 +198,42 @@ angular.module('starter.controllers', [])
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
     $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
+    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
 
-    function getUserInfo(profileID) {
+    function getProfileID() {
+        var authData = $scope.authObj.$getAuth();
+
+        if (authData) {
+            if (authData.provider == "google") {
+                var profileID = $scope.googleRef.$getRecord(authData.uid).profielID;
+            }
+            if (authData.provider == "facebook") {
+                var profileID = $scope.facebookRef.$getRecord(authData.uid).profielID;
+            }
+            return profileID;
+        } else {
+            $state.go('app.splash');
+        }
+    }
+
+    function getUserInfo() {
+        console.log("hallo");
         var def = $q.defer();
-        var data = $scope.dataRef.$getRecord(profileID);
-        console.log(data);
+        var profileData = $scope.dataRef.$getRecord(profileID);
+        console.log(profileData);
+        data = {
+            "profileID": profileData.profileID,
+            "displayName": profileData.displayName,
+            "email": profileData.email,
+            "picture": profileData.picture,
+            "birthdate": profileData.birthdate,
+            "age": profileData.age,
+            "hobby": profileData.hobby,
+            "gender": profileData.gender,
+            "firstname": profileData.firstname,
+            "lastname": profileData.lastname
+        };
     };
 
 })
