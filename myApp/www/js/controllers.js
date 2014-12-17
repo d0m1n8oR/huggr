@@ -1,8 +1,10 @@
 angular.module('starter.controllers', [])
-    .factory("Auth", ["$firebaseAuth", function($firebaseAuth) {
-        var ref = new Firebase("https://huggr.firebaseio.com/");
-        return $firebaseAuth(ref);
-    }])
+    .factory("Auth", ["$firebaseAuth",
+        function($firebaseAuth) {
+            var ref = new Firebase("https://huggr.firebaseio.com/");
+            return $firebaseAuth(ref);
+        }
+    ])
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state) {
 
@@ -21,40 +23,42 @@ angular.module('starter.controllers', [])
 
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
-            var googleOptions = {
-                scope: 'email'
-            };
 
-            $scope.auth.$authWithOAuthPopup("google", googleOptions).then(function(authData) {
-                console.log(authData.google.email);
+            ref.authWithOAuthPopup("google", function(err, authData) {
+                if (authData) {
+                    console.log(authData.google.email);
 
 
-                var userSigninIdentifier = authData.google.id;
+                    var userSigninIdentifier = authData.google.id;
 
-                console.log("userSigninIdentifier:" + userSigninIdentifier);
+                    console.log("userSigninIdentifier:" + userSigninIdentifier);
 
-                //
+                    //
 
-                if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
-                    console.warn("new user, registering...");
-                    $scope.register(authProvider, authData);
-                } else {
-                    $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
-                    $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
-                        token: authData.token,
-                        expires: authData.expires,
-                        AccessToken: authData.google.accessToken
-                    });
-                    $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                        displayName: authData.google.displayName,
-                        email: authData.google.email,
-                        picture: authData.google.cachedUserProfile.picture
-                    });
-                    console.log("Logged in as:", authData.uid);
-                    $state.go('app.home');
+                    if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
+                        console.warn("new user, registering...");
+                        $scope.register(authProvider, authData);
+                    } else {
+                        $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
+                        $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.google.accessToken
+                        });
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            displayName: authData.google.displayName,
+                            email: authData.google.email,
+                            picture: authData.google.cachedUserProfile.picture
+                        });
+                        console.log("Logged in as:", authData.uid);
+                        $state.go('app.home');
+                    }
                 }
-            }).catch(function(error) {
-                console.error("Authentication failed google:", error);
+                if (err) {
+                    console.log("error");
+                }
+            }, {
+                scope: "email"
             });
 
         }
@@ -236,55 +240,55 @@ angular.module('starter.controllers', [])
 .controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state) {
 
 
-        $scope.positions = [{
-            lat: 43.07493,
-            lng: -89.381388
-        }];
+    $scope.positions = [{
+        lat: 43.07493,
+        lng: -89.381388
+    }];
 
-        $scope.$on('mapInitialized', function(event, map) {
-            $scope.map = map;
-            $cordovaGeolocation
-                .getCurrentPosition()
-                .then(function(position) {
-                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    $scope.positions.lat = pos.k;
-                    $scope.positions.lng = pos.B;
-                    $scope.map.setCenter(pos);
+    $scope.$on('mapInitialized', function(event, map) {
+        $scope.map = map;
+        $cordovaGeolocation
+            .getCurrentPosition()
+            .then(function(position) {
+                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                $scope.positions.lat = pos.k;
+                $scope.positions.lng = pos.B;
+                $scope.map.setCenter(pos);
 
-                }, function(err) {
-                    alert("error locating the user");
-                });
-        });
+            }, function(err) {
+                alert("error locating the user");
+            });
+    });
 
-        $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
-            scope: $scope,
-        }).then(function(popover) {
-            $scope.popover = popover;
-        });
-        $scope.openPopover = function($event) {
-            $scope.popover.show($event);
-        };
-        $scope.closePopover = function() {
-            $scope.popover.hide();
-        };
-        //Cleanup the popover when we're done with it!
-        $scope.$on('$destroy', function() {
-            $scope.popover.remove();
-        });
-        // Execute action on hide popover
-        $scope.$on('popover.hidden', function() {
-            // Execute action
-        });
-        // Execute action on remove popover
-        $scope.$on('popover.removed', function() {
-            // Execute action
-        });
+    $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
+        scope: $scope,
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+    $scope.openPopover = function($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+        // Execute action
+    });
 
-        $scope.displayResults = function() {
-            $state.go('app.results');
-        }
+    $scope.displayResults = function() {
+        $state.go('app.results');
+    }
 
-    })
+})
     .controller('resultCtrl', function($scope) {
         $scope.results = [];
         for (var i = 0; i < 5; i++) {
