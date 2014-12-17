@@ -201,23 +201,7 @@ angular.module('starter.controllers', [])
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
 
-    function getProfileID() {
-        var authData = $scope.authObj.$getAuth();
-
-        if (authData) {
-            if (authData.provider == "google") {
-                var profileID = $scope.googleRef.$getRecord(authData.uid).profielID;
-            }
-            if (authData.provider == "facebook") {
-                var profileID = $scope.facebookRef.$getRecord(authData.uid).profielID;
-            }
-            return profileID;
-        } else {
-            $state.go('app.splash');
-        }
-    }
-
-    function getUserInfo() {
+    function getUserInfo(profileID) {
         console.log("hallo");
         var def = $q.defer();
         var profileData = $scope.dataRef.$getRecord(profileID);
