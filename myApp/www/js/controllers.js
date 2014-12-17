@@ -12,7 +12,7 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
 
-    //create child for signin
+    //create child for data
     $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
 
     //create child for google
@@ -106,8 +106,6 @@ angular.module('starter.controllers', [])
 
         if (authProvider == "google") {
             //write authentification data into database
-
-            $firebase(ref.child("users").child("signin").child("google")).$set(authData.google.id);
             $firebase(ref.child("users").child("signin").child("google").child(authData.google.id)).$set({
                 displayName: authData.google.displayName,
                 token: authData.token,
@@ -117,7 +115,6 @@ angular.module('starter.controllers', [])
                 AccessToken: authData.google.accessToken,
                 profileID: newProfileID
             });
-            $firebase(ref.child("users").child("data")).$set(newProfileID);
             $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                 profileID: newProfileID,
                 googleID: authData.google.id,
@@ -131,7 +128,6 @@ angular.module('starter.controllers', [])
         }
         if (authProvider == "facebook") {
             //write authentification data into database
-            $firebase(ref.child("users").child("signin").child("facebook")).$set(authData.facebook.id);
             $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                 displayName: authData.facebook.displayName,
                 token: authData.token,
@@ -141,7 +137,6 @@ angular.module('starter.controllers', [])
                 AccessToken: authData.facebook.accessToken,
                 profileID: newProfileID
             });
-            $firebase(ref.child("users").child("data")).$set(newProfileID);
             $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                 profileID: newProfileID,
                 googleID: null,
@@ -200,7 +195,15 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ProfileCtrl', function($scope, $firebase) {
-    $scope.userProfile =  $firebase(ref.child("users").child("data")).$asArray();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
+    $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+
+    function getUserInfo(profileID) {
+        var def = $q.defer();
+        var data = $scope.dataRef.$getRecord(profileID);
+        console.log(data);
+    };
 
 })
 
