@@ -201,6 +201,10 @@ angular.module('starter.controllers', [])
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
 
+    function test() {
+        console.log("test");
+    }
+
     function getUserInfo(profileID) {
         console.log("hallo");
         var def = $q.defer();
