@@ -6,8 +6,17 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap', 'firebase'])
 
-.run(function($ionicPlatform, $rootScope, $state) {
+.run(function($ionicPlatform, $rootScope, $state, $firebase, $firebaseAuth) {
   $ionicPlatform.ready(function() {
+
+    $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+    // We can catch the error thrown when the $requireAuth promise is rejected
+    // and redirect the user back to the home page
+    if (error === "AUTH_REQUIRED") {
+      $state.go("home");
+    }
+  });
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -21,13 +30,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
     $cordovaSplashscreen.hide()
   }, 5000)*/
   });
-    $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
-    // We can catch the error thrown when the $requireAuth promise is rejected
-    // and redirect the user back to the home page
-    if (error === "AUTH_REQUIRED") {
-      $state.go("home");
-    }
-  });
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -36,7 +39,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
     .state('index', {
       url: "/index",
       templateUrl: "templates/splash.html",
-      controller: "loginCtrl"
+      controller: "loginCtrl",
+      resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
     })
 
     .state('app', {
@@ -60,7 +71,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/home.html",
-          controller: "homeCtrl"
+          controller: "homeCtrl", 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     })
@@ -70,7 +89,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/results.html",
-          controller: "resultCtrl"
+          controller: "resultCtrl", 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     })
@@ -79,7 +106,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/test.html",
-          controller: "SampleCtrl"
+          controller: "SampleCtrl", 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     })
@@ -88,7 +123,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/profile.html",
-          controller: "ProfileCtrl"
+          controller: "ProfileCtrl", 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     })
@@ -97,7 +140,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
+          controller: 'PlaylistsCtrl', 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     })
@@ -107,7 +158,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       views: {
         'menuContent' :{
           templateUrl: "templates/playlist.html",
-          controller: 'PlaylistCtrl'
+          controller: 'PlaylistCtrl', 
+          resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$waitForAuth();
+      }]
+    }
         }
       }
     });
