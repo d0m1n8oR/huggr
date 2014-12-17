@@ -87,7 +87,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
       url: "/profile",
       views: {
         'menuContent' :{
-          templateUrl: "templates/profile.html"
+          templateUrl: "templates/profile.html",
+          controller: "ProfileCtrl"
         }
       }
     })

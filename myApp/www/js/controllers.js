@@ -199,7 +199,10 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('ProfileCtrl', function($scope, $firebase) {
+    $scope.userProfile =  $firebase(ref.child("users").child("data")).$asArray();
 
+})
 
 .controller("SampleCtrl", ["$scope", "Auth",
     function($scope, Auth) {
