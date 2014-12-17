@@ -6,52 +6,57 @@ angular.module('starter.controllers', [])
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state) {
 
-var ref = new Firebase("https://huggr.firebaseio.com/");
-var sync = $firebase(ref).$asObject();
-
-console.log(sync);
-
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
 
     //create child for signin
-$scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+    $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
 
     //create child for google
-$scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
-$scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
-$scope.facebookObj = $firebase(ref.child("users").child("signin").child("facebook"));
+    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
+    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
 
 
 
-    $scope.login = function(authProvider)  {
+    $scope.login = function(authProvider) {
         if (authProvider == "google") {
-            $scope.auth.$authWithOAuthPopup("google").then(function(authData) {
-                    var userSigninIdentifier = authData.google.id;
-                    googleRef.once("value", function(checkSnapshot) {
-                            if (checkSnapshot.hasChild(userSigninIdentifier)) {
+            var googleOptions = {
+                scope: 'email'
+            };
 
-                                googleRef.child(userSigninIdentifier).once("value", function(snapshot) {
-                                    var profileID = snapshot.val().profileID;
-                                    //update data in db
-                                    googleRef.child(userSigninIdentifier).update({
-                                        token: authData.token,
-                                        expires: authData.expires,
-                                        AccessToken: authData.google.accessToken
-                                    });
+            $scope.auth.$authWithOAuthPopup("google", googleOptions).then(function(authData) {
+                console.log(authData.google.email);
 
-                                    dataRef.child(profileID).update({
-                                        displayName: authData.google.displayName,
-                                        email: authData.google.email,
-                                        picture: authData.google.cachedUserProfile.picture
-                                    });
-                                    console.log("Logged in as google:", authData.uid);
-                                    $state.go('app.home');
-                                });
-                            } else {
-                                register(authProvider, authData);
-                            }
-                        });
-                    }).catch(function(error) {console.error("Authentication failed:", error)}); //authGoogle
+
+                var userSigninIdentifier = authData.google.id;
+
+                console.log("userSigninIdentifier:" + userSigninIdentifier);
+
+                //
+
+                if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
+                    console.warn("new user, registering...");
+                    $scope.register(authProvider, authData);
+                } else {
+                    $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
+                    $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
+                        token: authData.token,
+                        expires: authData.expires,
+                        AccessToken: authData.google.accessToken
+                    });
+                    $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                        displayName: authData.google.displayName,
+                        email: authData.google.email,
+                        picture: authData.google.cachedUserProfile.picture
+                    });
+                    console.log("Logged in as:", authData.uid);
+                    $state.go('app.home');
+                }
+            }).catch(function(error) {
+                console.error("Authentication failed google:", error);
+            });
+
         }
         if (authProvider == "facebook") {
 
@@ -63,23 +68,23 @@ $scope.facebookObj = $firebase(ref.child("users").child("signin").child("faceboo
                 //
 
                 if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
-                	console.warn("new user, registering...");
-    					$scope.register(authProvider, authData);
-					} else {
-					 $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
-					 $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
-                                token: authData.token,
-                                expires: authData.expires,
-                                AccessToken: authData.facebook.accessToken
-                            });
-                            $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                                displayName: authData.facebook.displayName,
-                                email: authData.facebook.email,
-                                picture: authData.facebook.cachedUserProfile.picture.data.url
-                            });
-                            console.log("Logged in as:", authData.uid);
-                            $state.go('app.home');
-					}
+                    console.warn("new user, registering...");
+                    $scope.register(authProvider, authData);
+                } else {
+                    $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
+                    $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
+                        token: authData.token,
+                        expires: authData.expires,
+                        AccessToken: authData.facebook.accessToken
+                    });
+                    $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                        displayName: authData.facebook.displayName,
+                        email: authData.facebook.email,
+                        picture: authData.facebook.cachedUserProfile.picture.data.url
+                    });
+                    console.log("Logged in as:", authData.uid);
+                    $state.go('app.home');
+                }
             }).catch(function(error) {
                 console.error("Authentication failed facebook:", error);
             });
@@ -87,9 +92,9 @@ $scope.facebookObj = $firebase(ref.child("users").child("signin").child("faceboo
         }
     };
 
-$scope.register = function (authProvider, authData) {
+    $scope.register = function(authProvider, authData) {
 
-    var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+        var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         while ($scope.dataRef.$getRecord(newProfileID) != null) {
             newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
@@ -98,9 +103,9 @@ $scope.register = function (authProvider, authData) {
         if (authProvider == "google") {
             //write authentification data into database
 
-              $firebase(ref.child("users").child("signin").child("google")).$set(authData.google.id);
-               	$firebase(ref.child("users").child("signin").child("google").child(authData.google.id)).$set({
-      			displayName: authData.google.displayName,
+            $firebase(ref.child("users").child("signin").child("google")).$set(authData.google.id);
+            $firebase(ref.child("users").child("signin").child("google").child(authData.google.id)).$set({
+                displayName: authData.google.displayName,
                 token: authData.token,
                 expires: authData.expires,
                 uid: authData.uid,
@@ -108,9 +113,9 @@ $scope.register = function (authProvider, authData) {
                 AccessToken: authData.google.accessToken,
                 profileID: newProfileID
             });
-             $firebase(ref.child("users").child("data")).$set(newProfileID);
-             $firebase(ref.child("users").child("data").child(newProfileID)).$set({
- 				profileID: newProfileID,
+            $firebase(ref.child("users").child("data")).$set(newProfileID);
+            $firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                profileID: newProfileID,
                 googleID: authData.google.id,
                 displayName: authData.google.displayName,
                 email: authData.google.email,
@@ -118,12 +123,12 @@ $scope.register = function (authProvider, authData) {
                 gender: authData.google.cachedUserProfile.gender,
                 firstname: authData.google.cachedUserProfile.given_name,
                 lastname: authData.google.cachedUserProfile.family_name
-			});
+            });
         }
         if (authProvider == "facebook") {
             //write authentification data into database
-  				$firebase(ref.child("users").child("signin").child("facebook")).$set(authData.facebook.id);
-               	$firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
+            $firebase(ref.child("users").child("signin").child("facebook")).$set(authData.facebook.id);
+            $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                 displayName: authData.facebook.displayName,
                 token: authData.token,
                 expires: authData.expires,
@@ -132,9 +137,9 @@ $scope.register = function (authProvider, authData) {
                 AccessToken: authData.facebook.accessToken,
                 profileID: newProfileID
             });
-             $firebase(ref.child("users").child("data")).$set(newProfileID);
-             $firebase(ref.child("users").child("data").child(newProfileID)).$set({
-             	profileID: newProfileID,
+            $firebase(ref.child("users").child("data")).$set(newProfileID);
+            $firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                profileID: newProfileID,
                 googleID: null,
                 facebookID: authData.facebook.id,
                 displayName: authData.facebook.displayName,
@@ -142,13 +147,13 @@ $scope.register = function (authProvider, authData) {
                 picture: authData.facebook.cachedUserProfile.picture.data.url,
                 gender: authData.facebook.cachedUserProfile.gender,
                 firstname: authData.facebook.cachedUserProfile.first_name,
-		        lastname: authData.facebook.cachedUserProfile.last_name
-			});
+                lastname: authData.facebook.cachedUserProfile.last_name
+            });
         }
-       $state.go('app.home');
+        $state.go('app.home');
 
 
-}; //function register(authProvider)
+    }; //function register(authProvider)
 
     //$scope.user = $scope.auth.$getAuth();
 
