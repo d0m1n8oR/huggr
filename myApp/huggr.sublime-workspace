@@ -1,0 +1,1084 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fil",
+				"angular: $filter"
+			],
+			[
+				"image",
+				"imageID"
+			],
+			[
+				"al",
+				"albumID"
+			],
+			[
+				"imgur",
+				"imgurl"
+			],
+			[
+				"im",
+				"imgurl"
+			],
+			[
+				"require",
+				"require_once  (keyword)"
+			],
+			[
+				"date_def",
+				"date_default_timezone_set"
+			],
+			[
+				"pa",
+				"path"
+			],
+			[
+				"host",
+				"hostpos"
+			],
+			[
+				"PHP",
+				"PHP_URL_HOST"
+			],
+			[
+				"par",
+				"parse_url"
+			],
+			[
+				"url",
+				"urlStringAlbum"
+			],
+			[
+				"str_re",
+				"str_replace  (function)"
+			],
+			[
+				"data",
+				"data_arr  (variable)"
+			],
+			[
+				"spl",
+				"spl_autoload_register"
+			],
+			[
+				"err",
+				"error_reporting"
+			],
+			[
+				"rss",
+				"rss"
+			],
+			[
+				"strrep",
+				"str_replace"
+			],
+			[
+				"strto",
+				"strtolower"
+			],
+			[
+				"Ver",
+				"verifiziere"
+			],
+			[
+				"loanCal",
+				"$scope.loanCalc.interest"
+			],
+			[
+				"po",
+				"pollingService"
+			],
+			[
+				"loan",
+				"$scope.loanCalc"
+			],
+			[
+				"das",
+				"$scope.dashStatsC"
+			],
+			[
+				"server",
+				"serverBackendURL2"
+			],
+			[
+				"act",
+				"activePlayers"
+			],
+			[
+				"tem",
+				"templateUrl"
+			],
+			[
+				"dire",
+				"directory"
+			],
+			[
+				"re",
+				"no-repeat"
+			],
+			[
+				"se",
+				"$scope.selected.procurement"
+			],
+			[
+				"pro",
+				"procurement"
+			],
+			[
+				"MANU",
+				"manufactureJob"
+			],
+			[
+				"ng-c",
+				"ng-click	AngularJS"
+			],
+			[
+				"fa",
+				"fakeServer"
+			],
+			[
+				"test",
+				"testclass"
+			],
+			[
+				"poll",
+				"pollingSvc"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"va",
+				"var_dump"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"sta",
+				"statIcon"
+			],
+			[
+				"stat",
+				"statBG"
+			],
+			[
+				"ng-re",
+				"ng-repeat	AngularJS"
+			],
+			[
+				"te",
+				"$scope.template"
+			],
+			[
+				"$log",
+				"$log.log	AngularJS"
+			],
+			[
+				"ng-i",
+				"ng-include	AngularJS"
+			],
+			[
+				"nav",
+				"$scope.navBarState"
+			],
+			[
+				"lisa",
+				"lisaAvatar"
+			],
+			[
+				"userDa",
+				"$scope.userData.name"
+			],
+			[
+				"is",
+				"isEmpty"
+			],
+			[
+				"val",
+				"$scope.valueCompanyName"
+			],
+			[
+				"sele",
+				"selector"
+			],
+			[
+				"sc",
+				"school"
+			],
+			[
+				"A",
+				"AUTHOR"
+			],
+			[
+				"connec",
+				"connectionID"
+			],
+			[
+				"Pending",
+				"pendingRequests"
+			],
+			[
+				"game",
+				"gameActive"
+			],
+			[
+				"mes",
+				"messageObj"
+			],
+			[
+				"pos",
+				"pos"
+			],
+			[
+				"con",
+				"content"
+			],
+			[
+				"send",
+				"sendRequest"
+			],
+			[
+				"pending",
+				"pendingRequests"
+			],
+			[
+				"req",
+				"pendingRequests"
+			],
+			[
+				"pend",
+				"pendingRequests"
+			],
+			[
+				"sed",
+				"sendRequest"
+			],
+			[
+				"pen",
+				"pendingRequests"
+			],
+			[
+				"pe",
+				"pendingRequests"
+			],
+			[
+				"sen",
+				"sendRequest"
+			],
+			[
+				"au",
+				"authorize"
+			],
+			[
+				"We",
+				"WebSocket"
+			],
+			[
+				"an",
+				"anything"
+			],
+			[
+				"ng-cl",
+				"ng-click	AngularJS"
+			],
+			[
+				"e",
+				"angular.element	AngularJS"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"fn",
+				"function"
+			],
+			[
+				"att",
+				".attr	.attr() - single"
+			],
+			[
+				"attr",
+				".attr	.attr() - single"
+			],
+			[
+				"ava",
+				"avatarPreview"
+			],
+			[
+				"logo",
+				"logoSelect"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "config.xml",
+			"settings":
+			{
+				"buffer_size": 798,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bower.json",
+			"settings":
+			{
+				"buffer_size": 120,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "gulpfile.js",
+			"settings":
+			{
+				"buffer_size": 1353,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ionic.project",
+			"settings":
+			{
+				"buffer_size": 152,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "package.json",
+			"settings":
+			{
+				"buffer_size": 354,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 339.0,
+		"selected_items":
+		[
+			[
+				"grun",
+				"Grunt"
+			],
+			[
+				"grunt",
+				"Grunt"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"packag",
+				"Package Control: List Packages"
+			],
+			[
+				"gr",
+				"Grunt"
+			],
+			[
+				"gru",
+				"Grunt"
+			],
+			[
+				"g",
+				"Grunt"
+			],
+			[
+				"grn",
+				"Grunt"
+			],
+			[
+				"grund",
+				"Preferences: Grunt - Settings – Default"
+			],
+			[
+				"package contr",
+				"Package Control: Install Package"
+			],
+			[
+				"bower",
+				"Bower: Install"
+			],
+			[
+				"bower ins",
+				"Bower: Install"
+			],
+			[
+				"package",
+				"Package Control: Disable Package"
+			],
+			[
+				"grunt ",
+				"Grunt"
+			],
+			[
+				"package contro ",
+				"Package Control: Disable Package"
+			],
+			[
+				"Packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"Instal",
+				"Package Control: Install Package"
+			],
+			[
+				"package control inst",
+				"Package Control: Install Package"
+			],
+			[
+				"package control in",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 610.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/emse/Documents/huggr/myApp/www"
+	],
+	"file_history":
+	[
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/Gruntfile.js",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/index.html",
+		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/dashboard.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_nav.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_nav-off-canvas.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/package.json",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/nav.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/header.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/bower.json",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/bower_components/modernizr/feature-detects/dataview-api.js",
+		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/Grunt/SublimeGrunt.sublime-settings",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/bower_components/jquery.ui/demos/accordion/no-auto-height.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/fonts/glyphicons-halflings-regular.svg",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/global/_var-pages.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts/app.coffee",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_header.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_content.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/maps/gmap.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts/UI/UICtrl.coffee",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_signin-signup.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/signup.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/profile.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts/shared/directives.coffee",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_lock-screen.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/signin.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/splash.html",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_splash.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/.sublime-grunt.cache",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/Gruntfile.coffee",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/ui/_var.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/global/_var.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/main.scss",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts/shared/main.coffee",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/.sass-cache/443a68d9bed82e3c52117d47009c06d908a182e8/main.scssc",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/node_modules/grunt-contrib-uglify/node_modules/uglify-js/lib/mozilla-ast.js",
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/node_modules/express/Makefile",
+		"/Users/emse/Documents/.bowerrc",
+		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/HTML-CSS-JS Prettify/.jsbeautifyrc",
+		"/Users/emse/Downloads/AngularJS/square/square/bower.json",
+		"/Users/emse/Downloads/AngularJS/square/square/Gruntfile.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/bower_components/mocha/Readme.md",
+		"/Users/emse/Downloads/AngularJS/square/square/client/bower_components/angular/README.md",
+		"/Users/emse/Downloads/AngularJS/square/square/client/bower_components/angular/angular.min.js.map",
+		"/Users/emse/Downloads/AngularJS/square/square/client/scripts/UI/UICtrl.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/views/nav.html",
+		"/Users/emse/Downloads/AngularJS/square/square/.gitignore",
+		"/Users/emse/Downloads/AngularJS/square/square/client/scripts/Map/Map.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/scripts/shared/localize.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/scripts/shared/main.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/scripts/app.coffee",
+		"/Users/emse/Downloads/AngularJS/square/square/client/styles-less/bootstrap-less/variables.less",
+		"/Users/emse/Downloads/AngularJS/square/square/client/styles-less/bootstrap-less/theme.less",
+		"/Users/emse/Downloads/AngularJS/square/square/client/styles-less/main.less",
+		"/Users/emse/Downloads/app.html",
+		"/Users/emse/Desktop/Liste.txt",
+		"/Volumes/emse/Downloads/monitor.sh",
+		"/Volumes/Sites/Default/TV/index.php",
+		"/Volumes/pyload/unrar_passwords.txt",
+		"/Applications/Sublime Text.app/Contents/MacOS/changelog.txt",
+		"/Users/emse/Library/Application Support/Call of Duty 4/players/profiles/cod4_mickey/config.cfg",
+		"/Users/emse/Library/Application Support/Call of Duty 4/players/profiles/emse/config.cfg",
+		"/Users/emse/Library/Application Support/Call of Duty 4/players/profiles/active.txt",
+		"/Users/emse/Downloads/cod4_mickey/blackout.svg",
+		"/Users/emse/Documents/plex/plex-data/data.js",
+		"/Users/emse/.ssh/known_hosts",
+		"/Users/emse/Downloads/ip.sh",
+		"/Users/emse/Dropbox/FilmlistePhilipp_1.txt",
+		"/Volumes/Sites/Default/p/js/app.js",
+		"/Volumes/Sites/Default/p/index.php",
+		"/Volumes/Sites/Default/p/json/data.json",
+		"/Volumes/Sites/Default/p/pocket.php",
+		"/Volumes/Sites/Default/p/js/controller.js",
+		"/Users/emse/Downloads/rainbow/rainbow/package.json",
+		"/Users/emse/Downloads/rainbow/rainbow/Gruntfile.coffee",
+		"/Users/emse/Downloads/rainbow/rainbow/bower.json",
+		"/Users/emse/Downloads/Topaz LABS - Photoshop Plug-in Bundle [06-2014]/Password.txt",
+		"/Users/emse/Downloads/[FikriShare.Com]Topaz Photoshop Plugins Bundle July 2014 (MAC)/keys.txt",
+		"/Users/emse/Downloads/[FikriShare.Com]Topaz Photoshop Plugins Bundle July 2014 (MAC)/ReadMe.txt",
+		"/Volumes/Sites/Default/feed/img/index.php",
+		"/Volumes/Sites/Default/feed/2.php",
+		"/Volumes/Sites/Default/feed/feed.php",
+		"/Volumes/Sites/Default/feed/index.php",
+		"/Volumes/Sites/Default/feed/html.php",
+		"/Users/emse/Downloads/cal.ical",
+		"/Users/emse/Downloads/img/classes/authorize.php",
+		"/Users/emse/Library/Caches/Cleanup At Startup/Transmit/457278BF-4C97-47A7-B578-154D240CA526/index.php",
+		"/Users/emse/Downloads/imgur-php-wrapper-master/examples.php",
+		"/Users/emse/Downloads/bahn.ical",
+		"/Users/emse/Downloads/square/square/client/index.html",
+		"/Users/emse/Downloads/square/square/client/scripts/Chart/ChartCtrl.coffee",
+		"/Users/emse/Downloads/square/dist/index.html",
+		"/Users/emse/Downloads/iarouse.com/dist-rainbow/v1.2/scripts/app.js",
+		"/Users/emse/Downloads/square/square/client/bower_components/moment/readme.md",
+		"/Users/emse/Downloads/square/square/Gruntfile.coffee",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/Gruntfile.coffee",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/bower.json",
+		"/Users/emse/Downloads/square/square/package.json",
+		"/Users/emse/Documents/Test/nodetest1/package.json",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/package.json",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/client/scripts/app.coffee",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/client/.buildignore",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.bowerrc",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.gitignore",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.travis.yml",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/app.js",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.jshintrc",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.gitattributes",
+		"/Users/emse/Downloads/themeforest-7511722-square-responsive-admin-app-with-angularjs/square/.editorconfig",
+		"/Users/emse/Library/Caches/Cleanup At Startup/Transmit/E9EFDFBB-EAD9-444E-AFEA-4CEABC675EC5/.htaccess",
+		"/Users/emse/Library/Caches/Cleanup At Startup/Transmit/91D98E2D-79BF-4596-9379-AB0E0A8FEAED/index.php",
+		"/Users/emse/Library/Application Support/MPlayerX/bookmarks2.plist",
+		"/Users/emse/Downloads/openvpn/openvpn.ovpn",
+		"/Users/emse/Downloads/themeforest-5606967-ortax-bootstrap-multipurpose-template-/main/template/index.php",
+		"/Users/emse/Downloads/logos-showcase/bxslider/plugins/settings_class.php",
+		"/Users/emse/Library/Caches/Cleanup At Startup/Transmit/E25917F2-F006-4362-9AB1-39D1D11656AA/settings_class.php",
+		"/Users/emse/Downloads/logos-showcase/js/order/simple-page-ordering.js",
+		"/Users/emse/Downloads/logos-showcase/widget-code.php",
+		"/Users/emse/Downloads/logos-showcase/shortcode-generator.php",
+		"/Users/emse/Downloads/logos-showcase/ordering-code.php",
+		"/Users/emse/Downloads/logos-showcase/lshowcase.php",
+		"/Volumes/WD Passport/Todo/Zeugs/ajax-contact-form-extended/readme.txt",
+		"/Users/emse/Downloads/Perfectly.Clear.PS-LR.1.7.3-1.3.7/Perfectly Clear PS-LR 1.7.3-1.3.7/read me.txt",
+		"/Users/emse/Downloads/alyeska-responsive-wordpress-theme-license.txt",
+		"/Users/emse/Downloads/Kartbahn/themeforest-164366-alyeska-responsive-wordpress-theme/alyeska/assets/css/theme.css",
+		"/Users/emse/Downloads/Kartbahn/themeforest-164366-alyeska-responsive-wordpress-theme/alyeska/framework/assets/css/magnificpopup.css",
+		"/Users/emse/Downloads/Kartbahn/themeforest-164366-alyeska-responsive-wordpress-theme/alyeska/framework/assets/css/magnificpopup.min.css",
+		"/Users/emse/Downloads/Kartbahn/themeforest-164366-alyeska-responsive-wordpress-theme/alyeska/framework/assets/css/rtl.css"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"font-aw",
+			"anima",
+			"anim",
+			"htmlmin",
+			"css",
+			"nav",
+			"hidden-mobile",
+			"button",
+			"DashboardCtrl",
+			"ugli",
+			"$dark",
+			"usemin",
+			"uglify",
+			"concat",
+			"concurrent",
+			"useminPrepare",
+			"lock",
+			"clean",
+			"bar",
+			"icon",
+			"font",
+			"coffee",
+			"copy",
+			"bower",
+			"nav",
+			"square",
+			"I",
+			"H",
+			"G",
+			"Downloads",
+			"think",
+			".rss",
+			"resources",
+			"\"",
+			"\",",
+			"route",
+			"clean",
+			"dist",
+			"panel",
+			"128",
+			"\"value\":2",
+			"64",
+			"></",
+			"\"",
+			"    ",
+			"box",
+			"iTunes - .*",
+			"\\d:\\d\\d",
+			"iTunes - Use Me, Download Song and Soundtrack Amazon - Use Me Download Song and Soundtrack\n",
+			"von",
+			"- ",
+			"iTunes: herunterladen",
+			"Beschreibung: Am Anfang der Folge: Harvey geht zu Jessica.\n",
+			"Amazon MP3: reinhören/downloaden\n",
+			"iTunes: herunterladen\n",
+			"\n ",
+			" ",
+			"\n-",
+			"- ",
+			"\n-",
+			"von",
+			"- Greenback Boogie von Ima Robot\n",
+			"iTunes: herunterladen",
+			"herunterladen",
+			"Amazon MP3: reinhören/downloaden\n",
+			"\\w \"",
+			"show",
+			"two+and+a+half+men",
+			"two+and",
+			"two+and+a+half+men\n",
+			"			<li><a href=\"http://scnlog.eu/?s=two+and+a+half+men&cat=0\" target=\"_blank\">Two and a half Men</a></li>\n",
+			"parov",
+			"gould",
+			"o.m.f.",
+			"jerry",
+			"^\\n",
+			"\n",
+			"#EXTINF:\\d*,",
+			"/Volumes.*",
+			"/Volumes*",
+			"*Volumes*",
+			"Volumes",
+			"balkan",
+			"ü",
+			"ä",
+			"̈",
+			"local",
+			"\\/lisa\\/",
+			"digi",
+			"..",
+			"/lisa",
+			"isem",
+			"accept",
+			"random",
+			"label",
+			"turq",
+			"roundplayers",
+			"players",
+			"location.pa",
+			"startpo",
+			"\n    ",
+			"poll",
+			"ng-model=\"succ\"",
+			"startpoll",
+			"stkl",
+			"isEmpty",
+			"financ",
+			"dashStatOverview",
+			"overview",
+			"chat",
+			"location.pa",
+			"location",
+			"Refresh",
+			"135",
+			"45deg",
+			"270deg",
+			"span3",
+			"span5",
+			"center",
+			"span2",
+			"span4",
+			"chat",
+			":",
+			"refresh",
+			"consol",
+			"650ms",
+			"350ms",
+			"id=\"style_color\""
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"J",
+			"I",
+			"H",
+			"http://iarouse.com/dist-rainbow/v1.2/i18n/resources",
+			"http://iarouse.com/dist-rainbow/v1.2/views/",
+			"",
+			".html\",",
+			"",
+			"\\w",
+			"\\w\"",
+			"'.strtolower(str_replace(\" \", \"+\", \"show\")).'",
+			"",
+			"ü",
+			"ä",
+			"fa fa-",
+			"",
+			"tooltip-placement",
+			"tooltip",
+			"fa fa-check",
+			"fa fa-times",
+			"class=\"fa fa-times\"",
+			"class=\"fa fa-remove\"",
+			"class=\"fa fa-chevron-down\"",
+			"<i class=\"fa fa-",
+			"icon-box",
+			"fa fa-",
+			"fa fa-bell",
+			"fa fa-bolt",
+			"fa fa-",
+			"icon-",
+			"url = http",
+			"http"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "config.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 798,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "bower.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "gulpfile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "ionic.project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 152,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "package.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 354,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Seti.tmTheme",
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 271.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "huggr.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"das",
+				"client/views/dashboard.html"
+			],
+			[
+				"dash",
+				"client/views/dashboard.html"
+			],
+			[
+				"nav",
+				"client/views/nav.html"
+			],
+			[
+				"header",
+				"client/views/header.html"
+			],
+			[
+				"main",
+				".sass-cache/443a68d9bed82e3c52117d47009c06d908a182e8/main.scssc"
+			],
+			[
+				"grunt",
+				"Gruntfile.coffee"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 236.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

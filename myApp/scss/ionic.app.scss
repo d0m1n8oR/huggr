@@ -1,0 +1,177 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+*/
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #66B5D7 !default;
+$balanced:                        #B7CA34 !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #D7410B !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+
+
+$button-facebook-bg:                  #3b5998 !default;
+$button-facebook-text:                #fff !default;
+$button-facebook-border:              #3b5998 !default;
+$button-facebook-active-bg:           #3b5998 !default;
+$button-facebook-active-border:       #000 !default;
+
+$button-gplus-bg:                  #dd4b39 !default;
+$button-gplus-text:                #fff !default;
+$button-gplus-border:              #dd4b39 !default;
+$button-gplus-active-bg:           #dd4b39 !default;
+$button-gplus-active-border:       #000 !default;
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+@import url("http://fonts.googleapis.com/css?family=Gochi+Hand");
+
+.button-facebook {
+    @include button-style($button-facebook-bg, $button-facebook-border, $button-facebook-active-bg, $button-facebook-active-border, $button-facebook-text);
+    @include button-clear($button-facebook-bg);
+    @include button-outline($button-facebook-bg);
+  }
+
+ .button-gplus {
+    @include button-style($button-gplus-bg, $button-gplus-border, $button-gplus-active-bg, $button-gplus-active-border, $button-gplus-text);
+    @include button-clear($button-gplus-bg);
+    @include button-outline($button-gplus-bg);
+  }
+
+  .splashLogo {
+  	left: 50%;
+  }
+
+  .tosGrey {
+    color: #ccc;
+  }
+  .splashLinks {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .logoFont {
+  	font-family: 'Gochi Hand', cursive;
+  	font-size: 4em;
+  }
+
+  .panel-profile {
+
+    .profile {
+        margin: 5px 15px 5px 5px;
+        border-radius: 50%;
+        @include box-shadow(0 0 0 5px lighten($dark, 90%), 0 0 10px 0 rgba(0,0,0,.2));
+
+        img {
+            border-radius: 50%;
+        }
+    }
+
+    .list-group > li > i {
+        margin-right: 10px;
+        font-size: 16px;
+        color: #767676;
+        table-layout: fixed;
+    }
+
+    .list-justified-container {
+        padding: 15px 0;
+    }
+
+    ul.list-justified {
+        display: table;
+        width: 100%;
+        list-style: none;
+        padding: 0;
+
+        > li {
+            float: none;
+            display: table-cell;
+            padding: 10px;
+            width: 1%;
+            border-right: 1px solid #767676;
+            &:last-child {
+                border: none;
+            }
+
+            p {
+                margin: 0;
+                font-size: 24px;
+            }
+    
+        }
+    }
+            .text-muted {
+              color: #999;
+              font-size: 12px;
+            }
+}
+
+.page-profile {
+    img.media-object {
+        border-radius: $border-radius-base;
+    }
+}
+
+.panel-heading {
+  text-transform: uppercase;
+  color: $light;
+}
+
+img {
+    &.img30_30 {
+        width: 30px;
+        height: 30px;
+    }
+    &.img64_64 {
+        width: 64px;
+        height: 64px;
+    }
+    &.img80_80 {
+        width: 80px;
+        height: 80px;        
+    }
+}
+
+.img-circle {
+  border-radius: 50%; // set radius in percents
+}
+
+.bg-info { 
+  background-color: $calm;
+    padding: 10px 15px;
+
+    color: $light !important;
+    h3 {
+      color: $light;
+    }
+  }
+
+#profilePanel {
+  margin: 20px 10px;
+  box-shadow: 0 1px 2px rgba(221, 221, 221, 0.1);
+  background-color: $light;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #767676;
+}
+.list .item.item-accordion {
+  line-height: 38px;
+
+  transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}

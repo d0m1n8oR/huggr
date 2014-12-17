@@ -1,0 +1,39 @@
+<ion-view title="Results">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+
+<!--
+<ion-list>
+    <div ng-repeat="result in results">
+        <a class="item item-thumbnail-left item-icon-right" ng-click="toggleGroup(result)"
+                ng-class="{active: isGroupShown(result)}">
+        <img src="img/avatars/img{{result.name}}.jpg">
+        <i class="icon" ng-class="isGroupShown(result) ? 'ion-minus' : 'ion-plus'"></i>
+                <h2>Diane Baker</h2>
+                <p><button class="button icon-left ion-location button-clear button-dark"> 2.0 km</button></p>
+                
+            </a>
+      <ion-item class="item-accordion"
+                ng-show="isGroupShown(result)">
+                <button class="button icon-left ion-information-circled button-clear button-dark"> get info</button>
+                <button class="button icon-left ion-map button-clear button-dark"> get route</button>
+      </ion-item>
+    </div>
+  </ion-list>
+-->
+
+        <div class="list">
+            <div ng-repeat="result in results">
+                <a class="item item-thumbnail-left item-button-right" ui-sref="app.profile">
+                <img src="img/avatars/img{{result.name}}.jpg">
+                <h2>Diane Baker</h2>
+                <p><button class="button icon-left ion-location button-clear button-dark"> 2.0 km</button></p>
+                <!--<button class="button button-icon icon ion-ios7-information-outline button-clear button-positive" ui-sref="app.profile"> </button>-->
+            </a>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

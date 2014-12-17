@@ -1,0 +1,24 @@
+<ion-view title="Request a hug!">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+  <button class="button button-icon icon ion-gear-a"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+	<div class="card">
+  <div class="item item-text-wrap">
+    <button ng-click="openPopover($event)" class="button button-balanced button-block">
+  I need a hug!
+</button>
+  </div>
+</div>  
+	<div class="card">
+  <div class="item item-text-wrap">
+            <map class="ui-map" zoom="14" center="[{{positions.lat}}, {{positions.lng}}]" scrollwheel="false" draggable="false">
+              <marker position="{{positions.lat}}, {{positions.lng}}" title="You are here"></marker>
+            </map>
+  </div>
+</div> 
+</ion-content>
+</ion-view>
