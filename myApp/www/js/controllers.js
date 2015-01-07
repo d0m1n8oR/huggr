@@ -201,15 +201,10 @@ angular.module('starter.controllers', [])
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
 
-    function test() {
-        console.log("test");
-    }
-
-    function getUserInfo(profileID) {
-        console.log("hallo");
-        var def = $q.defer();
+    //This method gets the user info from the database and saves it to a JSON object to return it
+    //Possible need of $q!
+    $scope.getUserInfo = function getUserInfo(profileID) {
         var profileData = $scope.dataRef.$getRecord(profileID);
-        console.log(profileData);
         data = {
             "profileID": profileData.profileID,
             "displayName": profileData.displayName,
@@ -222,6 +217,7 @@ angular.module('starter.controllers', [])
             "firstname": profileData.firstname,
             "lastname": profileData.lastname
         };
+        return (data);
     };
 
 })
