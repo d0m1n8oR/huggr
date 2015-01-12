@@ -1,13 +1,12 @@
 angular.module('starter.controllers', [])
 
-.factory("Auth", ["$firebaseAuth", "$firebase",
-        function($firebaseAuth) {
+.factory("Auth", ["$firebaseAuth", function($firebaseAuth) {
             var ref = new Firebase("https://huggr.firebaseio.com/");
             return $firebaseAuth(ref);
-        }
-    ])
-    //Factory um UserInfos abzurufen
-    //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
+        }])
+
+//Factory um UserInfos abzurufen
+//Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 .factory('UserInfo', ["$firebase", function($firebase) {
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
         var dataRef = $firebase(ref).$asArray();
@@ -56,6 +55,8 @@ angular.module('starter.controllers', [])
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
+
+    $scope.check = $scope.auth.$getAuth();
 
     //create child for data
     $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
@@ -221,7 +222,6 @@ angular.module('starter.controllers', [])
         $state.go('app.home');
     }; //function register(authProvider)
 
-    //$scope.user = $scope.auth.$getAuth();
 
     $ionicModal.fromTemplateUrl('templates/tos.html', {
         scope: $scope
