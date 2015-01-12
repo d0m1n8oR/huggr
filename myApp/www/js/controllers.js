@@ -1,28 +1,41 @@
 angular.module('starter.controllers', [])
-    .factory("Auth", ["$firebaseAuth", "$firebase",
+
+.factory("Auth", ["$firebaseAuth", "$firebase",
         function($firebaseAuth) {
             var ref = new Firebase("https://huggr.firebaseio.com/");
             return $firebaseAuth(ref);
         }
     ])
-  /*  .factory('UserData', ["$firebaseAuth", "$firebase",
-        function($firebaseAuth, $firebase) {
-            var ref = new Firebase("https://huggr.firebaseio.com/");
-            var auth = $firebaseAuth(ref);
-            var authData = auth.$getAuth();
-            console.log(authData.facebook.id);
-            if (authData.provider == "google") {
-                var googleArray = $firebase(ref.child("users").child("signin").child("google").child(authData.google.id)).$asArray();
-
+    //Factory um UserInfos abzurufen
+    //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
+.factory('UserInfo', ["$firebase", function($firebase) {
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+        var dataRef = $firebase(ref).$asArray();
+        return {
+            getProfile: function(ID) {
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);
+                        var profileData = {
+                            "profileID": record.profileID,
+                            "displayName": record.displayName,
+                            "email": record.email,
+                            "picture": record.picture,
+                            "birthdate": record.birthdate,
+                            "age": record.age,
+                            "hobby": record.hobby,
+                            "gender": record.gender,
+                            "firstname": record.firstname,
+                            "lastname": record.lastname
+                        };
+                        return profileData;
+                    })
+                    .catch(function(error) {
+                        console.error("Error getting UserInfo:", error);
+                    });
             }
-            if (authData.provider == "facebook") {
-                var fbArray = $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$asArray();
-                var profileID = fbArray;
-            }
-            return profileID;
-        }
-    ])*/
-    // create a User object from our Factory
+        };
+    }])
 
 .value('user', {
     "profileID": "",
@@ -58,15 +71,9 @@ angular.module('starter.controllers', [])
 
             ref.authWithOAuthPopup("google", function(err, authData) {
                 if (authData) {
-                    console.log(authData.google.email);
 
 
                     var userSigninIdentifier = authData.google.id;
-
-                    console.log("userSigninIdentifier:" + userSigninIdentifier);
-
-                    //
-
                     if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
                         console.warn("new user, registering...");
                         $scope.register(authProvider, authData);
@@ -83,18 +90,18 @@ angular.module('starter.controllers', [])
                             picture: authData.google.cachedUserProfile.picture
                         });
                         console.log("Logged in as:", authData.uid);
-        var profileData = $scope.dataRef.$getRecord($scope.profileID);
+                        var profileData = $scope.dataRef.$getRecord($scope.profileID);
 
-            user.profileID = profileData.profileID,
-            user.displayName = profileData.displayName,
-            user.email = profileData.email,
-            user.picture = profileData.picture,
-            user.birthdate = profileData.birthdate,
-            user.age = profileData.age,
-            user.hobby = profileData.hobby,
-            user.gender = profileData.gender,
-            user.firstname = profileData.firstname,
-            user.lastname = profileData.lastname
+                        user.profileID = profileData.profileID,
+                            user.displayName = profileData.displayName,
+                            user.email = profileData.email,
+                            user.picture = profileData.picture,
+                            user.birthdate = profileData.birthdate,
+                            user.age = profileData.age,
+                            user.hobby = profileData.hobby,
+                            user.gender = profileData.gender,
+                            user.firstname = profileData.firstname,
+                            user.lastname = profileData.lastname
                         console.log(user);
                         $state.go('app.home');
                     }
@@ -132,22 +139,22 @@ angular.module('starter.controllers', [])
                         picture: authData.facebook.cachedUserProfile.picture.data.url
                     });
                     console.log("Logged in as:", authData.uid);
-                    
+
                     var profileData = $scope.dataRef.$getRecord($scope.profileID);
                     //speichere nutzerdaten im objekt "user"
                     //für den zugriff auf die nutzerdaten, einfach user in den controller als dependency injecten,
                     //in eine lokale scope-variable überführen aka. $scope.userData = user; und dann spaß haben
-            user.profileID = profileData.profileID,
-            user.displayName = profileData.displayName,
-            user.email = profileData.email,
-            user.picture = profileData.picture,
-            user.birthdate = profileData.birthdate,
-            user.age = profileData.age,
-            user.hobby = profileData.hobby,
-            user.gender = profileData.gender,
-            user.firstname = profileData.firstname,
-            user.lastname = profileData.lastname
-                        console.log(user);
+                    user.profileID = profileData.profileID,
+                        user.displayName = profileData.displayName,
+                        user.email = profileData.email,
+                        user.picture = profileData.picture,
+                        user.birthdate = profileData.birthdate,
+                        user.age = profileData.age,
+                        user.hobby = profileData.hobby,
+                        user.gender = profileData.gender,
+                        user.firstname = profileData.firstname,
+                        user.lastname = profileData.lastname
+                    console.log(user);
 
                     $state.go('app.home');
                 }
@@ -254,42 +261,12 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $firebase, currentAuth, user) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, user, UserInfo) {
 
     $scope.userData = user;
 
-    var ref = new Firebase("https://huggr.firebaseio.com/");
-    var sync = $firebase(ref).$asObject();
-    $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
-    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
+    $scope.getUserInfo = UserInfo.getProfile("2225696150");
 
-    //This method gets the user info from the database and saves it to a JS object to return it
-    //Fixed: now properly works
-
-$scope.getUserInfo = function (ID) {
-   $scope.dataRef.$loaded()
-    .then(function(data) {
-        var record = data.$getRecord(ID);
-        var profileData = {
-            "profileID": record.profileID,
-            "displayName": record.displayName,
-            "email": record.email,
-            "picture": record.picture,
-            "birthdate": record.birthdate,
-            "age": record.age,
-            "hobby": record.hobby,
-            "gender": record.gender,
-            "firstname": record.firstname,
-            "lastname": record.lastname
-        };
-        console.log(profileData);
-        return profileData;
-    })
-    .catch(function(error) {
-        console.error("Error getting UserInfo:", error);
-    }); 
-}
 
 })
 
@@ -303,7 +280,7 @@ $scope.getUserInfo = function (ID) {
            console.error("Authentication failed: ", error);
          });*/
     }
-])
+    ])
 
 .controller('PlaylistsCtrl', function($scope, User) {
 
@@ -328,9 +305,11 @@ $scope.getUserInfo = function (ID) {
         title: 'Cowbell',
         id: 6
     }];
-})
+    })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {})
+.controller('PlaylistCtrl', function($scope, $stateParams) {
+
+    })
 
 .controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state) {
 
@@ -382,9 +361,9 @@ $scope.getUserInfo = function (ID) {
         $scope.displayResults = function() {
             $state.go('app.results');
         }
-
     })
-    .controller('resultCtrl', function($scope) {
+
+.controller('resultCtrl', function($scope) {
         $scope.results = [];
         for (var i = 0; i < 5; i++) {
             $scope.results[i] = {
