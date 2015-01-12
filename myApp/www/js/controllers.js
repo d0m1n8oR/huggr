@@ -1,81 +1,66 @@
 angular.module('starter.controllers', [])
 
 .factory("Auth", ["$firebaseAuth", function($firebaseAuth) {
-            var ref = new Firebase("https://huggr.firebaseio.com/");
-            return $firebaseAuth(ref);
-        }])
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    return $firebaseAuth(ref);
+}])
 
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
-.factory('UserInfo', ["$firebase", "user", function($firebase, user) {
-        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-        var dataRef = $firebase(ref).$asArray();
-        return {
-            getProfile: function(ID) {
-                dataRef.$loaded()
-                    .then(function(data) {
-                        var record = data.$getRecord(ID);
-                        var profileData = {
-                            "profileID": record.profileID,
-                            "displayName": record.displayName,
-                            "email": record.email,
-                            "picture": record.picture,
-                            "birthdate": record.birthdate,
-                            "age": record.age,
-                            "hobby": record.hobby,
-                            "gender": record.gender,
-                            "firstname": record.firstname,
-                            "lastname": record.lastname
-                        };
-                        return profileData;
-                    })
-                    .catch(function(error) {
-                        console.error("Error getting UserInfo:", error);
-                    });
-            },
-            setProfile: function(ID) {
-                dataRef.$loaded()
-                    .then(function(data) {
-                        var record = data.$getRecord(ID);                        
-                            user.profileID = record.profileID;
-                            user.displayName = record.displayName;
-                            user.email = record.email;
-                            user.picture = record.picture;
-                            user.birthdate = record.birthdate;
-                            user.age = record.age;
-                            user.hobby = record.hobby;
-                            user.gender = record.gender;
-                            user.firstname = record.firstname;
-                            user.lastname = record.lastname;  
-                    })
-                    .catch(function(error) {
-                        console.error("Error setting UserInfo:", error);
-                    });
-            }
-        };
-    }])
+.factory('UserInfo', ["$firebase", function($firebase) {
+    var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+    var dataRef = $firebase(ref).$asArray();
+    return {
+        getProfile: function(ID) {
+            dataRef.$loaded()
+                .then(function(data) {
+                    var record = data.$getRecord(ID);
+                    var profileData = {
+                        "profileID": record.profileID,
+                        "displayName": record.displayName,
+                        "email": record.email,
+                        "picture": record.picture,
+                        "birthdate": record.birthdate,
+                        "age": record.age,
+                        "hobby": record.hobby,
+                        "gender": record.gender,
+                        "firstname": record.firstname,
+                        "lastname": record.lastname
+                    };
+                    return profileData;
+                })
+                .catch(function(error) {
+                    console.error("Error getting UserInfo:", error);
+                });
+        }
+    };
+}])
 
-.value('user', {
-    "profileID": "",
-    "displayName": "",
-    "email": "",
-    "picture": "",
-    "birthdate": "",
-    "age": "",
-    "hobby": "",
-    "gender": "",
-    "firstname": "",
-    "lastname": ""
-})
+.factory('localstorage', ['$window', function($window) {
+    return {
+        set: function(key, value) {
+            $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+            return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+            return JSON.parse($window.localStorage[key] || '{}');
+        }
+    }
+}])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, user) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
-
     $scope.check = $scope.auth.$getAuth();
+
 
     //create child for data
     $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
@@ -111,18 +96,8 @@ angular.module('starter.controllers', [])
                         });
                         console.log("Logged in as:", authData.uid);
                         var profileData = $scope.dataRef.$getRecord($scope.profileID);
-
-                        user.profileID = profileData.profileID,
-                            user.displayName = profileData.displayName,
-                            user.email = profileData.email,
-                            user.picture = profileData.picture,
-                            user.birthdate = profileData.birthdate,
-                            user.age = profileData.age,
-                            user.hobby = profileData.hobby,
-                            user.gender = profileData.gender,
-                            user.firstname = profileData.firstname,
-                            user.lastname = profileData.lastname
-                        console.log(user);
+                        //Store profile Data persistently in local storage for global usage
+                        localstorage.setObject("userData", profileData);
                         $state.go('app.home');
                     }
                 }
@@ -161,21 +136,8 @@ angular.module('starter.controllers', [])
                     console.log("Logged in as:", authData.uid);
 
                     var profileData = $scope.dataRef.$getRecord($scope.profileID);
-                    //speichere nutzerdaten im objekt "user"
-                    //für den zugriff auf die nutzerdaten, einfach user in den controller als dependency injecten,
-                    //in eine lokale scope-variable überführen aka. $scope.userData = user; und dann spaß haben
-                    user.profileID = profileData.profileID,
-                        user.displayName = profileData.displayName,
-                        user.email = profileData.email,
-                        user.picture = profileData.picture,
-                        user.birthdate = profileData.birthdate,
-                        user.age = profileData.age,
-                        user.hobby = profileData.hobby,
-                        user.gender = profileData.gender,
-                        user.firstname = profileData.firstname,
-                        user.lastname = profileData.lastname
-                    console.log(user);
-
+                    //Store profile Data persistently in local storage for global usage
+                    localstorage.setObject("userData", profileData);
                     $state.go('app.home');
                 }
             }).catch(function(error) {
@@ -280,9 +242,8 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $firebase, Auth, user, UserInfo) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, localstorage) {
 
-    $scope.userData = user;
 
     $scope.getUserInfo = UserInfo.getProfile("2225696150");
 
@@ -293,117 +254,132 @@ angular.module('starter.controllers', [])
     function($scope, Auth) {
         $scope.auth = Auth;
         $scope.user = $scope.auth.$getAuth();
-        /* auth.$authWithOAuthPopup("facebook").then(function(authData) {
-           console.log("Logged in as:", authData.uid);
-         }).catch(function(error) {
-           console.error("Authentication failed: ", error);
-         });*/
+
     }
-    ])
+])
 
-.controller('PlaylistsCtrl', function($scope, User) {
+.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
+    //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
+    $scope.userData = localstorage.getObject('userData');
 
-    $scope.userData = User;
-    console.log($scope.userData);
-    $scope.playlists = [{
-        title: 'Reggae',
-        id: 1
-    }, {
-        title: 'Chill',
-        id: 2
-    }, {
-        title: 'Dubstep',
-        id: 3
-    }, {
-        title: 'Indie',
-        id: 4
-    }, {
-        title: 'Rap',
-        id: 5
-    }, {
-        title: 'Cowbell',
-        id: 6
-    }];
-    })
+    var ref = new Firebase("https://huggr.firebaseio.com/users/data/"+$scope.userData.profileID);
+    var userObject = $firebase(ref).$asObject();
+    //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
+    userObject.$bindTo($scope, "userData");
+
+    //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
+    if ($scope.userData.googleID != null) {
+            $scope.connectedProvider = true;
+        }
+    if ($scope.userData.facebookID != null) {
+            $scope.connectedProvider = false;
+        } 
+
+    document.addEventListener("deviceready", function () {
+
+    var options = {
+      quality: 50,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 100,
+      targetHeight: 100,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
+    };
+    $scope.takeNewPicture = function(){
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.userData.picture = "data:image/jpeg;base64," + imageData;
+    }, function(err) {
+      // error
+    });
+    };
+
+
+  }, false);    
+
+})
+
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 
-    })
+})
 
-.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state) {
+.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage) {
 
-        $scope.positions = {
-            lat: 49.4677562,
-            lng: 8.506636
-        };
+    $scope.positions = {
+        lat: 49.4677562,
+        lng: 8.506636
+    };
 
-        $scope.$on('mapInitialized', function(event, map) {
-            $scope.map = map;
-            $cordovaGeolocation
-                .getCurrentPosition()
-                .then(function(position) {
-                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    $scope.positions.lat = pos.k;
-                    $scope.positions.lng = pos.D;
-                }, function(err) {
-                    alert("error locating the user");
-                });
-        });
+    $scope.$on('mapInitialized', function(event, map) {
+        $scope.map = map;
+        $cordovaGeolocation
+            .getCurrentPosition()
+            .then(function(position) {
+                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                $scope.positions.lat = pos.k;
+                $scope.positions.lng = pos.D;
+            }, function(err) {
+                alert("error locating the user");
+            });
+    });
 
-        $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
-            scope: $scope,
-        }).then(function(popover) {
-            $scope.popover = popover;
-        });
-        $scope.openPopover = function($event) {
-            $scope.popover.show($event);
-        };
-        $scope.closePopover = function() {
-            $scope.popover.hide();
-        };
-        //Cleanup the popover when we're done with it!
-        $scope.$on('$destroy', function() {
-            $scope.popover.remove();
-        });
-        // Execute action on hide popover
-        $scope.$on('popover.hidden', function() {
-            // Execute action
-        });
-        // Execute action on remove popover
-        $scope.$on('popover.removed', function() {
-            // Execute action
-        });
+    $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
+        scope: $scope,
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+    $scope.openPopover = function($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+        // Execute action
+    });
 
-        $scope.displayResults = function() {
-            $state.go('app.results');
-        }
-    })
+    $scope.displayResults = function() {
+        $state.go('app.results');
+    }
+})
 
 .controller('resultCtrl', function($scope) {
-        $scope.results = [];
-        for (var i = 0; i < 5; i++) {
-            $scope.results[i] = {
-                name: i + 1,
-                items: []
-            };
-            for (var j = 0; j < 3; j++) {
-                $scope.results[i].items.push(i + '-' + j);
-            }
+    $scope.results = [];
+    for (var i = 0; i < 5; i++) {
+        $scope.results[i] = {
+            name: i + 1,
+            items: []
+        };
+        for (var j = 0; j < 3; j++) {
+            $scope.results[i].items.push(i + '-' + j);
         }
-        console.log($scope.groups);
+    }
+    console.log($scope.groups);
 
-        /*
-         * if given group is the selected group, deselect it
-         * else, select the given group
-         */
-        $scope.toggleGroup = function(group) {
-            if ($scope.isGroupShown(group)) {
-                $scope.shownGroup = null;
-            } else {
-                $scope.shownGroup = group;
-            }
-        };
-        $scope.isGroupShown = function(group) {
-            return $scope.shownGroup === group;
-        };
-    });
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+    $scope.toggleGroup = function(group) {
+        if ($scope.isGroupShown(group)) {
+            $scope.shownGroup = null;
+        } else {
+            $scope.shownGroup = group;
+        }
+    };
+    $scope.isGroupShown = function(group) {
+        return $scope.shownGroup === group;
+    };
+});

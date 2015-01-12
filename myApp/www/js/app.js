@@ -26,15 +26,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
-
-        //Populate global value "user" when app is reloaded
-        var auth = Auth.$getAuth();
-        if (auth) {
-          var split = auth.uid.split(":");
-          var ref = new Firebase("https://huggr.firebaseio.com/users/signin/"+split[0]+"/"+split[1]+"/profileID");
-          var dataRef = $firebase(ref).$asObject();
-          dataRef.$loaded().then(function(){UserInfo.setProfile(dataRef.$value)});
-        };
     });
 
 })
@@ -121,12 +112,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 }
             }
         })
-        .state('app.playlists', {
-            url: "/playlists",
+        .state('app.settings', {
+            url: "/settings",
             views: {
                 'menuContent': {
-                    templateUrl: "templates/playlists.html",
-                    controller: 'PlaylistsCtrl',
+                    templateUrl: "templates/settings.html",
+                    controller: 'SettingsCtrl',
                     resolve: {
                         "currentAuth": ["Auth", function(Auth) {
                                 return Auth.$requireAuth();
