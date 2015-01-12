@@ -332,11 +332,10 @@ angular.module('starter.controllers', [])
 
 .controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state) {
 
-
-        $scope.positions = [{
-            lat: 43.07493,
-            lng: -89.381388
-        }];
+        $scope.positions = {
+            lat: 49.4677562,
+            lng: 8.506636
+        };
 
         $scope.$on('mapInitialized', function(event, map) {
             $scope.map = map;
@@ -345,9 +344,7 @@ angular.module('starter.controllers', [])
                 .then(function(position) {
                     var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     $scope.positions.lat = pos.k;
-                    $scope.positions.lng = pos.B;
-                    $scope.map.setCenter(pos);
-
+                    $scope.positions.lng = pos.D;
                 }, function(err) {
                     alert("error locating the user");
                 });
