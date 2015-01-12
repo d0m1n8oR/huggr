@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap', 'firebase'])
 
-.run(function($ionicPlatform, $rootScope, $state, $firebase, $firebaseAuth) {
+.run(function($ionicPlatform, $rootScope, $state, $firebase, $firebaseAuth, Auth, UserInfo) {
     $ionicPlatform.ready(function() {
 
         $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
@@ -26,6 +26,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+
+        //Populate global value "user" when app is reloaded
+        var auth = Auth.$getAuth();
+        if (auth) {
+          var split = auth.uid.split(":");
+          var ref = new Firebase("https://huggr.firebaseio.com/users/signin/"+split[0]+"/"+split[1]+"/profileID");
+          var dataRef = $firebase(ref).$asObject();
+          dataRef.$loaded().then(function(){UserInfo.setProfile(dataRef.$value)});
+        };
     });
 
 })

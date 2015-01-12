@@ -7,7 +7,7 @@ angular.module('starter.controllers', [])
 
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
-.factory('UserInfo', ["$firebase", function($firebase) {
+.factory('UserInfo', ["$firebase", "user", function($firebase, user) {
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
         var dataRef = $firebase(ref).$asArray();
         return {
@@ -31,6 +31,25 @@ angular.module('starter.controllers', [])
                     })
                     .catch(function(error) {
                         console.error("Error getting UserInfo:", error);
+                    });
+            },
+            setProfile: function(ID) {
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);                        
+                            user.profileID = record.profileID;
+                            user.displayName = record.displayName;
+                            user.email = record.email;
+                            user.picture = record.picture;
+                            user.birthdate = record.birthdate;
+                            user.age = record.age;
+                            user.hobby = record.hobby;
+                            user.gender = record.gender;
+                            user.firstname = record.firstname;
+                            user.lastname = record.lastname;  
+                    })
+                    .catch(function(error) {
+                        console.error("Error setting UserInfo:", error);
                     });
             }
         };
