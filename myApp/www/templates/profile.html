@@ -5,8 +5,8 @@
     <ion-content class="has-header">
         <div id="profilePanel" class="panel panel-profile">
             <div class="panel-heading text-center bg-info">
-                <img alt="" src="img/g1.jpg" class="img-circle img80_80">
-                <h3>Emil Abramov</h3>
+                <img alt="" ng-src="{{userData.picture}}" class="img-circle img80_80">
+                <h3> {{userData.displayName}}</h3>
                 <p>UI Lead</p>
             </div>
             <div class="list-justified-container">
@@ -27,6 +27,10 @@
                     <button ng-click="getUserInfo(2225696150)" class="button">Getinfo</button>
                 </ul>
             </div>
+        </div>
+        <div>
+            {{userData.profileID}}
+           
         </div>
     </ion-content>
 </ion-view>
