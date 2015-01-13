@@ -75,9 +75,9 @@ angular.module('starter.controllers', [])
     //create child for google
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
-                            $ionicViewService.nextViewOptions({
-                            disableBack: true
-                        });
+    $ionicViewService.nextViewOptions({
+        disableBack: true
+    });
 
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
@@ -102,7 +102,7 @@ angular.module('starter.controllers', [])
                             email: authData.google.email,
                             picture: authData.google.cachedUserProfile.picture
                         });
-                        console.log("Logged in as:", authData.uid);
+                        console.log("Logged in as:" + authData.uid);
                         var profileData = $scope.dataRef.$getRecord($scope.profileID);
                         //Store profile Data persistently in local storage for global usage
                         localstorage.setObject("userData", profileData);
