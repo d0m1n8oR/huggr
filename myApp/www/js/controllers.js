@@ -576,9 +576,16 @@ angular.module('starter.controllers', [])
         });
     };
 
-    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('FilterGender').equalTo(gender)).$asArray();
+    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('FilterGender').equalTo(gender).limitToFirst(100)).$asArray();
     $scope.orderHuggRef.$loaded().then(function(data) {
-        console.log($scope.orderHuggRef);
+        var i = 0;
+        //parse all elements of returning array
+        while(data.$keyAt(i)!=null)
+        {
+            console.log(data.$getRecord(data.$keyAt(i)).reqProfileID);
+            i++;
+        }
+        //console.log($scope.orderHuggRef);
     });
 
     /* function findHuggs() {
