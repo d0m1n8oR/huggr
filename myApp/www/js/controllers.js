@@ -10,54 +10,63 @@ angular.module('starter.controllers', [])
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 .factory('UserInfo', ["$firebase",
-    function($firebase) {
-        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-        var dataRef = $firebase(ref).$asArray();
+        function($firebase) {
+            var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+            var dataRef = $firebase(ref).$asArray();
+            return {
+                getProfile: function(ID) {
+                    dataRef.$loaded()
+                        .then(function(data) {
+                            var record = data.$getRecord(ID);
+                            var profileData = {
+                                "profileID": record.profileID,
+                                "displayName": record.displayName,
+                                "email": record.email,
+                                "picture": record.picture,
+                                "birthdate": record.birthdate,
+                                "age": record.age,
+                                "hobby": record.hobby,
+                                "gender": record.gender,
+                                "firstname": record.firstname,
+                                "lastname": record.lastname
+                            };
+                            return profileData;
+                            console.log(profileData);
+                        })
+                        .catch(function(error) {
+                            console.error("Error getting UserInfo:", error);
+                        });
+                }
+            };
+        }
+    ])
+    .factory('helper', [function() {
         return {
-            getProfile: function(ID) {
-                dataRef.$loaded()
-                    .then(function(data) {
-                        var record = data.$getRecord(ID);
-                        var profileData = {
-                            "profileID": record.profileID,
-                            "displayName": record.displayName,
-                            "email": record.email,
-                            "picture": record.picture,
-                            "birthdate": record.birthdate,
-                            "age": record.age,
-                            "hobby": record.hobby,
-                            "gender": record.gender,
-                            "firstname": record.firstname,
-                            "lastname": record.lastname
-                        };
-                        return profileData;
-                    })
-                    .catch(function(error) {
-                        console.error("Error getting UserInfo:", error);
-                    });
+            calcAge: function(date) {
+                var ageDifMs = Date.now() - date.getTime();
+                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                return Math.abs(ageDate.getUTCFullYear() - 1970);
             }
         };
-    }
-])
-
-.factory('localstorage', ['$window',
-    function($window) {
-        return {
-            set: function(key, value) {
-                $window.localStorage[key] = value;
-            },
-            get: function(key, defaultValue) {
-                return $window.localStorage[key] || defaultValue;
-            },
-            setObject: function(key, value) {
-                $window.localStorage[key] = JSON.stringify(value);
-            },
-            getObject: function(key) {
-                return JSON.parse($window.localStorage[key] || '{}');
+    }])
+    .factory('localstorage', ['$window',
+        function($window) {
+            return {
+                set: function(key, value) {
+                    $window.localStorage[key] = value;
+                },
+                get: function(key, defaultValue) {
+                    return $window.localStorage[key] || defaultValue;
+                },
+                setObject: function(key, value) {
+                    $window.localStorage[key] = JSON.stringify(value);
+                },
+                getObject: function(key) {
+                    return JSON.parse($window.localStorage[key] || '{}');
+                }
             }
         }
-    }
-])
+    ])
 
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService) {
@@ -255,27 +264,65 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, localstorage) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
     var userObject = $firebase(ref).$asObject();
-    userObject.$bindTo($scope, "currentUser").then(localstorage.setObject("userData", $scope.currentUser));
+    userObject.$bindTo($scope, "currentUser").then(function(){
+        $scope.currentUser = helper.calcAge($scope.currentUser.birthdate);
+        localstorage.setObject("userData", $scope.currentUser)
+    });
 
-    $scope.getUserInfo = UserInfo.getProfile("2225696150");
-
+    console.log(UserInfo.getProfile("8822986615"));
+    console.log(Date.now());
 
 })
 
-.controller('SampleCtrl', function($scope, Auth, $firebase, localstorage) {
-    $scope.userData = localstorage.getObject('userData');
-    $scope.auth = Auth;
-    $scope.user = $scope.auth.$getAuth();
-    var ref = new Firebase("https://huggr.firebaseio.com/");
+.controller("SampleCtrl", ["$scope", "$firebase", "Auth",
+    function($scope, Auth, $firebase) {
+        //$scope.auth = Auth;
+        //$scope.user = $scope.auth.$getAuth();
+        var ref = new Firebase("https://huggr.firebaseio.com/");
 
-    var sync = $firebase(ref).$asObject();
+        var sync = $firebase(ref).$asObject();
 
-    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-})
+        $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+        $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
+
+            var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+
+            while ($scope.huggRef.$getRecord(huggID) != null) {
+                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+            }
+
+            var date = new Date();
+            var today = date.getTime();
+
+            $firebase(ref.child("hugg").child(huggID)).$set({
+                huggID: huggID,
+                huggLocation: huggLocation,
+                huggDate: huggDate,
+                huggTime: huggTime,
+                done: "0",
+                answered: "0",
+                accepted: "0",
+                reqProfile: userObj,
+                reqProfileID: userObj.profileID,
+                requestTime: today,
+            });
+            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+                rateReqHugg: ".",
+                rateAnswerHugg: ".",
+                total: "."
+            });
+            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+                blockedProfileID: "."
+            });
+        };
+
+    }
+])
 
 .controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
@@ -396,14 +443,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, Auth) {
-    $scope.userData = localstorage.getObject('userData');
-    $scope.auth = Auth;
-    $scope.user = $scope.auth.$getAuth();
-    var ref = new Firebase("https://huggr.firebaseio.com/");
-    var sync = $firebase(ref).$asObject();
-    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-
+.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage) {
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -452,6 +492,7 @@ angular.module('starter.controllers', [])
     $scope.displayResults = function() {
         $state.go('app.results');
     }
+<<<<<<< HEAD
 
     $scope.huggRequest = {
         male: "",
@@ -459,18 +500,11 @@ angular.module('starter.controllers', [])
     }
 
 
+=======
+>>>>>>> origin/master
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, localstorage) {
-    $scope.userData = localstorage.getObject('userData');
-    $scope.auth = Auth;
-    $scope.user = $scope.auth.$getAuth();
-    var ref = new Firebase("https://huggr.firebaseio.com/");
-
-    var sync = $firebase(ref).$asObject();
-
-    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-
+.controller('resultCtrl', function($scope) {
     $scope.results = [];
     for (var i = 0; i < 5; i++) {
         $scope.results[i] = {
@@ -496,38 +530,5 @@ angular.module('starter.controllers', [])
     };
     $scope.isGroupShown = function(group) {
         return $scope.shownGroup === group;
-    };
-
-    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
-
-        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-
-        while ($scope.huggRef.$getRecord(huggID) != null) {
-            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-        }
-
-        var date = new Date();
-        var today = date.getTime();
-
-        $firebase(ref.child("hugg").child(huggID)).$set({
-            huggID: huggID,
-            reqLat: reqLat,
-            reqLong: reqLong,
-            done: "0",
-            answered: "0",
-            accepted: "0",
-            reqProfileID: $scope.userData.profileID,
-            requestTime: today,
-            gender: gender
-        });
-        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-            rateReqHugg: ".",
-            rateAnswerHugg: ".",
-            total: "."
-        });
-        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-            blockedProfileID: "."
-        });
-        console.log("Success");
     };
 });

@@ -127,12 +127,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         })
 
-    .state('app.single', {
-        url: "/playlists/:playlistId",
+    .state('app.externalProfile', {
+        url: "/profile/:profileID",
         views: {
             'menuContent': {
-                templateUrl: "templates/playlist.html",
-                controller: 'PlaylistCtrl',
+                templateUrl: "templates/profile.html",
+                controller: 'ProfileCtrl',
                 resolve: {
                     "currentAuth": ["Auth", function(Auth) {
                         return Auth.$requireAuth();
