@@ -526,7 +526,7 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
     $scope.currentUser = localstorage.getObject('userData');
-    
+
     var gender;
 
     //checks what gender is filtered on
@@ -545,44 +545,43 @@ angular.module('starter.controllers', [])
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         $scope.huggRef.$loaded().then(function(data) {
-        while (data.$getRecord(huggID) != null) {
-            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-        }
+            while (data.$getRecord(huggID) != null) {
+                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+            }
 
-        var date = new Date();
-        var today = date.getTime();
+            var date = new Date();
+            var today = date.getTime();
 
-        $firebase(ref.child("hugg").child(huggID)).$set({
-            huggID: huggID,
-            reqLat: reqLat,
-            reqLong: reqLong,
-            FilterGender: gender,
-            done: "0",
-            answered: "0",
-            accepted: "0",
-            reqProfileID: $scope.currentUser.profileID,
-            reqProfileGender: $scope.currentUser.gender,
-            requestTime: today,
-        });
-        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-            rateReqHugg: ".",
-            rateAnswerHugg: ".",
-            total: "."
-        });
-        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-            blockedProfileID: "."
-        });
-        console.log("success " + huggID);
+            $firebase(ref.child("hugg").child(huggID)).$set({
+                huggID: huggID,
+                reqLat: reqLat,
+                reqLong: reqLong,
+                FilterGender: gender,
+                done: "0",
+                answered: "0",
+                accepted: "0",
+                reqProfileID: $scope.currentUser.profileID,
+                reqProfileGender: $scope.currentUser.gender,
+                requestTime: today,
+            });
+            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+                rateReqHugg: ".",
+                rateAnswerHugg: ".",
+                total: "."
+            });
+            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+                blockedProfileID: "."
+            });
+            console.log("success " + huggID);
         });
     };
-                                    
 
-    $scope.huggRef.$loaded().then(function(data) {
-         var record = data.$getRecord(3416233656);
-        console.log("Reco"+record.huggID);
+    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('FilterGender').equalTo(gender)).$asArray();
+    $scope.orderHuggRef.$loaded().then(function(data) {
+        console.log($scope.orderHuggRef);
     });
-    
-   /* function findHuggs() {
+
+    /* function findHuggs() {
         var huggArray = {
             id: []
         };
