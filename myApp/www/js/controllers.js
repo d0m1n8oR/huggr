@@ -306,7 +306,7 @@ angular.module('starter.controllers', [])
             });
         }
         if (provider == "toFacebook") {
-            connectRef.authWithOAuthPopup("facebook", function(err, user) {
+            connectRef.$authWithOAuthPopup("facebook", function(err, user) {
                 if (err) {
                     console.log(err);
                 }
