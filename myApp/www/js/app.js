@@ -85,7 +85,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         })
         .state('app.test', {
-            url: "/test",
+            url: "/test/:params",
             views: {
                 'menuContent': {
                     templateUrl: "templates/test.html",

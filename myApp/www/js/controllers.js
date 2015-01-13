@@ -40,7 +40,7 @@ angular.module('starter.controllers', [])
             };
         }
     ])
-    .factory('helper', [function() {
+.factory('helper', [function() {
         return {
             calcAge: function(date) {
                 var ageDifMs = Date.now() - date.getTime();
@@ -49,7 +49,7 @@ angular.module('starter.controllers', [])
             }
         };
     }])
-    .factory('localstorage', ['$window',
+.factory('localstorage', ['$window',
         function($window) {
             return {
                 set: function(key, value) {
@@ -278,10 +278,11 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller("SampleCtrl", ["$scope", "$firebase", "Auth",
-    function($scope, Auth, $firebase) {
+.controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
+    function($scope, Auth, $firebase, $stateParams) {
         //$scope.auth = Auth;
         //$scope.user = $scope.auth.$getAuth();
+        console.log($stateParams);
         var ref = new Firebase("https://huggr.firebaseio.com/");
 
         var sync = $firebase(ref).$asObject();
