@@ -266,51 +266,50 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller("SampleCtrl", ["$scope", "$firebase", "Auth",
-    function($scope, Auth, $firebase) {
-        //$scope.auth = Auth;
-        //$scope.user = $scope.auth.$getAuth();
-        var ref = new Firebase("https://huggr.firebaseio.com/");
+.controller('SampleCtrl', function($scope, Auth, $firebase, localstorage) {
+    $scope.userData = localstorage.getObject('userData');
+    $scope.auth = Auth;
+    $scope.user = $scope.auth.$getAuth();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
 
-        var sync = $firebase(ref).$asObject();
+    var sync = $firebase(ref).$asObject();
 
-        $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
-        $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
+    $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
 
-            var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-            while ($scope.huggRef.$getRecord(huggID) != null) {
-                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-            }
+        while ($scope.huggRef.$getRecord(huggID) != null) {
+            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+        }
 
-            var date = new Date();
-            var today = date.getTime();
+        var date = new Date();
+        var today = date.getTime();
 
-            $firebase(ref.child("hugg").child(huggID)).$set({
-                huggID: huggID,
-                huggLocation: huggLocation,
-                huggDate: huggDate,
-                huggTime: huggTime,
-                done: "0",
-                answered: "0",
-                accepted: "0",
-                reqProfile: userObj,
-                reqProfileID: userObj.profileID,
-                requestTime: today,
-            });
-            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-                rateReqHugg: ".",
-                rateAnswerHugg: ".",
-                total: "."
-            });
-            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-                blockedProfileID: "."
-            });
-        };
+        $firebase(ref.child("hugg").child(huggID)).$set({
+            huggID: huggID,
+            huggLocation: huggLocation,
+            huggDate: huggDate,
+            huggTime: huggTime,
+            done: "0",
+            answered: "0",
+            accepted: "0",
+            reqProfile: "test",
+            reqProfileID: $scope.userData.profileID,
+            requestTime: today,
+        });
+        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+            rateReqHugg: ".",
+            rateAnswerHugg: ".",
+            total: "."
+        });
+        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+            blockedProfileID: "."
+        });
+    };
 
-    }
-])
+})
 
 .controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
