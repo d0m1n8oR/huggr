@@ -276,7 +276,7 @@ angular.module('starter.controllers', [])
 
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
-    $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
+    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
@@ -289,15 +289,14 @@ angular.module('starter.controllers', [])
 
         $firebase(ref.child("hugg").child(huggID)).$set({
             huggID: huggID,
-            huggLocation: huggLocation,
-            huggDate: huggDate,
-            huggTime: huggTime,
+            reqLat: reqLat,
+            reqLong: reqLong,
             done: "0",
             answered: "0",
             accepted: "0",
-            reqProfile: "test",
             reqProfileID: $scope.userData.profileID,
             requestTime: today,
+            gender: gender
         });
         $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
             rateReqHugg: ".",
@@ -307,6 +306,7 @@ angular.module('starter.controllers', [])
         $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
             blockedProfileID: "."
         });
+        console.log("Success");
     };
 
 })
@@ -430,8 +430,15 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage) {
-//Setze Koordinaten für Initialisierung von Maps
+.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, Auth) {
+    $scope.userData = localstorage.getObject('userData');
+    $scope.auth = Auth;
+    $scope.user = $scope.auth.$getAuth();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+    //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
         lng: 8.506636
@@ -479,6 +486,39 @@ angular.module('starter.controllers', [])
     $scope.displayResults = function() {
         $state.go('app.results');
     }
+
+    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
+
+        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+
+        while ($scope.huggRef.$getRecord(huggID) != null) {
+            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+        }
+
+        var date = new Date();
+        var today = date.getTime();
+
+        $firebase(ref.child("hugg").child(huggID)).$set({
+            huggID: huggID,
+            reqLat: reqLat,
+            reqLong: reqLong,
+            done: "0",
+            answered: "0",
+            accepted: "0",
+            reqProfileID: $scope.userData.profileID,
+            requestTime: today,
+            gender: gender
+        });
+        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+            rateReqHugg: ".",
+            rateAnswerHugg: ".",
+            total: "."
+        });
+        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+            blockedProfileID: "."
+        });
+        console.log("Success");
+    };
 })
 
 .controller('resultCtrl', function($scope) {
