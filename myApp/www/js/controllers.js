@@ -10,36 +10,48 @@ angular.module('starter.controllers', [])
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 .factory('UserInfo', ["$firebase",
-        function($firebase) {
-            var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-            var dataRef = $firebase(ref).$asArray();
+    function($firebase) {
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+        var dataRef = $firebase(ref).$asArray();
+        return {
+            getProfile: function(ID) {
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);
+                        var profileData = {
+                            "profileID": record.profileID,
+                            "displayName": record.displayName,
+                            "email": record.email,
+                            "picture": record.picture,
+                            "birthdate": record.birthdate,
+                            "age": record.age,
+                            "hobby": record.hobby,
+                            "gender": record.gender,
+                            "firstname": record.firstname,
+                            "lastname": record.lastname
+                        };
+                        return profileData;
+                        console.log(profileData);
+                    })
+                    .catch(function(error) {
+                        console.error("Error getting UserInfo:", error);
+                    });
+            }
+        };
+    }
+])
+    .factory('helper', [
+        function() {
             return {
-                getProfile: function(ID) {
-                    dataRef.$loaded()
-                        .then(function(data) {
-                            var record = data.$getRecord(ID);
-                            var profileData = {
-                                "profileID": record.profileID,
-                                "displayName": record.displayName,
-                                "email": record.email,
-                                "picture": record.picture,
-                                "birthdate": record.birthdate,
-                                "age": record.age,
-                                "hobby": record.hobby,
-                                "gender": record.gender,
-                                "firstname": record.firstname,
-                                "lastname": record.lastname
-                            };
-                            return profileData;
-                            console.log(profileData);
-                        })
-                        .catch(function(error) {
-                            console.error("Error getting UserInfo:", error);
-                        });
+                calcAge: function(date) {
+                    var ageDifMs = Date.now() - date.getTime();
+                    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                    return Math.abs(ageDate.getUTCFullYear() - 1970);
                 }
             };
         }
     ])
+<<<<<<< HEAD
 .factory('helper', [function() {
         return {
             calcAge: function(date) {
@@ -50,6 +62,9 @@ angular.module('starter.controllers', [])
         };
     }])
 .factory('localstorage', ['$window',
+=======
+    .factory('localstorage', ['$window',
+>>>>>>> FETCH_HEAD
         function($window) {
             return {
                 set: function(key, value) {
@@ -268,7 +283,7 @@ angular.module('starter.controllers', [])
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
     var userObject = $firebase(ref).$asObject();
-    userObject.$bindTo($scope, "currentUser").then(function(){
+    userObject.$bindTo($scope, "currentUser").then(function() {
         $scope.currentUser = helper.calcAge($scope.currentUser.birthdate);
         localstorage.setObject("userData", $scope.currentUser)
     });
@@ -492,6 +507,11 @@ angular.module('starter.controllers', [])
 
     $scope.displayResults = function() {
         $state.go('app.results');
+    }
+
+    $scope.huggRequest = {
+        male: "",
+        female: ""
     }
 })
 

@@ -10,50 +10,24 @@
             <i class="icon ion-volume-high"></i>
         </div>
 
-        <div class="list">
-            <div class="item range range-positive">
-                <i class="icon ion-ios7-sunny-outline"></i>
-                <input type="range" name="volume" min="0" max="100" value="33">
-                <i class="icon ion-ios7-sunny"></i>
-            </div>
-        </div>
-        <div class="list">
 
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Lightsaber
-                </div>
-                <select>
-                    <option>Blue</option>
-                    <option selected>Green</option>
-                    <option>Red</option>
-                </select>
-            </label>
-
-        </div>
 
         <ul class="list">
 
             <li class="item item-checkbox">
                 <label class="checkbox">
-                    <input type="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.male">
                 </label>
-                Flux Capacitor
+                Male
+            </li>
+            <li class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.female">
+                </label>
+                Female
             </li>
         </ul>
-        <ul class="list">
 
-            <li class="item item-toggle">
-                HTML5
-                <label class="toggle toggle-assertive">
-                    <input type="checkbox">
-                    <div class="track">
-                        <div class="handle"></div>
-                    </div>
-                </label>
-            </li>
-
-        </ul>
         <button class="button button-energized button-block" ng-click="displayResults()">
             Search
         </button>
