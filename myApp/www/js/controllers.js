@@ -493,6 +493,7 @@ angular.module('starter.controllers', [])
         // Execute action
     });
 
+    //create huggRequest Object to store values from filters popup
     $scope.huggRequest = {
         male: "none",
         female: "none",
@@ -501,15 +502,21 @@ angular.module('starter.controllers', [])
 
     $scope.displayResults = function() {
 
+        var male = $scope.huggRequest.male;
+        var female = $scope.huggRequest.female;
+        var radius = $scope.huggRequest.radius;
+        //reset huggRequest Object values
+        $scope.huggRequest.male = "none";
+        $scope.huggRequest.female = "none";
+        $scope.huggRequest.radius = "none";
+
         //this opens the results view with the parameters
         $state.go('app.results', {
-            male: $scope.huggRequest.male,
-            female: $scope.huggRequest.female,
-            radius: $scope.huggRequest.radius
+            male: male,
+            female: female,
+            radius: radius
         });
-    }
-
-
+    };
 })
 
 .controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage) {
@@ -517,18 +524,18 @@ angular.module('starter.controllers', [])
     $scope.user = $scope.auth.$getAuth();
     console.log($stateParams);
     var gender;
-    if ($stateParams.female == "none" && $stateParams.male == true) {
+    
+    //checks what gender is filtered on
+    if ($stateParams.female == "none" && $stateParams.male == "true") {
         gender = "male";
     }
-    if ($stateParams.male == "none" && $stateParams.female == true) {
+    if ($stateParams.male == "none" && $stateParams.female == "true") {
         gender = "female";
     }
-    if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male = true && $stateParams.female == true)) {
+    if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
         gender = "both";
     }
-    console.log(gender);
-    var male = $stateParams.male;
-    var female = $stateParams.female;
+    
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     var sync = $firebase(ref).$asObject();
@@ -551,11 +558,12 @@ angular.module('starter.controllers', [])
             huggID: huggID,
             reqLat: reqLat,
             reqLong: reqLong,
-            gender: gender,
+            FilterGender: gender,
             done: "0",
             answered: "0",
             accepted: "0",
             reqProfileID: $scope.currentUser.profileID,
+            reqProfileGender: $scope.currentUser.gender,
             requestTime: today,
         });
         $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
@@ -566,13 +574,12 @@ angular.module('starter.controllers', [])
         $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
             blockedProfileID: "."
         });
-        console.log("success");
+        console.log("success "+ huggID);
     };
     //Search function here!!!
 
 
     $scope.results = [];
-    console.log($stateParams);
     for (var i = 0; i < 5; i++) {
         $scope.results[i] = {
             name: i + 1,
