@@ -1,57 +1,63 @@
 angular.module('starter.controllers', [])
 
-.factory("Auth", ["$firebaseAuth", function($firebaseAuth) {
-    var ref = new Firebase("https://huggr.firebaseio.com/");
-    return $firebaseAuth(ref);
-}])
+.factory("Auth", ["$firebaseAuth",
+    function($firebaseAuth) {
+        var ref = new Firebase("https://huggr.firebaseio.com/");
+        return $firebaseAuth(ref);
+    }
+])
 
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
-.factory('UserInfo', ["$firebase", function($firebase) {
-    var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-    var dataRef = $firebase(ref).$asArray();
-    return {
-        getProfile: function(ID) {
-            dataRef.$loaded()
-                .then(function(data) {
-                    var record = data.$getRecord(ID);
-                    var profileData = {
-                        "profileID": record.profileID,
-                        "displayName": record.displayName,
-                        "email": record.email,
-                        "picture": record.picture,
-                        "birthdate": record.birthdate,
-                        "age": record.age,
-                        "hobby": record.hobby,
-                        "gender": record.gender,
-                        "firstname": record.firstname,
-                        "lastname": record.lastname
-                    };
-                    return profileData;
-                })
-                .catch(function(error) {
-                    console.error("Error getting UserInfo:", error);
-                });
-        }
-    };
-}])
+.factory('UserInfo', ["$firebase",
+    function($firebase) {
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+        var dataRef = $firebase(ref).$asArray();
+        return {
+            getProfile: function(ID) {
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);
+                        var profileData = {
+                            "profileID": record.profileID,
+                            "displayName": record.displayName,
+                            "email": record.email,
+                            "picture": record.picture,
+                            "birthdate": record.birthdate,
+                            "age": record.age,
+                            "hobby": record.hobby,
+                            "gender": record.gender,
+                            "firstname": record.firstname,
+                            "lastname": record.lastname
+                        };
+                        return profileData;
+                    })
+                    .catch(function(error) {
+                        console.error("Error getting UserInfo:", error);
+                    });
+            }
+        };
+    }
+])
 
-.factory('localstorage', ['$window', function($window) {
-    return {
-        set: function(key, value) {
-            $window.localStorage[key] = value;
-        },
-        get: function(key, defaultValue) {
-            return $window.localStorage[key] || defaultValue;
-        },
-        setObject: function(key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
-        },
-        getObject: function(key) {
-            return JSON.parse($window.localStorage[key] || '{}');
+.factory('localstorage', ['$window',
+    function($window) {
+        return {
+            set: function(key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function(key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function(key) {
+                return JSON.parse($window.localStorage[key] || '{}');
+            }
         }
     }
-}])
+])
 
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage) {
@@ -279,6 +285,8 @@ angular.module('starter.controllers', [])
     $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
 
+    var mainref = new Firebase("https://huggr.firebaseio.com/");
+
 
     $scope.connect = function connect(provider) {
         if (provider == "toGoogle") {
@@ -288,7 +296,8 @@ angular.module('starter.controllers', [])
                 }
                 if (user) {
                     connectRef.onAuth(function(authData) {
-                        $firebase($scope.googleRef.child(authData.google.id)).$set({
+                        //TODO: get profileID!
+                        $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
                             displayName: authData.google.displayName,
                             token: authData.token,
                             expires: authData.expires,
@@ -312,7 +321,7 @@ angular.module('starter.controllers', [])
                 }
                 if (user) {
                     connectRef.onAuth(function(authData) {
-                        $firebase($scope.facebookRef.child(authData.facebook.id)).$set({
+                        $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                             displayName: authData.facebook.displayName,
                             token: authData.token,
                             expires: authData.expires,
