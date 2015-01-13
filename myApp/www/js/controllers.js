@@ -288,18 +288,20 @@ angular.module('starter.controllers', [])
     if ($scope.userData.facebookID != null) {
         returnval = returnval + 1;
     }
-
+    $scope.gProvider = false;
+    $scope.fbProvider = false;
     if (returnval == 0) {
         console.warn("Keine Services");
     }
     if (returnval == 1) {
-        //show google
+        $scope.gProvider = true;
     }
     if (returnval == 10) {
-        //show facebook
+        $scope.fbProvider = true;
     }
     if (returnval == 11) {
-        //show none
+        $scope.fbProvider = false;
+        $scope.gProvider = false;
     }
 
     var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
