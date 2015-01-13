@@ -496,7 +496,8 @@ angular.module('starter.controllers', [])
 
     $scope.huggRequest = {
         male: "none",
-        female: "none"
+        female: "none",
+        radius: "none"
     }
 
     $scope.displayResults = function() {
@@ -504,14 +505,58 @@ angular.module('starter.controllers', [])
         //this opens the results view with the parameters
         $state.go('app.results', {
             male: $scope.huggRequest.male,
-            female: $scope.huggRequest.female
+            female: $scope.huggRequest.female,
+            radius: $scope.huggRequest.radius
         });
     }
 
 
 })
 
-.controller('resultCtrl', function($scope, $stateParams) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams) {
+    $scope.auth = Auth;
+    $scope.user = $scope.auth.$getAuth();
+    console.log($stateParams);
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+
+    var sync = $firebase(ref).$asObject();
+
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+    $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
+
+        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+
+        while ($scope.huggRef.$getRecord(huggID) != null) {
+            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+        }
+
+        var date = new Date();
+        var today = date.getTime();
+
+        $firebase(ref.child("hugg").child(huggID)).$set({
+            huggID: huggID,
+            huggLocation: huggLocation,
+            huggDate: huggDate,
+            huggTime: huggTime,
+            done: "0",
+            answered: "0",
+            accepted: "0",
+            reqProfile: userObj,
+            reqProfileID: userObj.profileID,
+            requestTime: today,
+        });
+        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+            rateReqHugg: ".",
+            rateAnswerHugg: ".",
+            total: "."
+        });
+        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+            blockedProfileID: "."
+        });
+    };
+
+
     $scope.results = [];
     console.log($stateParams);
     for (var i = 0; i < 5; i++) {
