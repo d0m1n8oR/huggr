@@ -275,40 +275,6 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
 
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-
-    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
-
-        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-
-        while ($scope.huggRef.$getRecord(huggID) != null) {
-            huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-        }
-
-        var date = new Date();
-        var today = date.getTime();
-
-        $firebase(ref.child("hugg").child(huggID)).$set({
-            huggID: huggID,
-            reqLat: reqLat,
-            reqLong: reqLong,
-            done: "0",
-            answered: "0",
-            accepted: "0",
-            reqProfileID: $scope.userData.profileID,
-            requestTime: today,
-            gender: gender
-        });
-        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-            rateReqHugg: ".",
-            rateAnswerHugg: ".",
-            total: "."
-        });
-        $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-            blockedProfileID: "."
-        });
-        console.log("Success");
-    };
-
 })
 
 .controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
