@@ -4,7 +4,7 @@
     </ion-nav-buttons>
     <ion-content class="has-header">
 
-<!--
+        <!--
 <ion-list>
     <div ng-repeat="result in results">
         <a class="item item-thumbnail-left item-icon-right" ng-click="toggleGroup(result)"
@@ -23,17 +23,23 @@
     </div>
   </ion-list>
 -->
-
+        <p>
+            <!--TODO: schön machen-->
+            <button ng-click="requestHugg('reqLat', 'reqLong', 'gender')">Request Hugg</button>
+        </p>
         <div class="list">
             <div ng-repeat="result in results">
                 <a class="item item-thumbnail-left item-button-right" ui-sref="app.profile">
-                <img src="img/avatars/img{{result.name}}.jpg">
-                <h2>Diane Baker</h2>
-                <p><button class="button icon-left ion-location button-clear button-dark"> 2.0 km</button></p>
-                <!--<button class="button button-icon icon ion-ios7-information-outline button-clear button-positive" ui-sref="app.profile"> </button>-->
-            </a>
+                    <img src="img/avatars/img{{result.name}}.jpg">
+                    <h2>Diane Baker</h2>
+                    <p>
+                        <button class="button icon-left ion-location button-clear button-dark">2.0 km</button>
+                    </p>
+                    <!--<button class="button button-icon icon ion-ios7-information-outline button-clear button-positive" ui-sref="app.profile"> </button>-->
+                </a>
             </div>
         </div>
+
 
     </ion-content>
 </ion-view>

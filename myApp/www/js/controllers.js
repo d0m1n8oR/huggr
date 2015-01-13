@@ -487,6 +487,46 @@ angular.module('starter.controllers', [])
         $state.go('app.results');
     }
 
+
+})
+
+.controller('resultCtrl', function($scope, Auth, $firebase, localstorage) {
+    $scope.userData = localstorage.getObject('userData');
+    $scope.auth = Auth;
+    $scope.user = $scope.auth.$getAuth();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+
+    var sync = $firebase(ref).$asObject();
+
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+    $scope.results = [];
+    for (var i = 0; i < 5; i++) {
+        $scope.results[i] = {
+            name: i + 1,
+            items: []
+        };
+        for (var j = 0; j < 3; j++) {
+            $scope.results[i].items.push(i + '-' + j);
+        }
+    }
+    console.log($scope.groups);
+
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+    $scope.toggleGroup = function(group) {
+        if ($scope.isGroupShown(group)) {
+            $scope.shownGroup = null;
+        } else {
+            $scope.shownGroup = group;
+        }
+    };
+    $scope.isGroupShown = function(group) {
+        return $scope.shownGroup === group;
+    };
+
     $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
@@ -518,34 +558,5 @@ angular.module('starter.controllers', [])
             blockedProfileID: "."
         });
         console.log("Success");
-    };
-})
-
-.controller('resultCtrl', function($scope) {
-    $scope.results = [];
-    for (var i = 0; i < 5; i++) {
-        $scope.results[i] = {
-            name: i + 1,
-            items: []
-        };
-        for (var j = 0; j < 3; j++) {
-            $scope.results[i].items.push(i + '-' + j);
-        }
-    }
-    console.log($scope.groups);
-
-    /*
-     * if given group is the selected group, deselect it
-     * else, select the given group
-     */
-    $scope.toggleGroup = function(group) {
-        if ($scope.isGroupShown(group)) {
-            $scope.shownGroup = null;
-        } else {
-            $scope.shownGroup = group;
-        }
-    };
-    $scope.isGroupShown = function(group) {
-        return $scope.shownGroup === group;
     };
 });
