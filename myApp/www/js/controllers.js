@@ -60,7 +60,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -75,7 +75,9 @@ angular.module('starter.controllers', [])
     //create child for google
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
-
+                            $ionicViewService.nextViewOptions({
+                            disableBack: true
+                        });
 
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
@@ -105,6 +107,7 @@ angular.module('starter.controllers', [])
                         //Store profile Data persistently in local storage for global usage
                         localstorage.setObject("userData", profileData);
                         $state.go('app.home');
+
                     }
                 }
                 if (err) {
@@ -241,6 +244,10 @@ angular.module('starter.controllers', [])
     $scope.privacy = function() {
         $scope.modalPriv.show();
     };
+
+    $scope.goHome = function() {
+        $state.go('app.home');
+    }
 })
 
 
