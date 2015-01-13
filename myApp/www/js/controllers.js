@@ -453,6 +453,11 @@ angular.module('starter.controllers', [])
         $state.go('app.results');
     }
 
+    $scope.huggRequest = {
+        male: "",
+        female: ""
+    }
+
 
 })
 
