@@ -256,7 +256,10 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, localstorage) {
-
+    $scope.currentUser = localstorage.getObject('userData');
+    var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
+    var userObject = $firebase(ref).$asObject();
+    userObject.$bindTo($scope, "currentUser").then(localstorage.setObject("userData", $scope.currentUser));
 
     $scope.getUserInfo = UserInfo.getProfile("2225696150");
 
@@ -317,7 +320,6 @@ angular.module('starter.controllers', [])
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
     userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData));
-    console.log($scope.userData);
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
     var returnval = 0;
     if ($scope.userData.googleID != null) {
@@ -430,7 +432,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage) {
-
+//Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
         lng: 8.506636
@@ -438,9 +440,11 @@ angular.module('starter.controllers', [])
 
     $scope.$on('mapInitialized', function(event, map) {
         $scope.map = map;
+        //hole die GPS/IP-Geolocation
         $cordovaGeolocation
             .getCurrentPosition()
             .then(function(position) {
+                //wandle in google Maps format um
                 var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 $scope.positions.lat = pos.k;
                 $scope.positions.lng = pos.D;
