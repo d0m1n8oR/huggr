@@ -517,6 +517,19 @@ angular.module('starter.controllers', [])
     $scope.auth = Auth;
     $scope.user = $scope.auth.$getAuth();
     console.log($stateParams);
+    var gender;
+    if ($stateParams.female == "none" && $stateParams.male == true) {
+        gender = "male";
+    }
+    if ($stateParams.male == "none" && $stateParams.female == true) {
+        gender = "female";
+    }
+    if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male = true && $stateParams.female == true)) {
+        gender = "both";
+    }
+    console.log(gender);
+    var male = $stateParams.male;
+    var female = $stateParams.female;
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     var sync = $firebase(ref).$asObject();
@@ -524,7 +537,7 @@ angular.module('starter.controllers', [])
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
     $scope.currentUser = localstorage.getObject('userData');
 
-    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
+    $scope.requestHugg = function requestHugg(reqLat, reqLong) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
@@ -570,7 +583,6 @@ angular.module('starter.controllers', [])
             $scope.results[i].items.push(i + '-' + j);
         }
     }
-    console.log($scope.groups);
 
     /*
      * if given group is the selected group, deselect it
