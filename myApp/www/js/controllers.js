@@ -262,92 +262,97 @@ angular.module('starter.controllers', [])
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
 
-    var ref = new Firebase("https://huggr.firebaseio.com/users/data/"+$scope.userData.profileID);
+    var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
     userObject.$bindTo($scope, "userData");
 
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
     if ($scope.userData.googleID != null) {
-            $scope.connectedProvider = true;
-        }
+        $scope.connectedProvider = true;
+    }
     if ($scope.userData.facebookID != null) {
-            $scope.connectedProvider = false;
-        } 
-
-    $scope.connect =  function connect(provider) {
-    if (provider == "toGoogle") {
-        fbRef.authWithOAuthPopup("google", function(err, user) {
-            if (err) {
-                console.log(err);
-            }
-            if (user) {
-                fbRef.onAuth(function(authData) {
-                    googleRef.child(authData.google.id).set({
-                        displayName: authData.google.displayName,
-                        token: authData.token,
-                        expires: authData.expires,
-                        uid: authData.uid,
-                        ID: authData.google.id,
-                        AccessToken: authData.google.accessToken,
-                        profileID: profileID
-                    });
-                    dataRef.child(profileID).update({
-                        googleID: authData.google.id
-                    });
-                });
-
-            }
-        });
+        $scope.connectedProvider = false;
     }
-    if (provider == "toFacebook") {
-        fbRef.authWithOAuthPopup("facebook", function(err, user) {
-            if (err) {
-                console.log(err);
-            }
-            if (user) {
-                fbRef.onAuth(function(authData) {
-                    facebookRef.child(authData.google.id).set({
-                        displayName: authData.facebook.displayName,
-                        token: authData.token,
-                        expires: authData.expires,
-                        uid: authData.uid,
-                        ID: authData.facebook.id,
-                        AccessToken: authData.facebook.accessToken,
-                        profileID: profileID
+
+    var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
+    $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
+    $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
+
+
+    $scope.connect = function connect(provider) {
+        if (provider == "toGoogle") {
+            connectRef.authWithOAuthPopup("google", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase($scope.googleRef.child(authData.google.id)).$set({
+                            displayName: authData.google.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.google.id,
+                            AccessToken: authData.google.accessToken,
+                            profileID: profileID
+                        });
+                        $firebase(ref).$update({
+                            googleID: authData.google.id
+                        });
                     });
-                    dataRef.child(profileID).update({
-                        facebookID: authData.facebook.id
+
+                }
+            });
+        }
+        if (provider == "toFacebook") {
+            connectRef.authWithOAuthPopup("facebook", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase($scope.facebookRef.child(authData.facebook.id)).$set({
+                            displayName: authData.facebook.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.facebook.id,
+                            AccessToken: authData.facebook.accessToken,
+                            profileID: profileID
+                        });
+                        $firebase(ref).$update({
+                            facebookID: authData.facebook.id
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
     }
-}    
 
-    document.addEventListener("deviceready", function () {
+    document.addEventListener("deviceready", function() {
 
-    var options = {
-      quality: 50,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: true,
-      encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 100,
-      targetHeight: 100,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: false
-    };
-    $scope.takeNewPicture = function(){
-    $cordovaCamera.getPicture(options).then(function(imageData) {
-      $scope.userData.picture = "data:image/jpeg;base64," + imageData;
-    }, function(err) {
-      // error
-    });
-    };
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 100,
+            targetHeight: 100,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+        $scope.takeNewPicture = function() {
+            $cordovaCamera.getPicture(options).then(function(imageData) {
+                $scope.userData.picture = "data:image/jpeg;base64," + imageData;
+            }, function(err) {
+                // error
+            });
+        };
 
 
-  }, false);    
+    }, false);
 
 })
 
