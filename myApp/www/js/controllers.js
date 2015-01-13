@@ -10,37 +10,38 @@ angular.module('starter.controllers', [])
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 .factory('UserInfo', ["$firebase",
-        function($firebase) {
-            var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-            var dataRef = $firebase(ref).$asArray();
-            return {
-                getProfile: function(ID) {
-                    dataRef.$loaded()
-                        .then(function(data) {
-                            var record = data.$getRecord(ID);
-                            var profileData = {
-                                "profileID": record.profileID,
-                                "displayName": record.displayName,
-                                "email": record.email,
-                                "picture": record.picture,
-                                "birthdate": record.birthdate,
-                                "age": record.age,
-                                "hobby": record.hobby,
-                                "gender": record.gender,
-                                "firstname": record.firstname,
-                                "lastname": record.lastname
-                            };
-                            return profileData;
-                            console.log(profileData);
-                        })
-                        .catch(function(error) {
-                            console.error("Error getting UserInfo:", error);
-                        });
-                }
-            };
-        }
-    ])
-.factory('helper', [
+    function($firebase) {
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+        var dataRef = $firebase(ref).$asArray();
+        return {
+            getProfile: function(ID) {
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);
+                        var profileData = {
+                            "profileID": record.profileID,
+                            "displayName": record.displayName,
+                            "email": record.email,
+                            "picture": record.picture,
+                            "birthdate": record.birthdate,
+                            "age": record.age,
+                            "hobby": record.hobby,
+                            "gender": record.gender,
+                            "firstname": record.firstname,
+                            "lastname": record.lastname
+                        };
+                        return profileData;
+                        console.log(profileData);
+                    })
+                    .catch(function(error) {
+                        console.error("Error getting UserInfo:", error);
+                    });
+            }
+        };
+    }
+])
+    .factory('helper', [
+
         function() {
             return {
                 calcAge: function(date) {
@@ -493,18 +494,26 @@ angular.module('starter.controllers', [])
         // Execute action
     });
 
-    $scope.displayResults = function() {
-        $state.go('app.results');
+    $scope.huggRequest = {
+        male: "none",
+        female: "none"
     }
 
-    $scope.huggRequest = {
-        male: "",
-        female: ""
+    $scope.displayResults = function() {
+
+        //this opens the results view with the parameters
+        $state.go('app.results', {
+            male: $scope.huggRequest.male,
+            female: $scope.huggRequest.female
+        });
     }
+
+
 })
 
-.controller('resultCtrl', function($scope) {
+.controller('resultCtrl', function($scope, $stateParams) {
     $scope.results = [];
+    console.log($stateParams);
     for (var i = 0; i < 5; i++) {
         $scope.results[i] = {
             name: i + 1,

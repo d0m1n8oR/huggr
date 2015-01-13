@@ -33,7 +33,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
-        .state('index', {
+    .state('index', {
         url: "/index",
         templateUrl: "templates/splash.html",
         controller: "loginCtrl"
@@ -62,28 +62,32 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 templateUrl: "templates/home.html",
                 controller: "homeCtrl",
                 resolve: {
-                    "currentAuth": ["Auth", function(Auth) {
-                        return Auth.$requireAuth();
-                    }]
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
                 }
             }
         }
     })
 
     .state('app.results', {
-            url: "/results",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/results.html",
-                    controller: "resultCtrl",
-                    resolve: {
-                        "currentAuth": ["Auth", function(Auth) {
-                                return Auth.$requireAuth();
-                        }]
-                    }
+        url: "/results/:male/:female",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/results.html",
+                controller: "resultCtrl",
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
                 }
             }
-        })
+        }
+    })
         .state('app.test', {
             url: "/test/:params",
             views: {
@@ -91,9 +95,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                     templateUrl: "templates/test.html",
                     controller: "SampleCtrl",
                     resolve: {
-                        "currentAuth": ["Auth", function(Auth) {
+                        "currentAuth": ["Auth",
+                            function(Auth) {
                                 return Auth.$requireAuth();
-                        }]
+                            }
+                        ]
                     }
                 }
             }
@@ -105,9 +111,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                     templateUrl: "templates/profile.html",
                     controller: "ProfileCtrl",
                     resolve: {
-                        "currentAuth": ["Auth", function(Auth) {
+                        "currentAuth": ["Auth",
+                            function(Auth) {
                                 return Auth.$requireAuth();
-                        }]
+                            }
+                        ]
                     }
                 }
             }
@@ -119,9 +127,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                     templateUrl: "templates/settings.html",
                     controller: 'SettingsCtrl',
                     resolve: {
-                        "currentAuth": ["Auth", function(Auth) {
+                        "currentAuth": ["Auth",
+                            function(Auth) {
                                 return Auth.$requireAuth();
-                        }]
+                            }
+                        ]
                     }
                 }
             }
@@ -134,9 +144,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 templateUrl: "templates/profile.html",
                 controller: 'ProfileCtrl',
                 resolve: {
-                    "currentAuth": ["Auth", function(Auth) {
-                        return Auth.$requireAuth();
-                    }]
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
                 }
             }
         }
