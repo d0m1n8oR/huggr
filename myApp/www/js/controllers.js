@@ -522,9 +522,13 @@ angular.module('starter.controllers', [])
 .controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage) {
     $scope.auth = Auth;
     $scope.user = $scope.auth.$getAuth();
-    console.log($stateParams);
-    var gender;
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+    $scope.currentUser = localstorage.getObject('userData');
     
+    var gender;
+
     //checks what gender is filtered on
     if ($stateParams.female == "none" && $stateParams.male == "true") {
         gender = "male";
@@ -535,19 +539,13 @@ angular.module('starter.controllers', [])
     if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
         gender = "both";
     }
-    
-    var ref = new Firebase("https://huggr.firebaseio.com/");
-
-    var sync = $firebase(ref).$asObject();
-
-    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-    $scope.currentUser = localstorage.getObject('userData');
 
     $scope.requestHugg = function requestHugg(reqLat, reqLong) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-        while ($scope.huggRef.$getRecord(huggID) != null) {
+        $scope.huggRef.$loaded().then(function(data) {
+        while (data.$getRecord(huggID) != null) {
             huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
         }
 
@@ -574,9 +572,37 @@ angular.module('starter.controllers', [])
         $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
             blockedProfileID: "."
         });
-        console.log("success "+ huggID);
+        console.log("success " + huggID);
+        });
     };
-    //Search function here!!!
+                                    
+
+    $scope.huggRef.$loaded().then(function(data) {
+         var record = data.$getRecord(3416233656);
+        console.log("Reco"+record.huggID);
+    });
+    
+   /* function findHuggs() {
+        var huggArray = {
+            id: []
+        };
+        var stringProfileID = $scope.currentUser.profileID.toString();
+
+        
+        
+        
+        if (snapshot.val().accepted == "0" && snapshot.val().answered == "0" && snapshot.val().done == "0" && snapshot.val().reqProfile.profileID != $scope.currentUser.profileID && !(snapshot.child("blocked").hasChild(stringProfileID))) {
+            huggArray.id.push({
+                "huggID": snapshot.val().huggID,
+                "reqProfile": snapshot.val().reqProfile,
+                "huggLocation": snapshot.val().huggLocation,
+                "huggDate": snapshot.val().huggDate,
+                "huggTime": snapshot.val().huggTime,
+                "requestTime": snapshot.val().requestTime
+            });
+        }
+
+    };*/
 
 
     $scope.results = [];
