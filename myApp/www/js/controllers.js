@@ -267,44 +267,40 @@ angular.module('starter.controllers', [])
     function($scope, Auth) {
         $scope.auth = Auth;
         $scope.user = $scope.auth.$getAuth();
+        var ref = new Firebase("https://huggr.firebaseio.com/");
+        $scope.huggRef = fbRef.child("hugg");
 
         $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
 
-            var def = $.Deferred();
-
             var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-            huggRef.once("value", function(snapshot) {
-                while (snapshot.hasChild(huggID.toString())) {
-                    huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-                }
+            while ($scope.huggRef.$getRecord(huggID) != null) {
+                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+            }
 
-                var date = new Date();
-                var today = date.getTime();
+            var date = new Date();
+            var today = date.getTime();
 
-                huggRef.child(huggID).set({
-                    huggID: huggID,
-                    huggLocation: huggLocation,
-                    huggDate: huggDate,
-                    huggTime: huggTime,
-                    done: "0",
-                    answered: "0",
-                    accepted: "0",
-                    reqProfile: userObj,
-                    reqProfileID: userObj.profileID,
-                    requestTime: today,
-                });
-                huggRef.child(huggID).child("rating").set({
-                    rateReqHugg: ".",
-                    rateAnswerHugg: ".",
-                    total: "."
-                });
-                huggRef.child(huggID).child("blocked").set({
-                    blockedProfileID: "."
-                });
-                def.resolve("Success");
+            $firebase(ref.child("hugg").child(huggID)).$set({
+                huggID: huggID,
+                huggLocation: huggLocation,
+                huggDate: huggDate,
+                huggTime: huggTime,
+                done: "0",
+                answered: "0",
+                accepted: "0",
+                reqProfile: userObj,
+                reqProfileID: userObj.profileID,
+                requestTime: today,
             });
-            return def.promise();
+            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+                rateReqHugg: ".",
+                rateAnswerHugg: ".",
+                total: "."
+            });
+            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+                blockedProfileID: "."
+            });
         };
 
     }
