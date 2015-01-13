@@ -278,8 +278,8 @@ angular.module('starter.controllers', [])
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
-    userObject.$bindTo($scope, "userData");
-
+    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData));
+    console.log($scope.userData);
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
     if ($scope.userData.googleID != null) {
         $scope.connectedProvider = true;
@@ -302,7 +302,7 @@ angular.module('starter.controllers', [])
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.$onAuth(function(authData) {
+                    connectRef.onAuth(function(authData) {
                         $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
                             displayName: authData.google.displayName,
                             token: authData.token,
@@ -321,12 +321,12 @@ angular.module('starter.controllers', [])
             });
         }
         if (provider == "toFacebook") {
-            connectRef.$authWithOAuthPopup("facebook", function(err, user) {
+            connectRef.authWithOAuthPopup("facebook", function(err, user) {
                 if (err) {
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.$onAuth(function(authData) {
+                    connectRef.onAuth(function(authData) {
                         $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                             displayName: authData.facebook.displayName,
                             token: authData.token,
