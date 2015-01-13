@@ -263,12 +263,15 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller("SampleCtrl", ["$scope", "Auth",
-    function($scope, Auth) {
-        $scope.auth = Auth;
-        $scope.user = $scope.auth.$getAuth();
+.controller("SampleCtrl", ["$scope", "$firebase", "Auth",
+    function($scope, Auth, $firebase) {
+        //$scope.auth = Auth;
+        //$scope.user = $scope.auth.$getAuth();
         var ref = new Firebase("https://huggr.firebaseio.com/");
-        $scope.huggRef = fbRef.child("hugg");
+
+        var sync = $firebase(ref).$asObject();
+
+        $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
         $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
 
