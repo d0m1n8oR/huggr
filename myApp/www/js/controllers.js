@@ -281,11 +281,25 @@ angular.module('starter.controllers', [])
     userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData));
     console.log($scope.userData);
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
+    var returnval = 0;
     if ($scope.userData.googleID != null) {
-        $scope.connectedProvider = true;
+        returnval = returnval + 10;
     }
     if ($scope.userData.facebookID != null) {
-        $scope.connectedProvider = false;
+        returnval = returnval + 1;
+    }
+
+    if (returnval == 0) {
+        console.warn("Keine Services");
+    }
+    if (returnval == 1) {
+        //show google
+    }
+    if (returnval == 10) {
+        //show facebook
+    }
+    if (returnval == 11) {
+        //show none
     }
 
     var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
@@ -293,7 +307,6 @@ angular.module('starter.controllers', [])
     $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
 
     var mainref = new Firebase("https://huggr.firebaseio.com/");
-
 
     $scope.connect = function connect(provider) {
         if (provider == "toGoogle") {
