@@ -1,40 +1,36 @@
 <ion-view>
     <ion-content>
-    <div ng-show="check">
-      <p>you are logged in</p>
-            <button ng-click="Auth.$unauth()">Logout</button>
-
-    </div>
-    <div ng-hide="check">
-      <p>Welcome, please log in.</p>
-    </div>
-        <div class="row">
-            <div class="col"><img class="splashLogo" height="100%" width="100%" src="img/huggr.svg">
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col text-center logoFont">huggr</div>
-        </div>
-
-        <div>
-
+        <div ng-show="check">
             <div class="row">
-                <div class="col col-bottom text-center">
-                    <br>Login with:</div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <button ng-click="login('facebook')" class="button button-block button-facebook icon-left ion-social-facebook">Facebook</button>
+                <div class="col"><img class="splashLogo" height="100%" width="100%" src="img/huggr.svg">
                 </div>
-                <div class="col">
-                    <button ng-click="login('google')" class="button button-block button-gplus icon-left ion-social-googleplus">Google+</button>
-                </div>
+
             </div>
             <div class="row">
-                <div class="col text-center tosGrey">By logging in, you accept our <a class="splashLinks" ng-click="privacy()">privacy policy</a> and our <a class="splashLinks" ng-click="tos()">terms of service</a>.</div>
+                <div class="col text-center logoFont">huggr</div>
             </div>
-        </div>
+
+            <div>
+
+                <div class="row">
+                    <div ng-hide="check" class="col col-bottom text-center">
+                        <br>Login with:</div>
+                </div>
+                <div class="row" ng-show="check">
+                    <button ng-click="auth.$unauth()" class="button button-block button-assertive icon-left ion-log-out">Log Out</button>
+                </div>
+                <div class="row" ng-hide="check">
+                    <div class="col">
+                        <button ng-click="login('facebook')" class="button button-block button-facebook icon-left ion-social-facebook">Facebook</button>
+                    </div>
+                    <div class="col">
+                        <button ng-click="login('google')" class="button button-block button-gplus icon-left ion-social-googleplus">Google+</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center tosGrey">By logging in, you accept our <a class="splashLinks" ng-click="privacy()">privacy policy</a> and our <a class="splashLinks" ng-click="tos()">terms of service</a>.</div>
+                </div>
+            </div>
 
     </ion-content>
 </ion-view>

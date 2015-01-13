@@ -275,6 +275,56 @@ angular.module('starter.controllers', [])
             $scope.connectedProvider = false;
         } 
 
+    $scope.connect =  function connect(provider) {
+    if (provider == "toGoogle") {
+        fbRef.authWithOAuthPopup("google", function(err, user) {
+            if (err) {
+                console.log(err);
+            }
+            if (user) {
+                fbRef.onAuth(function(authData) {
+                    googleRef.child(authData.google.id).set({
+                        displayName: authData.google.displayName,
+                        token: authData.token,
+                        expires: authData.expires,
+                        uid: authData.uid,
+                        ID: authData.google.id,
+                        AccessToken: authData.google.accessToken,
+                        profileID: profileID
+                    });
+                    dataRef.child(profileID).update({
+                        googleID: authData.google.id
+                    });
+                });
+
+            }
+        });
+    }
+    if (provider == "toFacebook") {
+        fbRef.authWithOAuthPopup("facebook", function(err, user) {
+            if (err) {
+                console.log(err);
+            }
+            if (user) {
+                fbRef.onAuth(function(authData) {
+                    facebookRef.child(authData.google.id).set({
+                        displayName: authData.facebook.displayName,
+                        token: authData.token,
+                        expires: authData.expires,
+                        uid: authData.uid,
+                        ID: authData.facebook.id,
+                        AccessToken: authData.facebook.accessToken,
+                        profileID: profileID
+                    });
+                    dataRef.child(profileID).update({
+                        facebookID: authData.facebook.id
+                    });
+                });
+            }
+        });
+    }
+}    
+
     document.addEventListener("deviceready", function () {
 
     var options = {
