@@ -10,37 +10,37 @@ angular.module('starter.controllers', [])
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 .factory('UserInfo', ["$firebase",
-    function($firebase) {
-        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
-        var dataRef = $firebase(ref).$asArray();
-        return {
-            getProfile: function(ID) {
-                dataRef.$loaded()
-                    .then(function(data) {
-                        var record = data.$getRecord(ID);
-                        var profileData = {
-                            "profileID": record.profileID,
-                            "displayName": record.displayName,
-                            "email": record.email,
-                            "picture": record.picture,
-                            "birthdate": record.birthdate,
-                            "age": record.age,
-                            "hobby": record.hobby,
-                            "gender": record.gender,
-                            "firstname": record.firstname,
-                            "lastname": record.lastname
-                        };
-                        return profileData;
-                        console.log(profileData);
-                    })
-                    .catch(function(error) {
-                        console.error("Error getting UserInfo:", error);
-                    });
-            }
-        };
-    }
-])
-    .factory('helper', [
+        function($firebase) {
+            var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+            var dataRef = $firebase(ref).$asArray();
+            return {
+                getProfile: function(ID) {
+                    dataRef.$loaded()
+                        .then(function(data) {
+                            var record = data.$getRecord(ID);
+                            var profileData = {
+                                "profileID": record.profileID,
+                                "displayName": record.displayName,
+                                "email": record.email,
+                                "picture": record.picture,
+                                "birthdate": record.birthdate,
+                                "age": record.age,
+                                "hobby": record.hobby,
+                                "gender": record.gender,
+                                "firstname": record.firstname,
+                                "lastname": record.lastname
+                            };
+                            return profileData;
+                            console.log(profileData);
+                        })
+                        .catch(function(error) {
+                            console.error("Error getting UserInfo:", error);
+                        });
+                }
+            };
+        }
+    ])
+.factory('helper', [
         function() {
             return {
                 calcAge: function(date) {
@@ -51,37 +51,25 @@ angular.module('starter.controllers', [])
             };
         }
     ])
-<<<<<<< HEAD
-.factory('helper', [function() {
-        return {
-            calcAge: function(date) {
-                var ageDifMs = Date.now() - date.getTime();
-                var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                return Math.abs(ageDate.getUTCFullYear() - 1970);
-            }
-        };
-    }])
+
 .factory('localstorage', ['$window',
-=======
-    .factory('localstorage', ['$window',
->>>>>>> FETCH_HEAD
-        function($window) {
-            return {
-                set: function(key, value) {
-                    $window.localStorage[key] = value;
-                },
-                get: function(key, defaultValue) {
-                    return $window.localStorage[key] || defaultValue;
-                },
-                setObject: function(key, value) {
-                    $window.localStorage[key] = JSON.stringify(value);
-                },
-                getObject: function(key) {
-                    return JSON.parse($window.localStorage[key] || '{}');
-                }
+    function($window) {
+        return {
+            set: function(key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function(key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function(key) {
+                return JSON.parse($window.localStorage[key] || '{}');
             }
         }
-    ])
+    }
+])
 
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService) {
