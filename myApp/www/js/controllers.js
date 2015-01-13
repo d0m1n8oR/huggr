@@ -273,12 +273,11 @@ angular.module('starter.controllers', [])
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
     var userObject = $firebase(ref).$asObject();
     userObject.$bindTo($scope, "currentUser").then(function() {
-        $scope.currentUser = helper.calcAge($scope.currentUser.birthdate);
+        $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
     });
 
     console.log(UserInfo.getProfile("8822986615"));
-    console.log(Date.now());
 
 })
 

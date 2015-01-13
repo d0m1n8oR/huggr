@@ -8,7 +8,7 @@
   <div class="item item-avatar">
     <img ng-src="{{currentUser.picture}}">
     <h2>{{currentUser.displayName}}</h2>
-    <p><span ng-show="currentUser.birthdate">{{currentUser.birthdate}}</span><span ng-hide="currentUser.birthdate">You haven't set your birthday yet</span></p>
+    <p><span ng-show="currentUser.age">{{currentUser.age}} years old</span><span ng-hide="currentUser.age">You haven't set your birthday yet</span></p>
   </div>
 
   <div class="item item-body">
@@ -25,16 +25,15 @@
 
   <div class="item tabs tabs-secondary tabs-icon-left">
     <a class="tab-item" href="">
-      <i class="icon ion-thumbsup"></i>
-      hug
+    <span class="icon icon-huggr"></span>hug {{currentUser.firstname}}
     </a>
     <a class="tab-item" href="">
-      <i class="icon ion-chatbox"></i>
-      hug
+      <i class="icon ion-android-close"></i>
+      ban {{currentUser.firstname}}
     </a>
     <a class="tab-item" href="">
-      <i class="icon ion-share"></i>
-      hug
+      <i class="icon ion-chatbox-working"></i>
+      chat with {{currentUser.firstname}}
     </a>
   </div>
 
