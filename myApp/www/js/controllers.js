@@ -295,8 +295,7 @@ angular.module('starter.controllers', [])
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.onAuth(function(authData) {
-                        //TODO: get profileID!
+                    connectRef.$onAuth(function(authData) {
                         $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
                             displayName: authData.google.displayName,
                             token: authData.token,
@@ -304,7 +303,7 @@ angular.module('starter.controllers', [])
                             uid: authData.uid,
                             ID: authData.google.id,
                             AccessToken: authData.google.accessToken,
-                            profileID: profileID
+                            profileID: $scope.userData.profileID
                         });
                         $firebase(ref).$update({
                             googleID: authData.google.id
@@ -320,7 +319,7 @@ angular.module('starter.controllers', [])
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.onAuth(function(authData) {
+                    connectRef.$onAuth(function(authData) {
                         $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                             displayName: authData.facebook.displayName,
                             token: authData.token,
@@ -328,7 +327,7 @@ angular.module('starter.controllers', [])
                             uid: authData.uid,
                             ID: authData.facebook.id,
                             AccessToken: authData.facebook.accessToken,
-                            profileID: profileID
+                            profileID: $scope.userData.profileID
                         });
                         $firebase(ref).$update({
                             facebookID: authData.facebook.id
