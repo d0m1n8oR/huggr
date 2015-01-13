@@ -513,7 +513,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage) {
     $scope.auth = Auth;
     $scope.user = $scope.auth.$getAuth();
     console.log($stateParams);
@@ -522,8 +522,9 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
 
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+    $scope.currentUser = localstorage.getObject('userData');
 
-    $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
+    $scope.requestHugg = function requestHugg(reqLat, reqLong, gender) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
@@ -536,14 +537,13 @@ angular.module('starter.controllers', [])
 
         $firebase(ref.child("hugg").child(huggID)).$set({
             huggID: huggID,
-            huggLocation: huggLocation,
-            huggDate: huggDate,
-            huggTime: huggTime,
+            reqLat: reqLat,
+            reqLong: reqLong,
+            gender: gender,
             done: "0",
             answered: "0",
             accepted: "0",
-            reqProfile: userObj,
-            reqProfileID: userObj.profileID,
+            reqProfileID: $scope.currentUser.profileID,
             requestTime: today,
         });
         $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
@@ -554,6 +554,7 @@ angular.module('starter.controllers', [])
         $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
             blockedProfileID: "."
         });
+        console.log("success");
     };
 
 
