@@ -4,6 +4,7 @@
     </div>
     <ion-content>
 
+        <!-- need to get value from here -->
         <div class="range">
             <i class="icon ion-volume-low"></i>
             <input type="range" name="volume">
@@ -15,6 +16,21 @@
                 <input type="range" name="volume" min="0" max="100" value="33" ng-model="radius">
                 <i class="icon ion-ios7-sunny"></i>
             </div>
+        </div>
+
+        <div class="list">
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Range
+                </div>
+                <select ng-model="huggRequest.range">
+                    <option>5 km</option>
+                    <option selected>10 km</option>
+                    <option>Forever alone 100 km</option>
+                </select>
+            </label>
+
         </div>
 
 

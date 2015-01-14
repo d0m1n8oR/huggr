@@ -497,24 +497,24 @@ angular.module('starter.controllers', [])
     $scope.huggRequest = {
         male: "none",
         female: "none",
-        radius: "none"
+        range: "10 km"
     }
 
     $scope.displayResults = function() {
 
         var male = $scope.huggRequest.male;
         var female = $scope.huggRequest.female;
-        var radius = $scope.huggRequest.radius;
+        var range = $scope.huggRequest.range;
         //reset huggRequest Object values
         $scope.huggRequest.male = "none";
         $scope.huggRequest.female = "none";
-        $scope.huggRequest.radius = "none";
+        $scope.huggRequest.range = "none";
 
         //this opens the results view with the parameters
         $state.go('app.results', {
             male: male,
             female: female,
-            radius: radius
+            range: range
         });
     };
 })
@@ -526,8 +526,9 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
     $scope.currentUser = localstorage.getObject('userData');
-
+    
     var gender;
+    var range;
 
     //checks what gender is filtered on
     if ($stateParams.female == "none" && $stateParams.male == "true") {
@@ -539,7 +540,22 @@ angular.module('starter.controllers', [])
     if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
         gender = "both";
     }
+    
+    //chek for range values
+    if($stateParams.range == "5 km")
+    {
+        range = 5;
+    }
+    if($stateParams.range == "10 km")
+    {
+        range = 10;
+    }
+    else
+    {
+        range = 100;
+    }
 
+    //function to request a hugg in case the presented huggs are not suitable
     $scope.requestHugg = function requestHugg(reqLat, reqLong) {
 
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
@@ -579,7 +595,9 @@ angular.module('starter.controllers', [])
         });
     };
 
-    console.log(gender);
+    
+    //displays all huggs that suit the request
+    //if huggs are not answered, they are also not done or accepted
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
     $scope.orderHuggRef.$loaded().then(function(data) {
         var i = 0;
@@ -590,7 +608,8 @@ angular.module('starter.controllers', [])
             
             if( ((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ( (record.FilterGender == "both")||(record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) )
             {
-                console.log(record.reqFirstName);
+                console.log("Result "+i+" "+record.reqFirstName+" ReqProfileGender "+record.reqProfileGender+ " FilterGender "+ record.FilterGender);
+                //calculate range
             }
             
             i++;
