@@ -390,6 +390,10 @@ angular.module('starter.controllers', [])
         hugg: []
     };
 
+    var answeredHuggs = {
+        hugg: []
+    }
+
     $scope.orderHuggRef.$loaded().then(function(data) {
 
         var i = 0;
@@ -405,10 +409,34 @@ angular.module('starter.controllers', [])
                     "long": record.reqLong,
                     "time": record.requestTime
                 });
-            } //end if 
+            } //endif
+
+            //get huggs that the user requested, somebody else answered them but they are not yet done
+            if (record.answered == 1 && record.done == 0) {
+                answeredHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime,
+                    "answerProfileID": record.answerProfileID,
+                    "answerTime": record.answerTime,
+                    "answerProfilePiture": record.answerProfilePiture,
+                    "answerGender": record.answerGender,
+                    "answerFirstName": record.answerFirstName
+                });
+            } //end if
+
             i++;
         } //end while
-        console.log(unansweredHuggs);
+
+        console.log("Unanswered Huggs:");
+        for (i = 0; i < unansweredHuggs.hugg.length; i++) {
+            console.log(i + " " + unansweredHuggs.hugg[i].huggID);
+        }
+        console.log("\nAnswered Huggs:");
+        for (i = 0; i < answeredHuggs.hugg.length; i++) {
+            console.log(i + " " + answeredHuggs.hugg[0].huggID);
+        }
     }); //end then
 
     //remove huggs that nobody has answered yet from unanswered huggs list
@@ -416,8 +444,8 @@ angular.module('starter.controllers', [])
         $firebase(firebaseRef.child("hugg")).$remove(huggID).then(function(data) {
             console.log("Successfully removed hugg");
             return 1;
-        });//end then
-    };//end function
+        }); //end then
+    }; //end function
 
     //show answered huggs + revoke button
     //show accepted huggs + decline button
@@ -773,7 +801,7 @@ angular.module('starter.controllers', [])
                                 "profileID": record.reqProfileID,
                                 "distance": distance,
                                 "rating": record.reqRating
-                            }); //end pus
+                            }); //end push
                         } // end if
                     } // end if
 
