@@ -596,6 +596,10 @@ angular.module('starter.controllers', [])
     };
 
     
+    var huggArray = {
+        hugg: []
+    }
+    
     //displays all huggs that suit the request
     //if huggs are not answered, they are also not done or accepted
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
@@ -610,11 +614,21 @@ angular.module('starter.controllers', [])
             {
                 console.log("Result "+i+" "+record.reqFirstName+" ReqProfileGender "+record.reqProfileGender+ " FilterGender "+ record.FilterGender);
                 //calculate range
+                
+                huggArray.hugg.push({
+                   "huggID": record.huggID,
+                    "firstName": record.reqFirstName,
+                    "gender": record.reqProfileGender,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime,
+                    "picture": record.reqPicture
+                });
             }
             
             i++;
         }
-        //console.log($scope.orderHuggRef);
+        console.log(huggArray);
     });
 
     /* function findHuggs() {
