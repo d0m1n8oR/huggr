@@ -32,7 +32,9 @@ angular.module('starter.controllers', [])
                             "hobby": record.hobby,
                             "gender": record.gender,
                             "firstname": record.firstname,
-                            "lastname": record.lastname
+                            "lastname": record.lastname,
+                            "numberHuggs": record.numberHuggs,
+                            "rating": record.rating
                         };
                         //console.log(profileData);
                         deferred.resolve(profileData);
@@ -209,7 +211,20 @@ angular.module('starter.controllers', [])
                 picture: authData.google.cachedUserProfile.picture,
                 gender: authData.google.cachedUserProfile.gender,
                 firstname: authData.google.cachedUserProfile.given_name,
-                lastname: authData.google.cachedUserProfile.family_name
+                lastname: authData.google.cachedUserProfile.family_name,
+                rating: 0,
+                numberHuggs: 0
+            }).then(function(data) {
+
+                $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                $scope.dataRef.$loaded().then(function(data) {
+                    //load data into local storage
+                    var profileData = data.$getRecord(newProfileID);
+                    //Store profile Data persistently in local storage for global usage
+                    console.log(profileData);
+                    localstorage.setObject("userData", profileData);
+                    $state.go('app.home');
+                });
             });
         }
         if (authProvider == "facebook") {
@@ -232,10 +247,25 @@ angular.module('starter.controllers', [])
                 picture: authData.facebook.cachedUserProfile.picture.data.url,
                 gender: authData.facebook.cachedUserProfile.gender,
                 firstname: authData.facebook.cachedUserProfile.first_name,
-                lastname: authData.facebook.cachedUserProfile.last_name
+                lastname: authData.facebook.cachedUserProfile.last_name,
+                rating: 0,
+                numberHuggs: 0
+            }).then(function(data) {
+                $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                $scope.dataRef.$loaded().then(function(data) {
+                    //load data into local storage
+                    var profileData = data.$getRecord(newProfileID);
+                    //Store profile Data persistently in local storage for global usage
+                    console.log(profileData);
+                    localstorage.setObject("userData", profileData);
+                    $state.go('app.home');
+                });
             });
+
         }
-        $state.go('app.home');
+
+        //wait till transaction is complete!
+
     }; //function register(authProvider)
 
 
@@ -318,44 +348,6 @@ angular.module('starter.controllers', [])
         //$scope.auth = Auth;
         //$scope.user = $scope.auth.$getAuth();
         console.log($stateParams);
-        var ref = new Firebase("https://huggr.firebaseio.com/");
-
-        var sync = $firebase(ref).$asObject();
-
-        $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-
-        $scope.requestHugg = function requestHugg(huggLocation, huggDate, huggTime, userObj) {
-
-            var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-
-            while ($scope.huggRef.$getRecord(huggID) != null) {
-                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-            }
-
-            var date = new Date();
-            var today = date.getTime();
-
-            $firebase(ref.child("hugg").child(huggID)).$set({
-                huggID: huggID,
-                huggLocation: huggLocation,
-                huggDate: huggDate,
-                huggTime: huggTime,
-                done: "0",
-                answered: "0",
-                accepted: "0",
-                reqProfile: userObj,
-                reqProfileID: userObj.profileID,
-                requestTime: today,
-            });
-            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-                rateReqHugg: ".",
-                rateAnswerHugg: ".",
-                total: "."
-            });
-            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-                blockedProfileID: "."
-            });
-        };
 
     }
 ])
@@ -604,6 +596,8 @@ angular.module('starter.controllers', [])
             var date = new Date();
             var today = date.getTime();
 
+            console.log($scope.currentUser);
+
             //get GPS coordinates
             $cordovaGeolocation
                 .getCurrentPosition()
@@ -622,7 +616,8 @@ angular.module('starter.controllers', [])
                         reqProfileGender: $scope.currentUser.gender,
                         requestTime: today,
                         reqFirstName: $scope.currentUser.firstname,
-                        reqPicture: $scope.currentUser.picture
+                        reqPicture: $scope.currentUser.picture,
+                        reqRating: $scope.currentUser.rating
 
                     });
                     $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
@@ -689,7 +684,8 @@ angular.module('starter.controllers', [])
                                 "time": record.requestTime,
                                 "picture": record.reqPicture,
                                 "profileID": record.reqProfileID,
-                                "distance": distance
+                                "distance": distance,
+                                "rating": record.reqRating
                             }); //end pus
                         } // end if
                     } // end if
