@@ -9,10 +9,13 @@ angular.module('starter.controllers', [])
 
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
-.factory('UserInfo', ["$firebase",
-    function($firebase) {
+.factory('UserInfo', ["$firebase", "$q",
+    function($firebase, $q) {
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
         var dataRef = $firebase(ref).$asArray();
+
+        var deferred = $q.defer();
+
         return {
             getProfile: function(ID) {
                 dataRef.$loaded()
@@ -30,12 +33,16 @@ angular.module('starter.controllers', [])
                             "firstname": record.firstname,
                             "lastname": record.lastname
                         };
-                        return profileData;
-                        console.log(profileData);
+                        //console.log(profileData);
+                        deferred.resolve(profileData);
+                        //return profileData;
+
                     })
                     .catch(function(error) {
                         console.error("Error getting UserInfo:", error);
+                        deferred.reject("Error getting UserInfo: " + error)
                     });
+                return deferred.promise;
             }
         };
     }
@@ -268,7 +275,27 @@ angular.module('starter.controllers', [])
 
 })
 
+.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+    //stuff with stateParams
+    //In the hugg results when clicking on a offered hugg the user is refered to this page
+    //The params are the profileID of the user that offers the hugg and the huggID
+    //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
+    console.log($stateParams.profileID + " " + $stateParams.huggID);
+    UserInfo.getProfile(7555865560).then(function(value) {
+        $scope.data = value;
+
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.data.profileID);
+        var userObject = $firebase(ref).$asObject();
+        console.log("data " + $scope.data.profileID);
+        userObject.$bindTo($scope, "data").then(function() {
+            $scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
+        });
+    });
+
+})
+
 .controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
     var userObject = $firebase(ref).$asObject();
@@ -276,9 +303,6 @@ angular.module('starter.controllers', [])
         $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
     });
-
-    console.log(UserInfo.getProfile("8822986615"));
-
 })
 
 .controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
@@ -629,7 +653,7 @@ angular.module('starter.controllers', [])
                 //parse all elements of returning array
                 while (data.$keyAt(i) != null) {
                     var record = data.$getRecord(data.$keyAt(i));
-                
+
                     //check whether filter gender of searching person and gender of requestor match
                     //check whether gender of searching person and filter of requestor match
                     //check whether current user's profile ID is among the blocked profile IDs

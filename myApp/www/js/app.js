@@ -138,11 +138,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         })
 
     .state('app.externalProfile', {
-        url: "/profile/:profileID",
+        url: "/profile/:profileID/:huggID",
         views: {
             'menuContent': {
-                templateUrl: "templates/profile.html",
-                controller: 'ProfileCtrl',
+                templateUrl: "templates/extprofile.html",
+                controller: 'ExtProfileCtrl',
                 resolve: {
                     "currentAuth": ["Auth",
                         function(Auth) {
