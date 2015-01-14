@@ -519,7 +519,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation) {
     $scope.auth = Auth;
     $scope.user = $scope.auth.$getAuth();
     var ref = new Firebase("https://huggr.firebaseio.com/");
@@ -564,29 +564,34 @@ angular.module('starter.controllers', [])
             var date = new Date();
             var today = date.getTime();
 
-            $firebase(ref.child("hugg").child(huggID)).$set({
-                huggID: huggID,
-                reqLat: 49.478526,
-                reqLong: 8.452628,
-                FilterGender: gender,
-                done: 0,
-                answered: 0,
-                accepted: 0,
-                reqProfileID: $scope.currentUser.profileID,
-                reqProfileGender: $scope.currentUser.gender,
-                requestTime: today,
-                reqFirstName: $scope.currentUser.firstname,
-                reqPicture: $scope.currentUser.picture
+            $cordovaGeolocation
+                .getCurrentPosition()
+                .then(function(position) {
 
-            });
-            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-                rateReqHugg: ".",
-                rateAnswerHugg: ".",
-                total: "."
-            });
-            $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-                blockedProfileID: "."
-            });
+                    $firebase(ref.child("hugg").child(huggID)).$set({
+                        huggID: huggID,
+                        reqLat: position.coords.latitude,
+                        reqLong: position.coords.longitude,
+                        FilterGender: gender,
+                        done: 0,
+                        answered: 0,
+                        accepted: 0,
+                        reqProfileID: $scope.currentUser.profileID,
+                        reqProfileGender: $scope.currentUser.gender,
+                        requestTime: today,
+                        reqFirstName: $scope.currentUser.firstname,
+                        reqPicture: $scope.currentUser.picture
+
+                    });
+                    $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+                        rateReqHugg: ".",
+                        rateAnswerHugg: ".",
+                        total: "."
+                    });
+                    $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
+                        blockedProfileID: "."
+                    });
+                });
             console.log("success " + huggID);
         });
     };
@@ -605,44 +610,52 @@ angular.module('starter.controllers', [])
     $scope.orderHuggRef.$loaded().then(function(data) {
         var i = 0;
         //parse all elements of returning array
-        while (data.$keyAt(i) != null) {
-            var record = data.$getRecord(data.$keyAt(i));
+        $cordovaGeolocation
+            .getCurrentPosition()
+            .then(function(position) {
 
-            if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
-                console.log("Result " + i + " " + record.reqFirstName + " ReqProfileGender " + record.reqProfileGender + " FilterGender " + record.FilterGender);
+                currentLat = position.coords.latitude;
+                curentLong = position.coords.longitude;
+                console.log(currentLat + " " + currentLong)
+                while (data.$keyAt(i) != null) {
+                    var record = data.$getRecord(data.$keyAt(i));
 
-                //calc distance
-                var radius = 6371;
-                var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
+                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
+                        console.log("Result " + i + " " + record.reqFirstName + " ReqProfileGender " + record.reqProfileGender + " FilterGender " + record.FilterGender);
 
-                var a =
-                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
-                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                        //calc distance
+                        var radius = 6371;
+                        var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
+                        var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
 
-                var b =
-                    2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                        var a =
+                            Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                            Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
+                            Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
 
-                var distance = radius * b;
+                        var b =
+                            2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-                if (distance <= range) {
-                    huggArray.hugg.push({
-                        "huggID": record.huggID,
-                        "firstName": record.reqFirstName,
-                        "gender": record.reqProfileGender,
-                        "lat": record.reqLat,
-                        "long": record.reqLong,
-                        "time": record.requestTime,
-                        "picture": record.reqPicture,
-                        "profileID": record.reqProfileID,
-                        "distance": distance
-                    });
+                        var distance = radius * b;
+
+                        if (distance <= range) {
+                            huggArray.hugg.push({
+                                "huggID": record.huggID,
+                                "firstName": record.reqFirstName,
+                                "gender": record.reqProfileGender,
+                                "lat": record.reqLat,
+                                "long": record.reqLong,
+                                "time": record.requestTime,
+                                "picture": record.reqPicture,
+                                "profileID": record.reqProfileID,
+                                "distance": distance
+                            });
+                        }
+                    }
+
+                    i++;
                 }
-            }
-
-            i++;
-        }
+            });
         console.log(huggArray);
     });
 
