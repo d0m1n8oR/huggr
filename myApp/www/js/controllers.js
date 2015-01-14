@@ -12,9 +12,11 @@ angular.module('starter.controllers', [])
 //Important: This is a synchronised method, so you have to use UserInfo.getProfile({profileID}).then(function(returnData){...})
 .factory('UserInfo', ["$firebase", "$q",
     function($firebase, $q) {
+        //initialize firebase
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
         var dataRef = $firebase(ref).$asArray();
 
+        //$q for synchronous method call
         var deferred = $q.defer();
 
         return {
@@ -40,28 +42,31 @@ angular.module('starter.controllers', [])
                         deferred.resolve(profileData);
                         //return profileData;
 
-                    })
-                    .catch(function(error) {
-                        console.error("Error getting UserInfo:", error);
-                        deferred.reject("Error getting UserInfo: " + error)
-                    });
+                    }) // end then
+
+                .catch(function(error) {
+                    console.error("Error getting UserInfo:", error);
+                    deferred.reject("Error getting UserInfo: " + error)
+                }); // end catch
+
                 return deferred.promise;
+            } // end function(ID)
+        };
+    } // end function
+]) //end factory
+
+.factory('helper', [
+
+    function() {
+        return {
+            calcAge: function(date) {
+                var ageDifMs = Date.now() - date.getTime();
+                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                return Math.abs(ageDate.getUTCFullYear() - 1970);
             }
         };
     }
 ])
-    .factory('helper', [
-
-        function() {
-            return {
-                calcAge: function(date) {
-                    var ageDifMs = Date.now() - date.getTime();
-                    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                    return Math.abs(ageDate.getUTCFullYear() - 1970);
-                }
-            };
-        }
-    ])
 
 .factory('localstorage', ['$window',
     function($window) {
@@ -102,10 +107,15 @@ angular.module('starter.controllers', [])
         disableBack: true
     });
 
+    //function for logout
     $scope.logout = function() {
+
+        //disconnects user from auth object, needs to relogin
         $scope.auth.$unauth();
+
+        //reloads window to show login fields
         window.location.reload();
-    }
+    } // end function
 
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
@@ -369,6 +379,15 @@ angular.module('starter.controllers', [])
         $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
     });
+
+    //show unanswered huggs goes here + delete button
+
+    //show answered huggs + revoke button
+    //show accepted huggs + decline button
+
+    //show done huggs + rating button
+
+    //show archived huggs
 })
 
 .controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
@@ -619,12 +638,11 @@ angular.module('starter.controllers', [])
             //check whether huggID already exists in db
             while (data.$getRecord(huggID) != null) {
                 huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-            }
+            } //end while
 
+            //time calulation
             var date = new Date();
             var today = date.getTime();
-
-            console.log($scope.currentUser);
 
             //get GPS coordinates
             $cordovaGeolocation
@@ -647,17 +665,21 @@ angular.module('starter.controllers', [])
                         reqPicture: $scope.currentUser.picture,
                         reqRating: $scope.currentUser.rating
 
-                    });
+                    }); //end set
+
                     $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
                         rateReqHugg: ".",
                         rateAnswerHugg: ".",
                         total: "."
-                    });
+                    }); //end set
+
+                    //set empty array to firebase to initialize it
                     $firebase(ref.child("hugg").child(huggID).child("blocked")).$set([0, 0]);
-                });
-            console.log("success " + huggID);
-        });
-    };
+                }); // end then (GPS)
+
+        }); // end then (Loaded)
+
+    }; // end function
 
     //initialize JSON
     var huggArray = {
@@ -721,35 +743,10 @@ angular.module('starter.controllers', [])
                     i++;
                 } //end while
             }); //end GPS then
+
+        //This is the return value
         console.log(huggArray);
+
     }); //end load huggRef
 
-
-    /*
-    $scope.results = [];
-    for (var i = 0; i < 5; i++) {
-        $scope.results[i] = {
-            name: i + 1,
-            items: []
-        };
-        for (var j = 0; j < 3; j++) {
-            $scope.results[i].items.push(i + '-' + j);
-        }
-    }
-
-    /*
-     * if given group is the selected group, deselect it
-     * else, select the given group
-     
-    $scope.toggleGroup = function(group) {
-        if ($scope.isGroupShown(group)) {
-            $scope.shownGroup = null;
-        } else {
-            $scope.shownGroup = group;
-        }
-    };
-    $scope.isGroupShown = function(group) {
-        return $scope.shownGroup === group;
-    };
-    */
 }); //end resultCTRL
