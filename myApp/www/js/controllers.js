@@ -598,9 +598,7 @@ angular.module('starter.controllers', [])
                         rateAnswerHugg: ".",
                         total: "."
                     });
-                    $firebase(ref.child("hugg").child(huggID).child("blocked")).$set({
-                        blockedProfileID: "."
-                    });
+                    $firebase(ref.child("hugg").child(huggID).child("blocked")).$set([0, 0]);
                 });
             console.log("success " + huggID);
         });
@@ -631,10 +629,11 @@ angular.module('starter.controllers', [])
                 //parse all elements of returning array
                 while (data.$keyAt(i) != null) {
                     var record = data.$getRecord(data.$keyAt(i));
-
+                
                     //check whether filter gender of searching person and gender of requestor match
                     //check whether gender of searching person and filter of requestor match
-                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
+                    //check whether current user's profile ID is among the blocked profile IDs
+                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.blocked.indexOf($scope.currentUser.profileID) == -1)) {
 
                         //calc distance
                         var radius = 6371;
