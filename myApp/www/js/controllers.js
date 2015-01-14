@@ -622,7 +622,9 @@ angular.module('starter.controllers', [])
                     "lat": record.reqLat,
                     "long": record.reqLong,
                     "time": record.requestTime,
-                    "picture": record.reqPicture
+                    "picture": record.reqPicture,
+                    "profileID": record.reqProfileID,
+                    "distance": 2.04 
                 });
             }
             
