@@ -557,12 +557,15 @@ angular.module('starter.controllers', [])
                 reqLat: reqLat,
                 reqLong: reqLong,
                 FilterGender: gender,
-                done: "0",
-                answered: "0",
-                accepted: "0",
+                done: 0,
+                answered: 0,
+                accepted: 0,
                 reqProfileID: $scope.currentUser.profileID,
                 reqProfileGender: $scope.currentUser.gender,
                 requestTime: today,
+                reqFirstName: $scope.currentUser.firstname,
+                reqPicture: $scope.currentUser.picture
+                
             });
             $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
                 rateReqHugg: ".",
@@ -576,13 +579,20 @@ angular.module('starter.controllers', [])
         });
     };
 
-    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('FilterGender').equalTo(gender).limitToFirst(100)).$asArray();
+    console.log(gender);
+    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
     $scope.orderHuggRef.$loaded().then(function(data) {
         var i = 0;
         //parse all elements of returning array
         while(data.$keyAt(i)!=null)
         {
-            console.log(data.$getRecord(data.$keyAt(i)).reqProfileID);
+            var record = data.$getRecord(data.$keyAt(i));
+            
+            if( ((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ( (record.FilterGender == "both")||(record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) )
+            {
+                console.log(record.reqFirstName);
+            }
+            
             i++;
         }
         //console.log($scope.orderHuggRef);
