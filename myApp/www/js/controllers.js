@@ -526,7 +526,7 @@ angular.module('starter.controllers', [])
     var sync = $firebase(ref).$asObject();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
     $scope.currentUser = localstorage.getObject('userData');
-    
+
     var gender;
     var range;
 
@@ -540,18 +540,14 @@ angular.module('starter.controllers', [])
     if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
         gender = "both";
     }
-    
+
     //chek for range values
-    if($stateParams.range == "5 km")
-    {
+    if ($stateParams.range == "5 km") {
         range = 5;
     }
-    if($stateParams.range == "10 km")
-    {
+    if ($stateParams.range == "10 km") {
         range = 10;
-    }
-    else
-    {
+    } else {
         range = 100;
     }
 
@@ -570,8 +566,8 @@ angular.module('starter.controllers', [])
 
             $firebase(ref.child("hugg").child(huggID)).$set({
                 huggID: huggID,
-                reqLat: reqLat,
-                reqLong: reqLong,
+                reqLat: 49.478526,
+                reqLong: 8.452628,
                 FilterGender: gender,
                 done: 0,
                 answered: 0,
@@ -581,7 +577,7 @@ angular.module('starter.controllers', [])
                 requestTime: today,
                 reqFirstName: $scope.currentUser.firstname,
                 reqPicture: $scope.currentUser.picture
-                
+
             });
             $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
                 rateReqHugg: ".",
@@ -595,39 +591,56 @@ angular.module('starter.controllers', [])
         });
     };
 
-    
+
     var huggArray = {
         hugg: []
     }
-    
+
+    var currentLat = 49.472726;
+    var currentLong = 8.449496;
+
     //displays all huggs that suit the request
     //if huggs are not answered, they are also not done or accepted
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
     $scope.orderHuggRef.$loaded().then(function(data) {
         var i = 0;
         //parse all elements of returning array
-        while(data.$keyAt(i)!=null)
-        {
+        while (data.$keyAt(i) != null) {
             var record = data.$getRecord(data.$keyAt(i));
-            
-            if( ((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ( (record.FilterGender == "both")||(record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) )
-            {
-                console.log("Result "+i+" "+record.reqFirstName+" ReqProfileGender "+record.reqProfileGender+ " FilterGender "+ record.FilterGender);
-                //calculate range
-                
-                huggArray.hugg.push({
-                   "huggID": record.huggID,
-                    "firstName": record.reqFirstName,
-                    "gender": record.reqProfileGender,
-                    "lat": record.reqLat,
-                    "long": record.reqLong,
-                    "time": record.requestTime,
-                    "picture": record.reqPicture,
-                    "profileID": record.reqProfileID,
-                    "distance": 2.04 
-                });
+
+            if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
+                console.log("Result " + i + " " + record.reqFirstName + " ReqProfileGender " + record.reqProfileGender + " FilterGender " + record.FilterGender);
+
+                //calc distance
+                var radius = 6371;
+                var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
+                var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
+
+                var a =
+                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
+                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+
+                var b =
+                    2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                var distance = radius * b;
+
+                if (distance <= range) {
+                    huggArray.hugg.push({
+                        "huggID": record.huggID,
+                        "firstName": record.reqFirstName,
+                        "gender": record.reqProfileGender,
+                        "lat": record.reqLat,
+                        "long": record.reqLong,
+                        "time": record.requestTime,
+                        "picture": record.reqPicture,
+                        "profileID": record.reqProfileID,
+                        "distance": distance
+                    });
+                }
             }
-            
+
             i++;
         }
         console.log(huggArray);
