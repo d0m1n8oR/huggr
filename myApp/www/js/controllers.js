@@ -9,6 +9,7 @@ angular.module('starter.controllers', [])
 
 //Factory um UserInfos abzurufen
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
+//Important: This is a synchronised method, so you have to use UserInfo.getProfile({profileID}).then(function(returnData){...})
 .factory('UserInfo', ["$firebase", "$q",
     function($firebase, $q) {
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
@@ -275,6 +276,8 @@ angular.module('starter.controllers', [])
 
 })
 
+//this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
+//These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
 .controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
