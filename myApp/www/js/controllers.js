@@ -372,15 +372,46 @@ angular.module('starter.controllers', [])
 
 .controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
 
+    //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
+    var firebaseRef = new Firebase("https://huggr.firebaseio.com/");
+    $scope.orderHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
+
+    //show data in profile
     var userObject = $firebase(ref).$asObject();
     userObject.$bindTo($scope, "currentUser").then(function() {
         $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
-    });
+    }); // end bindTo
 
     //show unanswered huggs goes here + delete button
+    var unansweredHuggs = {
+        hugg: []
+    };
+
+    $scope.orderHuggRef.$loaded().then(function(data) {
+
+        var i = 0;
+        while (data.$keyAt(i) != null) {
+
+            var record = data.$getRecord(data.$keyAt(i));
+
+            //unanswered huggs are also not accepted and not done
+            if (record.answered == 0) {
+                unansweredHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime
+                });
+            } //end if 
+            i++;
+        } //end while
+        console.log(unansweredHuggs);
+
+
+    }); //end then
 
     //show answered huggs + revoke button
     //show accepted huggs + decline button
