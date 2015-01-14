@@ -100,6 +100,11 @@ angular.module('starter.controllers', [])
         disableBack: true
     });
 
+    $scope.logout = function() {
+        $scope.auth.$unauth();
+        window.location.reload();
+    }
+
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
 
