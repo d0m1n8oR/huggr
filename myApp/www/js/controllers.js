@@ -319,7 +319,7 @@ angular.module('starter.controllers', [])
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
     console.log($stateParams.profileID + " " + $stateParams.huggID);
-    UserInfo.getProfile(7555865560).then(function(value) {
+    UserInfo.getProfile($stateParams.profileID).then(function(value) {
         $scope.data = value;
 
         var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.data.profileID);
