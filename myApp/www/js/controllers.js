@@ -412,7 +412,7 @@ angular.module('starter.controllers', [])
             } //endif
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
-            if (record.answered == 1 && record.done == 0) {
+            if (record.answered == 1 && record.done == 0 && accepted == 0) {
                 answeredHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
