@@ -409,9 +409,15 @@ angular.module('starter.controllers', [])
             i++;
         } //end while
         console.log(unansweredHuggs);
-
-
     }); //end then
+
+    //remove huggs that nobody has answered yet from unanswered huggs list
+    $scope.removeHugg = function removeHugg(huggID) {
+        $firebase(firebaseRef.child("hugg")).$remove(huggID).then(function(data) {
+            console.log("Successfully removed hugg");
+            return 1;
+        });//end then
+    };//end function
 
     //show answered huggs + revoke button
     //show accepted huggs + decline button
