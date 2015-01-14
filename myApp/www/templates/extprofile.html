@@ -23,18 +23,16 @@
                     <a href="" class="subdued">Number of huggs: {{data.numberHuggs}}</a>
                 </p>
             </div>
-
+            <div class="item item-body">
+                <a href="" class="subdued">Testing: HuggID: {{huggID}}</a>
+            </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item" href="">
-                    <span class="icon icon-huggr"></span>hug {{data.firstname}}
-                </a>
-                <a class="tab-item" href="">
-                    <i class="icon ion-android-close"></i>
-                    ban {{data.firstname}}
+                <a class="tab-item" href="" ng-click="answerHugg({{huggID}})">
+                    <span class="icon icon-huggr"></span>Hugg {{data.firstname}}
                 </a>
                 <a class="tab-item" href="">
                     <i class="icon ion-chatbox-working"></i>
-                    chat with {{data.firstname}}
+                    Chat with {{data.firstname}}
                 </a>
             </div>
 

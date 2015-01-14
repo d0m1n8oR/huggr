@@ -318,19 +318,47 @@ angular.module('starter.controllers', [])
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
-    console.log($stateParams.profileID + " " + $stateParams.huggID);
+
+    $scope.huggID = $stateParams.huggID;
+    $scope.data;
+    $scope.currentUser = localstorage.getObject('userData');
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
     UserInfo.getProfile($stateParams.profileID).then(function(value) {
         $scope.data = value;
 
         var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.data.profileID);
         var userObject = $firebase(ref).$asObject();
-        console.log("data " + $scope.data.profileID);
+
+        //displays information
         userObject.$bindTo($scope, "data").then(function() {
             $scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
-        });
-    });
+        }); //end bindTo
+    }); //end getProfile
 
-})
+    $scope.answerHugg = function answerHugg(huggID) {
+        var date = new Date();
+        var today = date.getTime();
+
+        //adds info of user that accepts hugg to database
+        $firebase(ref.child("hugg").child(huggID)).$update({
+            answered: 1,
+            answerProfileID: $scope.currentUser.profileID,
+            answerTime: today,
+            answerProfilePiture: $scope.currentUser.picture,
+            answerGender: $scope.currentUser.gender,
+            answerFirstName: $scope.currentUser.firstname
+
+        }).then(function(data) {
+
+            console.log("Successfully updated");
+
+        }); //end then
+
+    } //end function
+
+}) //end controller
 
 .controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
 
