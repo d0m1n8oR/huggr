@@ -438,7 +438,7 @@ angular.module('starter.controllers', [])
         }
         console.log("\nAnswered Huggs:");
         for (i = 0; i < answeredHuggs.hugg.length; i++) {
-            console.log(i + " " + answeredHuggs.hugg[0].huggID);
+            console.log(i + " " + answeredHuggs.hugg[i].huggID);
         }
     }); //end then
 
@@ -469,11 +469,11 @@ angular.module('starter.controllers', [])
         $firebase(firebaseRef.child("hugg").child(huggID)).$update({
             answered: 0,
             accepted: 0,
-            answerProfileID: "",
-            answerPicture: "",
-            answerGender: "",
-            answerTime: "",
-            answerFirstName: ""
+            answerProfileID: null,
+            answerPicture: null,
+            answerGender: null,
+            answerTime: null,
+            answerFirstName: null
         }).then(function(x) {
 
             $firebase(firebaseRef.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
@@ -694,7 +694,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -792,71 +792,87 @@ angular.module('starter.controllers', [])
     var currentLong = 8.449496;
 
     //wait for ref to load before continuing
-    $scope.orderHuggRef.$loaded().then(function(data) {
-        var i = 0;
+    function getHuggs() {
+        var deferred = $q.defer();
 
-        //get GPS locaion
-        $cordovaGeolocation
-            .getCurrentPosition()
-            .then(function(position) {
+        $scope.orderHuggRef.$loaded().then(function(data) {
+            var i = 0;
 
-                //save coordinates to var
-                currentLat = position.coords.latitude;
-                curentLong = position.coords.longitude;
+            console.log(i);
+            //get GPS locaion
+            $cordovaGeolocation
+                .getCurrentPosition()
+                .then(function(position) {
 
-                //parse all elements of returning array
-                while (data.$keyAt(i) != null) {
-                    var record = data.$getRecord(data.$keyAt(i));
+                    //save coordinates to var
+                    currentLat = position.coords.latitude;
+                    curentLong = position.coords.longitude;
 
-                    //check whether filter gender of searching person and gender of requestor match
-                    //check whether gender of searching person and filter of requestor match
-                    //check whether current user's profile ID is among the blocked profile IDs
-                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
+                    //parse all elements of returning array
+                    while (data.$keyAt(i) != null) {
 
-                        $scope.huggRef = $firebase(ref.child("hugg").child(record.huggID).child("blocked")).$asArray();
-                        $scope.huggRef.$loaded().then(function(data) {
+                        function load() {
+                            var def = $q.defer();
+                            console.log(i + ("2"))
+                            def.resolve(data.$getRecord(data.$keyAt(i)));
+                            return def.promise
+                        }; //end function
+                        //check whether filter gender of searching person and gender of requestor match
+                        //check whether gender of searching person and filter of requestor match
+                        //check whether current user's profile ID is among the blocked profile IDs
+                        load().then(function(record) {
+                            if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
 
-                            //check whether user is blocked in results                            
-                            if (data.$getRecord($scope.currentUser.profileID) == null) {
-                                
-                                //calc distance
-                                var radius = 6371;
-                                var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                                var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
-                                var a =
-                                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
-                                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
-                                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                var distance = radius * b;
+                                $scope.huggRef = $firebase(ref.child("hugg").child(record.huggID).child("blocked")).$asArray();
+                                $scope.huggRef.$loaded().then(function(data) {
 
-                                //check for distance within range and save to JSON
-                                if (distance <= range) {
-                                    huggArray.hugg.push({
-                                        "huggID": record.huggID,
-                                        "firstName": record.reqFirstName,
-                                        "gender": record.reqProfileGender,
-                                        "lat": record.reqLat,
-                                        "long": record.reqLong,
-                                        "time": record.requestTime,
-                                        "picture": record.reqPicture,
-                                        "profileID": record.reqProfileID,
-                                        "distance": distance,
-                                        "rating": record.reqRating
-                                    }); //end push
-                                } // end if
-                                
-                            } //end if
+                                    //check whether user is blocked in results                            
+                                    if (data.$getRecord($scope.currentUser.profileID) == null) {
+
+                                        //calc distance
+                                        var radius = 6371;
+                                        var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
+                                        var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
+                                        var a =
+                                            Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                                            Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
+                                            Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                                        var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                        var distance = radius * b;
+
+                                        //check for distance within range and save to JSON
+                                        console.log(i);
+                                        if (distance <= range) {
+                                            huggArray.hugg.push({
+                                                "huggID": record.huggID,
+                                                "firstName": record.reqFirstName,
+                                                "gender": record.reqProfileGender,
+                                                "lat": record.reqLat,
+                                                "long": record.reqLong,
+                                                "time": record.requestTime,
+                                                "picture": record.reqPicture,
+                                                "profileID": record.reqProfileID,
+                                                "distance": distance,
+                                                "rating": record.reqRating
+                                            }); //end push
+                                        } // end if
+
+                                    } //end if
+                                }); //end then
+                            } // end if
                         }); //end then
-                    } // end if
+                        i++;
+                    } //end while
+                    deferred.resolve(huggArray);
+                }); //end GPS then
 
-                    i++;
-                } //end while
-            }); //end GPS then
+            //This is the return value
+        }); //end load huggRef
+        return deferred.promise;
+    } //end function
 
-        //This is the return value
-        console.log(huggArray);
-
-    }); //end load huggRef
+    getHuggs().then(function(array) {
+        console.log(array);
+    })
 
 }); //end resultCTRL
