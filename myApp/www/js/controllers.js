@@ -359,7 +359,8 @@ angular.module('starter.controllers', [])
             answerTime: today,
             answerProfilePiture: $scope.currentUser.picture,
             answerGender: $scope.currentUser.gender,
-            answerFirstName: $scope.currentUser.firstname
+            answerFirstName: $scope.currentUser.firstname,
+            answerRating: $scope.currentUser.rating
 
         }).then(function(data) {
 
@@ -377,7 +378,8 @@ angular.module('starter.controllers', [])
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
     var firebaseRef = new Firebase("https://huggr.firebaseio.com/");
-    $scope.orderHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
+    $scope.orderOwnHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
+    $scope.orderOtherHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
 
 
     //show data in profile
@@ -394,9 +396,13 @@ angular.module('starter.controllers', [])
 
     var answeredHuggs = {
         hugg: []
-    }
+    };
 
-    $scope.orderHuggRef.$loaded().then(function(data) {
+    var unacceptedHuggs = {
+        hugg: []
+    };
+
+    $scope.orderOwnHuggRef.$loaded().then(function(data) {
 
         var i = 0;
         while (data.$keyAt(i) != null) {
@@ -430,6 +436,32 @@ angular.module('starter.controllers', [])
 
             i++;
         } //end while
+    });
+
+    $scope.orderOtherHuggRef.$loaded().then(function(data) {
+
+        var i = 0;
+        while (data.$keyAt(i) != null) {
+
+            var record = data.$getRecord(data.$keyAt(i));
+
+            //unanswered huggs are also not accepted and not done
+            if (record.answered == 1 && record.accepted == 0) {
+                unacceptedHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime,
+                    "profileID": record.reqProfileID,
+                    "picture": record.reqPicture,
+                    "gender": record.reqProfileGender,
+                    "rating": record.reqRating,
+
+                });
+            } //endif
+
+            i++;
+        } //end while
 
         console.log("Profile of User")
         console.log("Unanswered Huggs:");
@@ -439,6 +471,10 @@ angular.module('starter.controllers', [])
         console.log("\nAnswered Huggs:");
         for (i = 0; i < answeredHuggs.hugg.length; i++) {
             console.log(i + " " + answeredHuggs.hugg[i].huggID);
+        }
+        console.log("\nUnaccepted Huggs:");
+        for (i = 0; i < unacceptedHuggs.hugg.length; i++) {
+            console.log(i + " " + unacceptedHuggs.hugg[i].huggID);
         }
     }); //end then
 
@@ -797,8 +833,6 @@ angular.module('starter.controllers', [])
 
         $scope.orderHuggRef.$loaded().then(function(data) {
             var i = 0;
-
-            console.log(i);
             //get GPS locaion
             $cordovaGeolocation
                 .getCurrentPosition()
@@ -813,7 +847,6 @@ angular.module('starter.controllers', [])
 
                         function load() {
                             var def = $q.defer();
-                            console.log(i + ("2"))
                             def.resolve(data.$getRecord(data.$keyAt(i)));
                             return def.promise
                         }; //end function
@@ -841,7 +874,6 @@ angular.module('starter.controllers', [])
                                         var distance = radius * b;
 
                                         //check for distance within range and save to JSON
-                                        console.log(i);
                                         if (distance <= range) {
                                             huggArray.hugg.push({
                                                 "huggID": record.huggID,
@@ -873,6 +905,6 @@ angular.module('starter.controllers', [])
 
     getHuggs().then(function(array) {
         console.log(array);
-    })
+    });
 
 }); //end resultCTRL
