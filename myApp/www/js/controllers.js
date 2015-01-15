@@ -389,7 +389,7 @@ angular.module('starter.controllers', [])
         localstorage.setObject("userData", $scope.currentUser)
     }); // end bindTo
 
-    //show unanswered huggs goes here + delete button
+    //initialize various arrays to save data to
     var unansweredHuggs = {
         hugg: []
     };
@@ -418,11 +418,16 @@ angular.module('starter.controllers', [])
         hugg: []
     };
 
+    //waiting on this reference to be loaded
+    //this reference is for huggs that this users requested
+    //in DB: profileID of user is in reqProfileID field
     $scope.orderOwnHuggRef.$loaded().then(function(data) {
 
         var i = 0;
+        //loop to get all the elements
         while (data.$keyAt(i) != null) {
 
+            //save value from db to record
             var record = data.$getRecord(data.$keyAt(i));
 
             //unanswered huggs are also not accepted and not done
@@ -432,7 +437,7 @@ angular.module('starter.controllers', [])
                     "lat": record.reqLat,
                     "long": record.reqLong,
                     "reqTime": record.reqTime
-                });
+                }); //end push
             } //endif
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
@@ -448,7 +453,7 @@ angular.module('starter.controllers', [])
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName
-                });
+                }); //end push
             } //end if
 
             //get huggs that the user requested, somebody else answered them and the requesting user has already accepted the hugg
@@ -465,7 +470,7 @@ angular.module('starter.controllers', [])
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName
-                });
+                }); //end push
             } //end if
 
             //get huggs that are done and requested by this user
@@ -484,18 +489,23 @@ angular.module('starter.controllers', [])
                     "reqRating": record.rating.reqRating,
                     "answerRating": record.rating.answerRating,
                     "totalRating": record.rating.totalRating
-                });
+                }); //end push
             } //end if
 
             i++;
         } //end while
-    });
+    }); //end loaded()
 
+    //waitig on this reference to be loadd
+    //this reference is for huggs that other users requested and that this user answered
+    //in DB: profileID of user is in answerProfileID field
     $scope.orderOtherHuggRef.$loaded().then(function(data) {
 
         var i = 0;
+        //loop to get all elements
         while (data.$keyAt(i) != null) {
 
+            //save element from DB to record
             var record = data.$getRecord(data.$keyAt(i));
 
             //unanswered huggs are also not accepted and not done
@@ -511,7 +521,7 @@ angular.module('starter.controllers', [])
                     "reqGender": record.reqGender,
                     "reqRating": record.reqRating,
                     "reqFirstName": record.reqFirstName
-                });
+                }); //end push
             } //endif
 
             //the user has answered this hugg and the requesting user has accepted the answer
@@ -528,9 +538,12 @@ angular.module('starter.controllers', [])
                     "reqGender": record.reqGender,
                     "reqRating": record.reqRating,
                     "reqFirstName": record.reqFirstName
-                });
+                }); //end push
             } //endif
 
+            //queries for huggs that other users request and this user answered the hugg
+            //the hugg is done
+            //corresponding element: Rating
             if (record.done == 1) {
                 otherDoneHuggs.hugg.push({
                     "huggID": record.huggID,
@@ -544,11 +557,19 @@ angular.module('starter.controllers', [])
                     "reqRating": record.rating.reqRating,
                     "answerRating": record.rating.answerRating,
                     "totalRating": record.rating.totalRating
-                });
+                }); //end push
             } //end if
 
             i++;
         } //end while
+
+
+        /*******************************************************************************************
+         *                                                                                          *
+         *           THIS BLOCK SHOWS HOW THE DATA RCIEVED FROM THE QUERIES CAN BE USED!            *
+         *                       PLEASE DELETE FOR FINAL VERSION                                    *
+         *                                                                                          *
+         *******************************************************************************************/
         console.log("Profile of User")
         console.log("Huggs from you that nobody has yet answered:");
         for (i = 0; i < unansweredHuggs.hugg.length; i++) {
@@ -720,13 +741,7 @@ angular.module('starter.controllers', [])
 
     }; //end function
 
-    //show answered huggs + revoke button
-    //show accepted huggs + decline button
-
-    //show done huggs + rating button
-
-    //show archived huggs
-})
+}) //end ProfileCtrl
 
 .controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
     function($scope, Auth, $firebase, $stateParams) {
