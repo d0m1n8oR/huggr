@@ -409,7 +409,7 @@ angular.module('starter.controllers', [])
     var otherAcceptedHuggs = {
         hugg: []
     };
-    
+
     var ownDoneHuggs = {
         hugg: []
     };
@@ -463,7 +463,7 @@ angular.module('starter.controllers', [])
                     "answerFirstName": record.answerFirstName
                 });
             } //end if
-            
+
             //get huggs that are done and requested by this user
             //corresponding: Rating
             if (record.done == 1) {
@@ -551,23 +551,18 @@ angular.module('starter.controllers', [])
         console.log("\nHuggs that you requested and that are done");
         for (i = 0; i < ownDoneHuggs.hugg.length; i++) {
             console.log(i + " " + ownDoneHuggs.hugg[i].huggID);
-            if(ownDoneHuggs.hugg[i].reqRating == ".")
-            {
+            if (ownDoneHuggs.hugg[i].reqRating == ".") {
                 console.log("Please rate this hugg!");
+            } else {
+                console.log("Your rating was " + ownDoneHuggs.hugg[i].reqRating);
             }
-            else{
-                console.log("Your rating was "+ownDoneHuggs.hugg[i].reqRating);
-            }
-            if(ownDoneHuggs.hugg[i].answerRating == ".")
-            {
+            if (ownDoneHuggs.hugg[i].answerRating == ".") {
                 console.log("Waiting for the other user to rate!");
+            } else {
+                console.log("The other rating was " + ownDoneHuggs.hugg[i].answerRating);
             }
-            else{
-                console.log("The other rating was "+ownDoneHuggs.hugg[i].answerRating);
-            }
-            if(ownDoneHuggs.hugg[i].totalRating != ".")
-            {
-                console.log("The rating for this hugg is "+ ownDoneHuggs.hugg[i].totalRating);
+            if (ownDoneHuggs.hugg[i].totalRating != ".") {
+                console.log("The rating for this hugg is " + ownDoneHuggs.hugg[i].totalRating);
             }
         }
 
@@ -645,11 +640,42 @@ angular.module('starter.controllers', [])
     //after this the hugg can be rated
     $scope.markDone = function markDone(huggID) {
 
+        //update status in huggRef DB
         $firebase(firebaseRef.child("hugg").child(huggID)).$update({
             done: 1
         }).then(function(x) {
-            console.log("Successfully marked done!");
-            return 1;
+
+            //define ref for huggs
+            $scope.huggRef = $firebase(firebaseRef.child("hugg")).$asArray();
+            $scope.huggRef.$loaded().then(function(huggData) {
+                //load infos for selected hugg
+                var record = huggData.$getRecord(huggID);
+
+                //define ref for users
+                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef.$loaded().then(function(userData) {
+
+                    //load current number of huggs for both users and add 1
+                    var reqNumberHuggs = userData.$getRecord(record.reqProfileID).numberHuggs + 1;
+                    var answerNumberHuggs = userData.$getRecord(record.answerProfileID).numberHuggs + 1;
+
+                    //update info on number of huggs for requestor
+                    $firebase(firebaseRef.child("users").child("data").child(record.reqProfileID)).$update({
+                        numberHuggs: reqNumberHuggs
+                    }).then(function(x) {
+
+                        //update info on number of huggs for answerer
+                        $firebase(firebaseRef.child("users").child("data").child(record.answerProfileID)).$update({
+                            numberHuggs: answerNumberHuggs
+                        }).then(function(y) {
+                            //finalize
+                            console.log("Successfully marked done!");
+                            return 1;
+                        }); //end then (finalize)
+                    }); //end then (update answerer)
+                }); //end then (load userRef)
+
+            }); //end then(load huggRef)
         }); //end then
 
     }; //end function
