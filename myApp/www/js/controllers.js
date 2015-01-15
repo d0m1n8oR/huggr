@@ -401,6 +401,10 @@ angular.module('starter.controllers', [])
     var unacceptedHuggs = {
         hugg: []
     };
+    
+    var ownAcceptedHuggs = {
+        hugg: []
+    };
 
     $scope.orderOwnHuggRef.$loaded().then(function(data) {
 
@@ -420,8 +424,26 @@ angular.module('starter.controllers', [])
             } //endif
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
+            //corresponding button is acceptHugg() or declineHugg()
             if (record.answered == 1 && record.done == 0 && record.accepted == 0) {
                 answeredHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime,
+                    "answerProfileID": record.answerProfileID,
+                    "answerTime": record.answerTime,
+                    "answerPicture": record.answerPicture,
+                    "answerGender": record.answerGender,
+                    "answerFirstName": record.answerFirstName
+                });
+            } //end if
+            
+            //get huggs that the user requested, somebody else answered them and the requesting user has already accepted the hugg
+            //the hugg has not yet taken place
+            //corresponding button is declineHugg()
+            if (record.answered == 1 && record.done == 0 && record.accepted == 1) {
+                ownAcceptedHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -446,6 +468,7 @@ angular.module('starter.controllers', [])
             var record = data.$getRecord(data.$keyAt(i));
 
             //unanswered huggs are also not accepted and not done
+            //corresponding button is revokeAnswer()
             if (record.answered == 1 && record.accepted == 0) {
                 unacceptedHuggs.hugg.push({
                     "huggID": record.huggID,
@@ -464,17 +487,22 @@ angular.module('starter.controllers', [])
         } //end while
 
         console.log("Profile of User")
-        console.log("Unanswered Huggs:");
+        console.log("Huggs from you that nobody has yet answered:");
         for (i = 0; i < unansweredHuggs.hugg.length; i++) {
             console.log(i + " " + unansweredHuggs.hugg[i].huggID);
         }
-        console.log("\nAnswered Huggs:");
+        console.log("\nHuggs from you that someone else answered:");
         for (i = 0; i < answeredHuggs.hugg.length; i++) {
             console.log(i + " " + answeredHuggs.hugg[i].huggID);
         }
-        console.log("\nUnaccepted Huggs:");
+        console.log("\nHuggs that you answered but the other person has not yet accepted:");
         for (i = 0; i < unacceptedHuggs.hugg.length; i++) {
             console.log(i + " " + unacceptedHuggs.hugg[i].huggID);
+        }
+        console.log("\nHuggs that someone else answered and you accepted");
+        for(i = 0; i<ownAcceptedHuggs.hugg.length;i++)
+        {
+            console.log(i+" "+ownAcceptedHuggs.hugg[i].huggID);
         }
     }); //end then
 
