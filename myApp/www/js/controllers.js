@@ -405,6 +405,10 @@ angular.module('starter.controllers', [])
     var ownAcceptedHuggs = {
         hugg: []
     };
+    
+    var otherAcceptedHuggs = {
+        hugg: []
+    }; 
 
     $scope.orderOwnHuggRef.$loaded().then(function(data) {
 
@@ -482,6 +486,21 @@ angular.module('starter.controllers', [])
 
                 });
             } //endif
+            
+            //unanswered huggs are also not accepted and not done
+            //corresponding button is revokeAnswer()
+            if (record.answered == 1 && record.accepted == 1 && record.done == 0) {
+                otherAcceptedHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "time": record.requestTime,
+                    "profileID": record.reqProfileID,
+                    "picture": record.reqPicture,
+                    "gender": record.reqGender,
+                    "rating": record.reqRating,
+                });
+            } //endif
 
             i++;
         } //end while
@@ -503,6 +522,11 @@ angular.module('starter.controllers', [])
         for(i = 0; i<ownAcceptedHuggs.hugg.length;i++)
         {
             console.log(i+" "+ownAcceptedHuggs.hugg[i].huggID);
+        }
+        console.log("\nHuggs that you answered and the other person accepted");
+        for(i = 0; i<otherAcceptedHuggs.hugg.length;i++)
+        {
+            console.log(i+" "+otherAcceptedHuggs.hugg[i].huggID);
         }
     }); //end then
 
