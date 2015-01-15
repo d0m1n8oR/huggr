@@ -357,7 +357,7 @@ angular.module('starter.controllers', [])
             answered: 1,
             answerProfileID: $scope.currentUser.profileID,
             answerTime: today,
-            answerProfilePiture: $scope.currentUser.picture,
+            answerPicture: $scope.currentUser.picture,
             answerGender: $scope.currentUser.gender,
             answerFirstName: $scope.currentUser.firstname,
             answerRating: $scope.currentUser.rating
@@ -428,7 +428,7 @@ angular.module('starter.controllers', [])
                     "time": record.requestTime,
                     "answerProfileID": record.answerProfileID,
                     "answerTime": record.answerTime,
-                    "answerProfilePiture": record.answerProfilePiture,
+                    "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName
                 });
@@ -454,7 +454,7 @@ angular.module('starter.controllers', [])
                     "time": record.requestTime,
                     "profileID": record.reqProfileID,
                     "picture": record.reqPicture,
-                    "gender": record.reqProfileGender,
+                    "gender": record.reqGender,
                     "rating": record.reqRating,
 
                 });
@@ -509,7 +509,8 @@ angular.module('starter.controllers', [])
             answerPicture: null,
             answerGender: null,
             answerTime: null,
-            answerFirstName: null
+            answerFirstName: null,
+            answerRating: null
         }).then(function(x) {
 
             $firebase(firebaseRef.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
@@ -520,6 +521,26 @@ angular.module('starter.controllers', [])
             }); //end then
 
         }); //end then
+    }; //end function
+
+    //revoke an answer to a hugg (the hugg is requested from somebody else, the user answered the hugg, the hugg is not yet accepted)
+    //the user doesn't want to participate in the offered hugg
+    $scope.revokeAnswer = function revokeAnswer(huggID) {
+
+        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+            answered: 0,
+            accepted: 0,
+            answerProfileID: null,
+            answerPicture: null,
+            answerGender: null,
+            answerTime: null,
+            answerFirstName: null,
+            answerRating: null
+        }).then(function(x) {
+            console.log("Successfully revoked hugg answer!");
+            return 1;
+        }); //end then
+
     }; //end function
 
     //show answered huggs + revoke button
@@ -799,19 +820,27 @@ angular.module('starter.controllers', [])
                         answered: 0,
                         accepted: 0,
                         reqProfileID: $scope.currentUser.profileID,
-                        reqProfileGender: $scope.currentUser.gender,
+                        reqGender: $scope.currentUser.gender,
                         requestTime: today,
                         reqFirstName: $scope.currentUser.firstname,
                         reqPicture: $scope.currentUser.picture,
                         reqRating: $scope.currentUser.rating
 
-                    }); //end set
+                    }).then(function(x) {
 
-                    $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-                        rateReqHugg: ".",
-                        rateAnswerHugg: ".",
-                        total: "."
-                    }); //end set
+                        $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
+                            rateReqHugg: ".",
+                            rateAnswerHugg: ".",
+                            total: "."
+                        }).then(function(y)
+                                
+                                {
+                            console.log("Successfully requested hugg");
+                            return 1;
+                        }); //end then
+
+                    }); //end then (rating)
+
                 }); // end then (GPS)
 
         }); // end then (Loaded)
@@ -854,7 +883,7 @@ angular.module('starter.controllers', [])
                         //check whether gender of searching person and filter of requestor match
                         //check whether current user's profile ID is among the blocked profile IDs
                         load().then(function(record) {
-                            if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
+                            if (((gender == "both") || (gender != "both" && record.reqGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
 
                                 $scope.huggRef = $firebase(ref.child("hugg").child(record.huggID).child("blocked")).$asArray();
                                 $scope.huggRef.$loaded().then(function(data) {
@@ -878,7 +907,7 @@ angular.module('starter.controllers', [])
                                             huggArray.hugg.push({
                                                 "huggID": record.huggID,
                                                 "firstName": record.reqFirstName,
-                                                "gender": record.reqProfileGender,
+                                                "gender": record.reqGender,
                                                 "lat": record.reqLat,
                                                 "long": record.reqLong,
                                                 "time": record.requestTime,
