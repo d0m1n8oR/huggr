@@ -414,6 +414,10 @@ angular.module('starter.controllers', [])
         hugg: []
     };
 
+    var otherDoneHuggs = {
+        hugg: []
+    };
+
     $scope.orderOwnHuggRef.$loaded().then(function(data) {
 
         var i = 0;
@@ -427,7 +431,7 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime
+                    "reqTime": record.reqTime
                 });
             } //endif
 
@@ -438,7 +442,7 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime,
+                    "reqTime": record.reqTime,
                     "answerProfileID": record.answerProfileID,
                     "answerTime": record.answerTime,
                     "answerPicture": record.answerPicture,
@@ -455,7 +459,7 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime,
+                    "reqTime": record.reqTime,
                     "answerProfileID": record.answerProfileID,
                     "answerTime": record.answerTime,
                     "answerPicture": record.answerPicture,
@@ -471,7 +475,7 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime,
+                    "reqTime": record.reqTime,
                     "answerProfileID": record.answerProfileID,
                     "answerTime": record.answerTime,
                     "answerPicture": record.answerPicture,
@@ -501,11 +505,12 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime,
-                    "profileID": record.reqProfileID,
-                    "picture": record.reqPicture,
-                    "gender": record.reqGender,
-                    "rating": record.reqRating
+                    "reqTime": record.reqTime,
+                    "reqProfileID": record.reqProfileID,
+                    "reqPicture": record.reqPicture,
+                    "reqGender": record.reqGender,
+                    "reqRating": record.reqRating,
+                    "reqFirstName": record.reqFirstName
                 });
             } //endif
 
@@ -517,13 +522,30 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "time": record.requestTime,
-                    "profileID": record.reqProfileID,
-                    "picture": record.reqPicture,
-                    "gender": record.reqGender,
-                    "rating": record.reqRating
+                    "reqTime": record.reqTime,
+                    "reqProfileID": record.reqProfileID,
+                    "reqPicture": record.reqPicture,
+                    "reqGender": record.reqGender,
+                    "reqRating": record.reqRating,
+                    "reqFirstName": record.reqFirstName
                 });
             } //endif
+
+            if (record.done == 1) {
+                otherDoneHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "reqTime": record.reqTime,
+                    "reqProfileID": record.reqProfileID,
+                    "reqPicture": record.reqPicture,
+                    "reqGender": record.reqGender,
+                    "reqFirstName": record.reqFirstName,
+                    "reqRating": record.rating.reqRating,
+                    "answerRating": record.rating.answerRating,
+                    "totalRating": record.rating.totalRating
+                });
+            } //end if
 
             i++;
         } //end while
@@ -563,6 +585,24 @@ angular.module('starter.controllers', [])
             }
             if (ownDoneHuggs.hugg[i].totalRating != ".") {
                 console.log("The rating for this hugg is " + ownDoneHuggs.hugg[i].totalRating);
+            }
+        }
+
+        console.log("\nHuggs that you answered and that are done");
+        for (i = 0; i < otherDoneHuggs.hugg.length; i++) {
+            console.log(i + " " + otherDoneHuggs.hugg[i].huggID);
+            if (otherDoneHuggs.hugg[i].answerRating == ".") {
+                console.log("Please rate this hugg!");
+            } else {
+                console.log("Your rating was " + otherDoneHuggs.hugg[i].answerRating);
+            }
+            if (otherDoneHuggs.hugg[i].reqRating == ".") {
+                console.log("Waiting for the other user to rate!");
+            } else {
+                console.log("The other rating was " + otherDoneHuggs.hugg[i].reqRating);
+            }
+            if (otherDoneHuggs.hugg[i].totalRating != ".") {
+                console.log("The rating for this hugg is " + otherDoneHuggs.hugg[i].totalRating);
             }
         }
 
@@ -958,7 +998,7 @@ angular.module('starter.controllers', [])
                         accepted: 0,
                         reqProfileID: $scope.currentUser.profileID,
                         reqGender: $scope.currentUser.gender,
-                        requestTime: today,
+                        reqTime: today,
                         reqFirstName: $scope.currentUser.firstname,
                         reqPicture: $scope.currentUser.picture,
                         reqRating: $scope.currentUser.rating
@@ -1047,7 +1087,7 @@ angular.module('starter.controllers', [])
                                                 "gender": record.reqGender,
                                                 "lat": record.reqLat,
                                                 "long": record.reqLong,
-                                                "time": record.requestTime,
+                                                "reqTime": record.reqTime,
                                                 "picture": record.reqPicture,
                                                 "profileID": record.reqProfileID,
                                                 "distance": distance,
