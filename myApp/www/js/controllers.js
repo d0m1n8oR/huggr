@@ -379,6 +379,7 @@ angular.module('starter.controllers', [])
     var firebaseRef = new Firebase("https://huggr.firebaseio.com/");
     $scope.orderHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
 
+
     //show data in profile
     var userObject = $firebase(ref).$asObject();
     userObject.$bindTo($scope, "currentUser").then(function() {
@@ -451,7 +452,7 @@ angular.module('starter.controllers', [])
         }); //end then
     }; //end function
 
-    //accept a hugg request by a user
+    //accept a hugg answer to a request by this user
     $scope.acceptHugg = function acceptHugg(huggID) {
         $firebase(firebaseRef.child("hugg").child(huggID)).$update({
             accepted: 1
@@ -460,6 +461,29 @@ angular.module('starter.controllers', [])
             return 1;
         }); //end then
 
+    }; //end function
+
+    //decline a hugg answer to a request that was made by this user
+    $scope.declineHugg = function declineHugg(huggID, answerProfileID) {
+
+        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+            answered: 0,
+            accepted: 0,
+            answerProfileID: "",
+            answerPicture: "",
+            answerGender: "",
+            answerTime: "",
+            answerFirstName: ""
+        }).then(function(x) {
+
+            $firebase(firebaseRef.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
+                1: answerProfileID
+            }).then(function(y) {
+                console.log("Successfully declined hugg");
+                return 1;
+            }); //end then
+
+        }); //end then
     }; //end function
 
     //show answered huggs + revoke button
@@ -752,9 +776,6 @@ angular.module('starter.controllers', [])
                         rateAnswerHugg: ".",
                         total: "."
                     }); //end set
-
-                    //set empty array to firebase to initialize it
-                    $firebase(ref.child("hugg").child(huggID).child("blocked")).$set([0, 0]);
                 }); // end then (GPS)
 
         }); // end then (Loaded)
@@ -790,34 +811,43 @@ angular.module('starter.controllers', [])
                     //check whether filter gender of searching person and gender of requestor match
                     //check whether gender of searching person and filter of requestor match
                     //check whether current user's profile ID is among the blocked profile IDs
-                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.blocked.indexOf($scope.currentUser.profileID) == -1)) {
+                    if (((gender == "both") || (gender != "both" && record.reqProfileGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender))) {
 
-                        //calc distance
-                        var radius = 6371;
-                        var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                        var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
-                        var a =
-                            Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                            Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
-                            Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
-                        var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                        var distance = radius * b;
+                        $scope.huggRef = $firebase(ref.child("hugg").child(record.huggID).child("blocked")).$asArray();
+                        $scope.huggRef.$loaded().then(function(data) {
 
-                        //check for distance within range and save to JSON
-                        if (distance <= range) {
-                            huggArray.hugg.push({
-                                "huggID": record.huggID,
-                                "firstName": record.reqFirstName,
-                                "gender": record.reqProfileGender,
-                                "lat": record.reqLat,
-                                "long": record.reqLong,
-                                "time": record.requestTime,
-                                "picture": record.reqPicture,
-                                "profileID": record.reqProfileID,
-                                "distance": distance,
-                                "rating": record.reqRating
-                            }); //end push
-                        } // end if
+                            //check whether user is blocked in results                            
+                            if (data.$getRecord($scope.currentUser.profileID) == null) {
+                                
+                                //calc distance
+                                var radius = 6371;
+                                var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
+                                var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
+                                var a =
+                                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
+                                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                var distance = radius * b;
+
+                                //check for distance within range and save to JSON
+                                if (distance <= range) {
+                                    huggArray.hugg.push({
+                                        "huggID": record.huggID,
+                                        "firstName": record.reqFirstName,
+                                        "gender": record.reqProfileGender,
+                                        "lat": record.reqLat,
+                                        "long": record.reqLong,
+                                        "time": record.requestTime,
+                                        "picture": record.reqPicture,
+                                        "profileID": record.reqProfileID,
+                                        "distance": distance,
+                                        "rating": record.reqRating
+                                    }); //end push
+                                } // end if
+                                
+                            } //end if
+                        }); //end then
                     } // end if
 
                     i++;
