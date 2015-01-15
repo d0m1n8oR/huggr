@@ -21,6 +21,7 @@ angular.module('starter.controllers', [])
 
         return {
             getProfile: function(ID) {
+                console.log(ID);
                 dataRef.$loaded()
                     .then(function(data) {
                         var record = data.$getRecord(ID);
@@ -429,6 +430,7 @@ angular.module('starter.controllers', [])
             i++;
         } //end while
 
+        console.log("Profile of User")
         console.log("Unanswered Huggs:");
         for (i = 0; i < unansweredHuggs.hugg.length; i++) {
             console.log(i + " " + unansweredHuggs.hugg[i].huggID);
@@ -442,9 +444,22 @@ angular.module('starter.controllers', [])
     //remove huggs that nobody has answered yet from unanswered huggs list
     $scope.removeHugg = function removeHugg(huggID) {
         $firebase(firebaseRef.child("hugg")).$remove(huggID).then(function(data) {
+
+        }).then(function(data) {
             console.log("Successfully removed hugg");
             return 1;
         }); //end then
+    }; //end function
+
+    //accept a hugg request by a user
+    $scope.acceptHugg = function acceptHugg(huggID) {
+        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+            accepted: 1
+        }).then(function(data) {
+            console.log("successfully accepted hugg!");
+            return 1;
+        }); //end then
+
     }; //end function
 
     //show answered huggs + revoke button
