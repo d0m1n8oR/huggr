@@ -392,10 +392,10 @@ angular.module('starter.controllers', [])
         }).then(function(data) {
 
             //add notification for user that requested the hugg
-            $firebase(ref.child("users").child("data").child(reqProfileID).child("notifications").child(huggID)).$set({
+            $firebase(ref.child("users").child("data").child($scope.profileID).child("notifications").child(huggID)).$set({
                 huggID: huggID,
-                firstName: $scope.crretUser.firstname,
-                picture: $scoe.currentUser.picture,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
                 time: today,
                 profileID: $scope.currentUser.profileID,
                 type: "answer",
