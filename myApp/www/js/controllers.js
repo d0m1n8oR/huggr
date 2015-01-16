@@ -741,6 +741,54 @@ angular.module('starter.controllers', [])
 
     }; //end function
 
+    $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
+
+        $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+            answerRating: rating
+        }).then(function(x) {
+            $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+            $scope.userRef.$loaded().then(function(userData) {
+
+                var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs-1)+rating)/(userData.$getRecord(answerProfileID).numberHuggs);
+                
+                $firebase(firebaseRef.child("users").child("data").child(answerProfileID)).$update({
+                    rating: answerRating
+                }).then(function(y)
+                        {
+                    console.log("Successfully rated");
+                    return 1;
+                });//end update
+                
+            });//end then
+
+        }); //end update
+
+    }; //end function
+    
+    $scope.rateReqHugg = function rateReqHugg(huggID, rating, reqProfileID) {
+
+        $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+            reqRating: rating
+        }).then(function(x) {
+            $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+            $scope.userRef.$loaded().then(function(userData) {
+
+                var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs-1)+rating)/(userData.$getRecord(reqProfileID).numberHuggs);
+                
+                $firebase(firebaseRef.child("users").child("data").child(reqProfileID)).$update({
+                    rating: reqRating
+                }).then(function(y)
+                        {
+                    console.log("Successfully rated");
+                    return 1;
+                });//end update
+                
+            });//end then
+
+        }); //end update
+
+    }; //end function
+
 }) //end ProfileCtrl
 
 .controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
