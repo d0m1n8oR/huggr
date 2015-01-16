@@ -380,7 +380,7 @@ angular.module('starter.controllers', [])
     var firebaseRef = new Firebase("https://huggr.firebaseio.com/");
     $scope.orderOwnHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
     $scope.orderOtherHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
-
+    $scope.huggRef = $firebase(firebaseRef.child("hugg")).$asArray();
 
     //show data in profile
     var userObject = $firebase(ref).$asObject();
@@ -707,7 +707,6 @@ angular.module('starter.controllers', [])
         }).then(function(x) {
 
             //define ref for huggs
-            $scope.huggRef = $firebase(firebaseRef.child("hugg")).$asArray();
             $scope.huggRef.$loaded().then(function(huggData) {
                 //load infos for selected hugg
                 var record = huggData.$getRecord(huggID);
@@ -743,28 +742,36 @@ angular.module('starter.controllers', [])
 
     $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
 
-        $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
-            answerRating: rating
-        }).then(function(x) {
-            $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
-            $scope.userRef.$loaded().then(function(userData) {
+        $scope.huggRef.$loaded().then(function(huggData) {
+            var reqRating = huggData.$getRecord(huggID).rating.reqRating;
+            if (reqRating != ".") {
+                var total = (reqRating + rating) / 2;
+                $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                    totalRating: total
+                }); //end updae
+            }
+            $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                answerRating: rating
+            }).then(function(x) {
+                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef.$loaded().then(function(userData) {
 
-                var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs-1)+rating)/(userData.$getRecord(answerProfileID).numberHuggs);
-                
-                $firebase(firebaseRef.child("users").child("data").child(answerProfileID)).$update({
-                    rating: answerRating
-                }).then(function(y)
-                        {
-                    console.log("Successfully rated");
-                    return 1;
-                });//end update
-                
-            });//end then
+                    var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs);
 
-        }); //end update
+                    $firebase(firebaseRef.child("users").child("data").child(answerProfileID)).$update({
+                        rating: answerRating
+                    }).then(function(y) {
+                        console.log("Successfully rated");
+                        return 1;
+                    }); //end update
+
+                }); //end then
+
+            }); //end update
+        });
 
     }; //end function
-    
+
     $scope.rateReqHugg = function rateReqHugg(huggID, rating, reqProfileID) {
 
         $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
@@ -773,17 +780,16 @@ angular.module('starter.controllers', [])
             $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
             $scope.userRef.$loaded().then(function(userData) {
 
-                var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs-1)+rating)/(userData.$getRecord(reqProfileID).numberHuggs);
-                
+                var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
+
                 $firebase(firebaseRef.child("users").child("data").child(reqProfileID)).$update({
                     rating: reqRating
-                }).then(function(y)
-                        {
+                }).then(function(y) {
                     console.log("Successfully rated");
                     return 1;
-                });//end update
-                
-            });//end then
+                }); //end update
+
+            }); //end then
 
         }); //end update
 
