@@ -674,7 +674,7 @@ angular.module('starter.controllers', [])
     userArray.$loaded().then(function(data) {
         console.log(data.$getRecord("blocked"));
     });
-    
+
     //remove users from block list
     $scope.unblockUser = function unblockUser(unblockProfileID) {
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
@@ -1062,6 +1062,7 @@ angular.module('starter.controllers', [])
         range: "10 km"
     }
 
+    //function that is executed on "Search"-Click in Popover
     $scope.displayResults = function() {
 
         var male = $scope.huggRequest.male;
@@ -1077,8 +1078,24 @@ angular.module('starter.controllers', [])
             male: male,
             female: female,
             range: range
-        });
-    };
+        }); // end go
+    }; //end function
+
+    $scope.currentUser = localstorage.getObject('userData');
+    if ($scope.currentUser.notifications != null) {
+        for (i = 0; i < Object.keys($scope.currentUser.notifications).length; i++) {
+            //console.log($scope.currentUser.notifications[3571064178]);
+            var p = $scope.currentUser.notifications
+            for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                    console.log("Benachrichtigung von " + p[key].firstName);
+                }
+            }
+        }
+        //console.log($scope.currentUser.notifications);
+    }
+
+
 })
 
 .controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q) {
