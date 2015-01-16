@@ -340,8 +340,7 @@ angular.module('starter.controllers', [])
     UserInfo.getProfile($scope.profileID).then(function(value) {
         $scope.data = value;
 
-        var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.data.profileID);
-        var userObject = $firebase(ref).$asObject();
+        var userObject = $firebase(ref.child("users").child("data").child($scope.data.profileID)).$asObject();
 
         //displays information
         userObject.$bindTo($scope, "data").then(function() {
@@ -352,16 +351,16 @@ angular.module('starter.controllers', [])
     //block a user from ever sending requests again
     $scope.blockUser = function blockUser(blockProfileID) {
 
-        console.log(blockProfileID);
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
             1: blockProfileID
         }).then(function(y) {
             console.log("Successfully blocked user");
             return 1;
-        })
+        }); //end set
 
     }; //end function
 
+    //answer to a hugg that the user of this currently shown profile has requested
     $scope.answerHugg = function answerHugg(huggID) {
         var date = new Date();
         var today = date.getTime();
@@ -390,14 +389,13 @@ angular.module('starter.controllers', [])
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
-    var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID);
-    var firebaseRef = new Firebase("https://huggr.firebaseio.com/");
-    $scope.orderOwnHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
-    $scope.orderOtherHuggRef = $firebase(firebaseRef.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
-    $scope.huggRef = $firebase(firebaseRef.child("hugg")).$asArray();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $scope.orderOwnHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
+    $scope.orderOtherHuggRef = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
     //show data in profile
-    var userObject = $firebase(ref).$asObject();
+    var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
     userObject.$bindTo($scope, "currentUser").then(function() {
         $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
@@ -431,10 +429,6 @@ angular.module('starter.controllers', [])
     var otherDoneHuggs = {
         hugg: []
     };
-
-    //show blocked users
-    console.log("Blocked users:");
-    console.log($scope.currentUser.blocked);
 
     //waiting on this reference to be loaded
     //this reference is for huggs that this users requested
@@ -646,12 +640,24 @@ angular.module('starter.controllers', [])
         }
 
     }); //end then
+    
+    //show users currently blocked
+    console.log("blocked users \n"+$scope.currentUser.blocked);
 
+    //remove users from block list
+    $scope.unblockUser = function unblockUser(unblockProfileID) {
+        console.log(unblockProfileID);
+        console.log($scope.currentUser.profileID);
+        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
+            console.log("Successfully unblocked user");
+            return 1;
+        });
 
+    }; //end function
 
     //remove huggs that nobody has answered yet from unanswered huggs list
     $scope.removeHugg = function removeHugg(huggID) {
-        $firebase(firebaseRef.child("hugg")).$remove(huggID).then(function(data) {
+        $firebase(ref.child("hugg")).$remove(huggID).then(function(data) {
 
         }).then(function(data) {
             console.log("Successfully removed hugg");
@@ -661,7 +667,7 @@ angular.module('starter.controllers', [])
 
     //accept a hugg answer to a request by this user
     $scope.acceptHugg = function acceptHugg(huggID) {
-        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+        $firebase(ref.child("hugg").child(huggID)).$update({
             accepted: 1
         }).then(function(data) {
             console.log("successfully accepted hugg!");
@@ -673,7 +679,7 @@ angular.module('starter.controllers', [])
     //decline a hugg answer to a request that was made by this user
     $scope.declineHugg = function declineHugg(huggID, answerProfileID) {
 
-        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+        $firebase(ref.child("hugg").child(huggID)).$update({
             answered: 0,
             accepted: 0,
             answerProfileID: null,
@@ -684,7 +690,7 @@ angular.module('starter.controllers', [])
             answerRating: null
         }).then(function(x) {
 
-            $firebase(firebaseRef.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
+            $firebase(ref.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
                 1: answerProfileID
             }).then(function(y) {
                 console.log("Successfully declined hugg");
@@ -698,7 +704,7 @@ angular.module('starter.controllers', [])
     //the user doesn't want to participate in the offered hugg
     $scope.revokeAnswer = function revokeAnswer(huggID) {
 
-        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+        $firebase(ref.child("hugg").child(huggID)).$update({
             answered: 0,
             accepted: 0,
             answerProfileID: null,
@@ -720,7 +726,7 @@ angular.module('starter.controllers', [])
     $scope.markDone = function markDone(huggID) {
 
         //update status in huggRef DB
-        $firebase(firebaseRef.child("hugg").child(huggID)).$update({
+        $firebase(ref.child("hugg").child(huggID)).$update({
             done: 1
         }).then(function(x) {
 
@@ -730,7 +736,7 @@ angular.module('starter.controllers', [])
                 var record = huggData.$getRecord(huggID);
 
                 //define ref for users
-                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
                 $scope.userRef.$loaded().then(function(userData) {
 
                     //load current number of huggs for both users and add 1
@@ -738,12 +744,12 @@ angular.module('starter.controllers', [])
                     var answerNumberHuggs = userData.$getRecord(record.answerProfileID).numberHuggs + 1;
 
                     //update info on number of huggs for requestor
-                    $firebase(firebaseRef.child("users").child("data").child(record.reqProfileID)).$update({
+                    $firebase(ref.child("users").child("data").child(record.reqProfileID)).$update({
                         numberHuggs: reqNumberHuggs
                     }).then(function(x) {
 
                         //update info on number of huggs for answerer
-                        $firebase(firebaseRef.child("users").child("data").child(record.answerProfileID)).$update({
+                        $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
                             numberHuggs: answerNumberHuggs
                         }).then(function(y) {
                             //finalize
@@ -768,12 +774,12 @@ angular.module('starter.controllers', [])
             var reqRating = huggData.$getRecord(huggID).rating.reqRating;
             if (reqRating != ".") {
                 var total = (reqRating + rating) / 2;
-                $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                     totalRating: total
                 }); //end updae
             }
             //add the rating of the user to the db
-            $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+            $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                 answerRating: rating
             }).then(function(x) {
 
@@ -781,12 +787,12 @@ angular.module('starter.controllers', [])
                 //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                 //then the rating for this hugg is added and the result is devided by the new number of huggs
                 //the result is the new avarage rating for the user and is saved to the db
-                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
                 $scope.userRef.$loaded().then(function(userData) {
 
                     var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs);
 
-                    $firebase(firebaseRef.child("users").child("data").child(answerProfileID)).$update({
+                    $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
                         rating: answerRating
                     }).then(function(y) {
                         console.log("Successfully rated");
@@ -811,13 +817,13 @@ angular.module('starter.controllers', [])
             var answerRating = huggData.$getRecord(huggID).rating.answerRating;
             if (reqRating != ".") {
                 var total = (answerRating + rating) / 2;
-                $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                     totalRating: total
                 }); //end updae
             }
 
             //add the rating of the user to the db
-            $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+            $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                 reqRating: rating
             }).then(function(x) {
 
@@ -825,12 +831,12 @@ angular.module('starter.controllers', [])
                 //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                 //then the rating for this hugg is added and the result is devided by the new number of huggs
                 //the result is the new avarage rating for the user and is saved to the db
-                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
                 $scope.userRef.$loaded().then(function(userData) {
 
                     var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
 
-                    $firebase(firebaseRef.child("users").child("data").child(reqProfileID)).$update({
+                    $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
                         rating: reqRating
                     }).then(function(y) {
                         console.log("Successfully rated");
@@ -1128,11 +1134,10 @@ angular.module('starter.controllers', [])
                             reqRate: ".",
                             answerRate: ".",
                             totalRating: "."
-                        }).then(function(y)
-                            {
-                                console.log("Successfully requested hugg");
-                                return 1;
-                            }); //end then
+                        }).then(function(y) {
+                            console.log("Successfully requested hugg");
+                            return 1;
+                        }); //end then
 
                     }); //end then (rating)
 
