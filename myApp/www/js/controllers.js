@@ -213,30 +213,36 @@ angular.module('starter.controllers', [])
                 ID: authData.google.id,
                 AccessToken: authData.google.accessToken,
                 profileID: newProfileID
-            });
-            $firebase(ref.child("users").child("data").child(newProfileID)).$set({
-                profileID: newProfileID,
-                googleID: authData.google.id,
-                displayName: authData.google.displayName,
-                email: authData.google.email,
-                picture: authData.google.cachedUserProfile.picture,
-                gender: authData.google.cachedUserProfile.gender,
-                firstname: authData.google.cachedUserProfile.given_name,
-                lastname: authData.google.cachedUserProfile.family_name,
-                rating: 0,
-                numberHuggs: 0
-            }).then(function(data) {
+            }).then(function(x) {
+                $firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                    profileID: newProfileID,
+                    googleID: authData.google.id,
+                    displayName: authData.google.displayName,
+                    email: authData.google.email,
+                    picture: authData.google.cachedUserProfile.picture,
+                    gender: authData.google.cachedUserProfile.gender,
+                    firstname: authData.google.cachedUserProfile.given_name,
+                    lastname: authData.google.cachedUserProfile.family_name,
+                    rating: 0,
+                    numberHuggs: 0
+                }).then(function(data) {
 
-                $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-                $scope.dataRef.$loaded().then(function(data) {
-                    //load data into local storage
-                    var profileData = data.$getRecord(newProfileID);
-                    //Store profile Data persistently in local storage for global usage
-                    console.log(profileData);
-                    localstorage.setObject("userData", profileData);
-                    $state.go('app.home');
-                });
-            });
+                    //initialize user object with blocked array
+                    $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
+                        0: 1000000000001
+                    }).then(function(y) {
+                        $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                        $scope.dataRef.$loaded().then(function(data) {
+                            //load data into local storage
+                            var profileData = data.$getRecord(newProfileID);
+                            //Store profile Data persistently in local storage for global usage
+                            console.log("Successfully registered user!");
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home');
+                        }); //end loaded
+                    }); //end set
+                }); //end set userDB
+            }); //end set signinDB
         }
         if (authProvider == "facebook") {
             //write authentification data into database
@@ -248,30 +254,38 @@ angular.module('starter.controllers', [])
                 ID: authData.facebook.id,
                 AccessToken: authData.facebook.accessToken,
                 profileID: newProfileID
-            });
-            $firebase(ref.child("users").child("data").child(newProfileID)).$set({
-                profileID: newProfileID,
-                googleID: null,
-                facebookID: authData.facebook.id,
-                displayName: authData.facebook.displayName,
-                email: authData.facebook.email,
-                picture: authData.facebook.cachedUserProfile.picture.data.url,
-                gender: authData.facebook.cachedUserProfile.gender,
-                firstname: authData.facebook.cachedUserProfile.first_name,
-                lastname: authData.facebook.cachedUserProfile.last_name,
-                rating: 0,
-                numberHuggs: 0
-            }).then(function(data) {
-                $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-                $scope.dataRef.$loaded().then(function(data) {
-                    //load data into local storage
-                    var profileData = data.$getRecord(newProfileID);
-                    //Store profile Data persistently in local storage for global usage
-                    console.log(profileData);
-                    localstorage.setObject("userData", profileData);
-                    $state.go('app.home');
-                });
-            });
+            }).then(function(y) {
+                $firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                    profileID: newProfileID,
+                    googleID: null,
+                    facebookID: authData.facebook.id,
+                    displayName: authData.facebook.displayName,
+                    email: authData.facebook.email,
+                    picture: authData.facebook.cachedUserProfile.picture.data.url,
+                    gender: authData.facebook.cachedUserProfile.gender,
+                    firstname: authData.facebook.cachedUserProfile.first_name,
+                    lastname: authData.facebook.cachedUserProfile.last_name,
+                    rating: 0,
+                    numberHuggs: 0
+                }).then(function(data) {
+
+                    $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
+                        0: 1000000000001
+                    }).then(function(y) {
+
+                        //initialize user object with blocked array
+                        $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                        $scope.dataRef.$loaded().then(function(data) {
+                            //load data into local storage
+                            var profileData = data.$getRecord(newProfileID);
+                            //Store profile Data persistently in local storage for global usage
+                            console.log("Successfully registered");
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home');
+                        }); //end load data
+                    }); //end set blocked
+                }); //end set usersData
+            }); //end set signinData
 
         }
 
@@ -352,7 +366,7 @@ angular.module('starter.controllers', [])
     $scope.blockUser = function blockUser(blockProfileID) {
 
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
-            1: blockProfileID
+            0: blockProfileID
         }).then(function(y) {
             console.log("Successfully blocked user");
             return 1;
@@ -377,7 +391,19 @@ angular.module('starter.controllers', [])
 
         }).then(function(data) {
 
-            console.log("Successfully updated");
+            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(reqProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.crretUser.firstname,
+                picture: $scoe.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "answer",
+                change: "add"
+            }).then(function(x) {
+                console.log("Successfully answered hugg");
+                return 1;
+            });
 
         }); //end then
 
@@ -640,14 +666,17 @@ angular.module('starter.controllers', [])
         }
 
     }); //end then
-    
-    //show users currently blocked
-    console.log("blocked users \n"+$scope.currentUser.blocked);
 
+    //show users currently blocked
+
+    //doesn't work with currentUser ...
+    var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asArray();
+    userArray.$loaded().then(function(data) {
+        console.log(data.$getRecord("blocked"));
+    });
+    
     //remove users from block list
     $scope.unblockUser = function unblockUser(unblockProfileID) {
-        console.log(unblockProfileID);
-        console.log($scope.currentUser.profileID);
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
             console.log("Successfully unblocked user");
             return 1;
