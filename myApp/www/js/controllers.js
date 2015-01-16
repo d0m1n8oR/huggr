@@ -331,12 +331,13 @@ angular.module('starter.controllers', [])
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
 
     $scope.huggID = $stateParams.huggID;
+    $scope.profileID = $stateParams.profileID;
     $scope.data;
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
-    UserInfo.getProfile($stateParams.profileID).then(function(value) {
+    UserInfo.getProfile($scope.profileID).then(function(value) {
         $scope.data = value;
 
         var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.data.profileID);
@@ -347,6 +348,19 @@ angular.module('starter.controllers', [])
             $scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
         }); //end bindTo
     }); //end getProfile
+
+    //block a user from ever sending requests again
+    $scope.blockUser = function blockUser(blockProfileID) {
+
+        console.log(blockProfileID);
+        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
+            1: blockProfileID
+        }).then(function(y) {
+            console.log("Successfully blocked user");
+            return 1;
+        })
+
+    }; //end function
 
     $scope.answerHugg = function answerHugg(huggID) {
         var date = new Date();
@@ -417,6 +431,10 @@ angular.module('starter.controllers', [])
     var otherDoneHuggs = {
         hugg: []
     };
+
+    //show blocked users
+    console.log("Blocked users:");
+    console.log($scope.currentUser.blocked);
 
     //waiting on this reference to be loaded
     //this reference is for huggs that this users requested
@@ -1101,7 +1119,8 @@ angular.module('starter.controllers', [])
                         reqTime: today,
                         reqFirstName: $scope.currentUser.firstname,
                         reqPicture: $scope.currentUser.picture,
-                        reqRating: $scope.currentUser.rating
+                        reqRating: $scope.currentUser.rating,
+                        blocked: $scope.currentUser.blocked
 
                     }).then(function(x) {
 
@@ -1110,7 +1129,6 @@ angular.module('starter.controllers', [])
                             answerRate: ".",
                             totalRating: "."
                         }).then(function(y)
-
                             {
                                 console.log("Successfully requested hugg");
                                 return 1;
