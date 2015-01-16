@@ -740,8 +740,12 @@ angular.module('starter.controllers', [])
 
     }; //end function
 
+    //the user that requested the hugg can rate the user that answered
     $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
 
+        //get rating of other user
+        //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
+        //in this case the total rating is calulated and added to the db
         $scope.huggRef.$loaded().then(function(huggData) {
             var reqRating = huggData.$getRecord(huggID).rating.reqRating;
             if (reqRating != ".") {
@@ -750,9 +754,15 @@ angular.module('starter.controllers', [])
                     totalRating: total
                 }); //end updae
             }
+            //add the rating of the user to the db
             $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
                 answerRating: rating
             }).then(function(x) {
+
+                //calculates the rating of the other user
+                //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
+                //then the rating for this hugg is added and the result is devided by the new number of huggs
+                //the result is the new avarage rating for the user and is saved to the db
                 $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
                 $scope.userRef.$loaded().then(function(userData) {
 
@@ -772,26 +782,47 @@ angular.module('starter.controllers', [])
 
     }; //end function
 
+    //the user that answered the hugg can rate the user that requested the hugg
     $scope.rateReqHugg = function rateReqHugg(huggID, rating, reqProfileID) {
 
-        $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
-            reqRating: rating
-        }).then(function(x) {
-            $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
-            $scope.userRef.$loaded().then(function(userData) {
+        $scope.huggRef.$loaded().then(function(huggData) {
 
-                var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
+            //get rating of other user
+            //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
+            //in this case the total rating is calulated and added to the db
+            var answerRating = huggData.$getRecord(huggID).rating.answerRating;
+            if (reqRating != ".") {
+                var total = (answerRating + rating) / 2;
+                $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                    totalRating: total
+                }); //end updae
+            }
 
-                $firebase(firebaseRef.child("users").child("data").child(reqProfileID)).$update({
-                    rating: reqRating
-                }).then(function(y) {
-                    console.log("Successfully rated");
-                    return 1;
-                }); //end update
+            //add the rating of the user to the db
+            $firebase(firebaseRef.child("hugg").child(huggID).child("rating")).$update({
+                reqRating: rating
+            }).then(function(x) {
 
-            }); //end then
+                //calculates the rating of the other user
+                //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
+                //then the rating for this hugg is added and the result is devided by the new number of huggs
+                //the result is the new avarage rating for the user and is saved to the db
+                $scope.userRef = $firebase(firebaseRef.child("users").child("data")).$asArray();
+                $scope.userRef.$loaded().then(function(userData) {
 
-        }); //end update
+                    var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
+
+                    $firebase(firebaseRef.child("users").child("data").child(reqProfileID)).$update({
+                        rating: reqRating
+                    }).then(function(y) {
+                        console.log("Successfully rated");
+                        return 1;
+                    }); //end update
+
+                }); //end then
+
+            }); //end update
+        }); //end loaded()
 
     }; //end function
 
