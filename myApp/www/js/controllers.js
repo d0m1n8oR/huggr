@@ -128,7 +128,9 @@ angular.module('starter.controllers', [])
                     var userSigninIdentifier = authData.google.id;
                     if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
                         console.warn("new user, registering...");
-                        $scope.register(authProvider, authData);
+                        $scope.popover.show(".ion-social-facebook");
+                        //$scope.enterData(authProvider, authData);
+                        //$scope.register(authProvider, authData);
                     } else {
                         $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
                         $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
@@ -199,17 +201,18 @@ angular.module('starter.controllers', [])
 
         }
     };
-    
-    $scope.loginModel = {
+
+    $scope.loginModel = {}
+
+    $scope.submit = function(authProvider, authData) {
+        if ($scope.loginModel.gender != null || $scope.loginModel.birthdate != null) {
+            console.log($scope.loginModel);
+            $scope.popover.remove();
+            $scope.register(authProvider, authData);
+        }
     }
-    
-    $scope.print = function()
-    {
-        console.log($scope.loginModel);
-        $scope.popover.hide();
-    }
-        
-        $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
+
+    $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
         scope: $scope,
     }).then(function(popover) {
         $scope.popover = popover;
@@ -234,7 +237,7 @@ angular.module('starter.controllers', [])
     });
 
     $scope.register = function(authProvider, authData) {
-        
+
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         while ($scope.dataRef.$getRecord(newProfileID) != null) {
@@ -258,7 +261,10 @@ angular.module('starter.controllers', [])
                     displayName: authData.google.displayName,
                     email: authData.google.email,
                     picture: authData.google.cachedUserProfile.picture,
-                    gender: authData.google.cachedUserProfile.gender,
+                    //gender: authData.google.cachedUserProfile.gender,
+                    gender: $scope.loginModel.gender,
+                    birthdate: $scope.loginModel.birthdate,
+                    //
                     firstname: authData.google.cachedUserProfile.given_name,
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
@@ -381,7 +387,7 @@ angular.module('starter.controllers', [])
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
-$scope.$on("$ionicView.enter", function(scopes, states) {
+    $scope.$on("$ionicView.enter", function(scopes, states) {
         console.log("enter");
         console.log($scope);
         //
@@ -522,7 +528,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
                     "reqTime": record.reqTime
                 }); //end push
             } //endif
-            
+
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
             //corresponding button is acceptHugg() or declineHugg()
@@ -1133,7 +1139,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
         $scope.huggRequest.male = "none";
         $scope.huggRequest.female = "none";
         $scope.huggRequest.range = "none";
-        
+
         //remove popover when showing results
         $scope.popover.remove();
 
