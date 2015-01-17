@@ -346,6 +346,7 @@ angular.module('starter.controllers', [])
 
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
+    console.log($scope.huggID);
     $scope.data;
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
@@ -1098,7 +1099,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -1279,6 +1280,7 @@ angular.module('starter.controllers', [])
     } //end function
 
     getHuggs().then(function(array) {
+        $scope.resultList = array;
         console.log(array);
     });
 

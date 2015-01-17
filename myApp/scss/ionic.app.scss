@@ -45,7 +45,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="sp-"], [class*=" sp-"] {
   font-family: 'icomoon';
   speak: none;
   font-style: normal;
@@ -59,10 +59,17 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-huggr:before {
+.sp-huggr:before {
   content: "\e600";
 }
 
+.sp-huggr-colored {
+  color: #F05331 !important;
+}
+.override-icon-position:before{
+  line-height: 2 !important;
+  font-size: 45px !important;
+}
 
 
 .button-facebook {

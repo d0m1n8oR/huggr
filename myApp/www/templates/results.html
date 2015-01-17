@@ -2,45 +2,30 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <ion-content class="has-header">
-
-        <!--
-<ion-list>
-    <div ng-repeat="result in results">
-        <a class="item item-thumbnail-left item-icon-right" ng-click="toggleGroup(result)"
-                ng-class="{active: isGroupShown(result)}">
-        <img src="img/avatars/img{{result.name}}.jpg">
-        <i class="icon" ng-class="isGroupShown(result) ? 'ion-minus' : 'ion-plus'"></i>
-                <h2>Diane Baker</h2>
-                <p><button class="button icon-left ion-location button-clear button-dark"> 2.0 km</button></p>
-                
-            </a>
-      <ion-item class="item-accordion"
-                ng-show="isGroupShown(result)">
-                <button class="button icon-left ion-information-circled button-clear button-dark"> get info</button>
-                <button class="button icon-left ion-map button-clear button-dark"> get route</button>
-      </ion-item>
+    <div class="bar bar-subheader bar-energized">
+        <h2 class="title">These lonely bastards need a hug</h2>
     </div>
-  </ion-list>
--->
-        <p>
-            <!--TODO: schön machen-->
-            <button ng-click="requestHugg('reqLat', 'reqLong', 'gender')">Request Hugg</button>
-        </p>
-        <!--
-        <div class="list">
-            <div ng-repeat="result in results">
-                <a class="item item-thumbnail-left item-button-right" ui-sref="app.profile">
-                    <img src="img/avatars/img{{result.name}}.jpg">
-                    <h2>Diane Baker</h2>
-                    <p>
-                        <button class="button icon-left ion-location button-clear button-dark">2.0 km</button>
-                    </p>
-                  
-                </a>
-            </div>
-        </div>-->
+    <ion-content class="has-header has-subheader">
+
+        <ion-list>
+
+            <ion-item ng-repeat="item in resultList.hugg" item="item" href="#/profile/{{item.profileID}}/{{item.huggID}}/" class="item-thumbnail-left">
+                <img ng-src="{{item.picture}}">
+                <h2>{{item.firstName}}</h2>
+                <p>
+                    <button class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}}km</button>
+                </p>
+                <ion-option-button class="button-outline button-positive icon ion-information-circled override-icon-position" ng-click=""></ion-option-button>
+                <ion-option-button class="button-royal icon ion-map override-icon-position" ng-click=""></ion-option-button>
+                <ion-option-button class="button-stable icon sp-huggr sp-huggr-colored override-icon-position" ng-click=""></ion-option-button>
+
+            </ion-item>
+
+        </ion-list>
 
 
     </ion-content>
+    <div class="bar bar-footer bar-balanced">
+        <div class="title" ng-click="requestHugg('reqLat', 'reqLong', 'gender')">Request Hugg</div>
+    </div>
 </ion-view>
