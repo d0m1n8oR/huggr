@@ -967,12 +967,19 @@ angular.module('starter.controllers', [])
 .controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
+    
 
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
-    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData));
+    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData), function(x){
+        $scope.userData.birthdate = new Date($scope.userData.birthdate);
+    });
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
+    
+    $scope.userData.birthdate = new Date($scope.userData.birthdate);
+    
+   // $scope.date = $scope.userDate.birthdate.toDateString();
     var returnval = 0;
     if ($scope.userData.googleID != null) {
         returnval = returnval + 10;
