@@ -1155,7 +1155,8 @@ angular.module('starter.controllers', [])
     }
     if ($stateParams.range == "10 km") {
         range = 10;
-    } else {
+    } 
+    if ($stateParams.range == "Forever alone 100 km") {
         range = 100;
     }
 
