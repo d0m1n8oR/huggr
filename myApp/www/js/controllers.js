@@ -199,17 +199,17 @@ angular.module('starter.controllers', [])
 
         }
     };
-    
-    $scope.loginModel = {
+
+    $scope.loginModel = {}
+
+    $scope.print = function() {
+        if ($scope.loginModel.gender != null && $scope.loginModel.birthdate != null) {
+            console.log($scope.loginModel);
+            $scope.popover.hide();
+        }
     }
-    
-    $scope.print = function()
-    {
-        console.log($scope.loginModel);
-        $scope.popover.hide();
-    }
-        
-        $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
+
+    $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
         scope: $scope,
     }).then(function(popover) {
         $scope.popover = popover;
@@ -234,7 +234,7 @@ angular.module('starter.controllers', [])
     });
 
     $scope.register = function(authProvider, authData) {
-        
+
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         while ($scope.dataRef.$getRecord(newProfileID) != null) {
@@ -381,7 +381,7 @@ angular.module('starter.controllers', [])
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
-$scope.$on("$ionicView.enter", function(scopes, states) {
+    $scope.$on("$ionicView.enter", function(scopes, states) {
         console.log("enter");
         console.log($scope);
         //
@@ -522,7 +522,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
                     "reqTime": record.reqTime
                 }); //end push
             } //endif
-            
+
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
             //corresponding button is acceptHugg() or declineHugg()
@@ -1133,7 +1133,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
         $scope.huggRequest.male = "none";
         $scope.huggRequest.female = "none";
         $scope.huggRequest.range = "none";
-        
+
         //remove popover when showing results
         $scope.popover.remove();
 
