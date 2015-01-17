@@ -1,0 +1,54 @@
+<ion-popover-view style="height: 50%">
+    <div class="bar bar-header bar-balanced">
+        <h1 class="title">Give us some details</h1>
+    </div>
+    <ion-content>
+
+        <!-- need to get value from here -->
+        <label>  </label>
+        <label>   </label>
+        
+        
+
+
+        <ul class="list">
+            <li class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.male">
+                </label>
+                Male
+            </li>
+            <li class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.female" name="male">
+                </label>
+                Female
+            </li>
+        </ul>
+        
+        <label class="item item-radio">
+            <input type="radio" name="group" value="male" ng-model="loginModel.gender">
+            <div class="item-content">
+                Male
+            </div>
+            <i class="radio-icon ion-checkmark"></i>
+        </label>
+         <label class="item item-radio">
+            <input type="radio" name="group" ng-model="loginModel.gender" value="female">
+            <div class="item-content">
+                Female
+            </div>
+            <i class="radio-icon ion-checkmark"></i>
+        </label>
+        
+        <label class="item item-input item-stacked-label">
+                <i class="icon ion-egg placeholder-icon"></i>
+                <span class="input-label">Your Birthday</span>
+                <input type="date" ng-model="loginModel.birthdate">
+            </label>
+
+        <button class="button button-energized button-block" ng-click="print()">
+            Search
+        </button>
+    </ion-content>
+</ion-popover-view>

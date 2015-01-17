@@ -89,7 +89,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -199,9 +199,42 @@ angular.module('starter.controllers', [])
 
         }
     };
+    
+    $scope.loginModel = {
+    }
+    
+    $scope.print = function()
+    {
+        console.log($scope.loginModel);
+        $scope.popover.hide();
+    }
+        
+        $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
+        scope: $scope,
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+    $scope.openPopover = function($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+        // Execute action
+    });
 
     $scope.register = function(authProvider, authData) {
-
+        
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         while ($scope.dataRef.$getRecord(newProfileID) != null) {
@@ -489,6 +522,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
                     "reqTime": record.reqTime
                 }); //end push
             } //endif
+            
 
             //get huggs that the user requested, somebody else answered them but they are not yet done
             //corresponding button is acceptHugg() or declineHugg()
@@ -623,6 +657,7 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
         console.log("Profile of User")
         console.log("Huggs from you that nobody has yet answered:");
         for (i = 0; i < unansweredHuggs.hugg.length; i++) {
+            console.log("hallo");
             console.log(i + " " + unansweredHuggs.hugg[i].huggID);
         }
         console.log("\nHuggs from you that someone else answered and you have not yet accepted:");
