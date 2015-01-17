@@ -1133,6 +1133,9 @@ $scope.$on("$ionicView.enter", function(scopes, states) {
         $scope.huggRequest.male = "none";
         $scope.huggRequest.female = "none";
         $scope.huggRequest.range = "none";
+        
+        //remove popover when showing results
+        $scope.popover.remove();
 
         //this opens the results view with the parameters
         $state.go('app.results', {
