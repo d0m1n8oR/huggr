@@ -8,7 +8,7 @@
             <div class="item item-avatar">
                 <img ng-src="{{data.picture}}">
                 <h2>{{data.displayName}}</h2>
-                <p><span ng-show="currentUser.age">{{data.age}} years old</span><span ng-hide="currentUser.age">You haven't set your birthday yet</span>
+                <p><span ng-show="currentUser.age">{{data.age}} years old</span><span ng-hide="currentUser.age">{{data.displayName}} hasn't set the birthday yet</span>
                 </p>
             </div>
 
@@ -16,22 +16,24 @@
                 <img class="full-image rounded" ng-src="{{data.picture}}">
                 <p>
                     <span ng-show="currentUser.hobby">{{data.hobby}}</span>
-                    <span ng-hide="currentUser.hobby">Please tell us something about yourself</span>
+                    <span ng-hide="currentUser.hobby">{{data.displayName}} has not provided any information about hobbys</span>
                 </p>
                 <p>
-                    <a href="" class="subdued">Rating: {{data.rating}}</a>
+                    <span>Rating:</span>
+                    <rating ng-model="data.rating" max="5"></rating>
                     <a href="" class="subdued">Number of huggs: {{data.numberHuggs}}</a>
                 </p>
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
-                <a class="tab-item" href="" ng-click="answerHugg({{huggID}})">
-                    <span class="sp sp-huggr"></span>Hugg {{data.firstname}}
+                <a class="tab-item" href="" ng-click="answerHugg(huggID)">
+                    <i class="icon sp-huggr"></i>
+                    Hugg {{data.firstname}}
                 </a>
                 <a class="tab-item" href="">
                     <i class="icon ion-chatbox-working"></i>
                     Chat with {{data.firstname}}
                 </a>
-                <a class="tab-item" href="" ng-click="blockUser({{profileID}})">
+                <a class="tab-item" href="" ng-click="blockUser(profileID)">
                     <i class="icon ion-android-close"></i>
                     Ban {{data.firstname}}
                 </a>
