@@ -159,37 +159,42 @@ angular.module('starter.controllers', [])
         }
         if (authProvider == "facebook") {
 
-            $scope.auth.$authWithOAuthPopup("facebook").then(function(authData) {
+            ref.authWithOAuthPopup("facebook", function(err, authData) {
 
-                var userSigninIdentifier = authData.facebook.id;
-                console.log("userSigninIdentifier:" + userSigninIdentifier);
+                if (authData) {
+                    var userSigninIdentifier = authData.facebook.id;
+                    console.log("userSigninIdentifier:" + userSigninIdentifier);
 
-                //
+                    //
 
-                if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
-                    console.warn("new user, registering...");
-                    $scope.register(authProvider, authData);
-                } else {
-                    $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
-                    $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
-                        token: authData.token,
-                        expires: authData.expires,
-                        AccessToken: authData.facebook.accessToken
-                    });
-                    $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                        displayName: authData.facebook.displayName,
-                        email: authData.facebook.email,
-                        picture: authData.facebook.cachedUserProfile.picture.data.url
-                    });
-                    console.log("Logged in as:", authData.uid);
+                    if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
+                        console.warn("new user, registering...");
+                        $scope.register(authProvider, authData);
+                    } else {
+                        $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
+                        $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.facebook.accessToken
+                        });
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            displayName: authData.facebook.displayName,
+                            email: authData.facebook.email,
+                            picture: authData.facebook.cachedUserProfile.picture.data.url
+                        });
+                        console.log("Logged in as:", authData.uid);
 
-                    var profileData = $scope.dataRef.$getRecord($scope.profileID);
-                    //Store profile Data persistently in local storage for global usage
-                    localstorage.setObject("userData", profileData);
-                    $state.go('app.home');
+                        var profileData = $scope.dataRef.$getRecord($scope.profileID);
+                        //Store profile Data persistently in local storage for global usage
+                        localstorage.setObject("userData", profileData);
+                        $state.go('app.home');
+                    }
                 }
-            }).catch(function(error) {
-                console.error("Authentication failed facebook:", error);
+                if (err) {
+                    console.log("error")
+                }
+            }, {
+                scope: "email"
             });
 
         }
@@ -1155,7 +1160,7 @@ angular.module('starter.controllers', [])
     }
     if ($stateParams.range == "10 km") {
         range = 10;
-    } 
+    }
     if ($stateParams.range == "Forever alone 100 km") {
         range = 100;
     }
