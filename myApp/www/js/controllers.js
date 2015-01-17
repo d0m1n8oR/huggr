@@ -696,12 +696,26 @@ angular.module('starter.controllers', [])
     }; //end function
 
     //accept a hugg answer to a request by this user
-    $scope.acceptHugg = function acceptHugg(huggID) {
+    $scope.acceptHugg = function acceptHugg(huggID, answerProfileID) {
         $firebase(ref.child("hugg").child(huggID)).$update({
             accepted: 1
         }).then(function(data) {
-            console.log("successfully accepted hugg!");
-            return 1;
+            var date = new Date();
+            var today = date.getTime();
+
+            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "accept",
+                change: "add"
+            }).then(function(x) {
+                console.log("successfully accepted hugg!");
+                return 1;
+            })
         }); //end then
 
     }; //end function
@@ -1010,7 +1024,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage) {
+.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase) {
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -1082,7 +1096,16 @@ angular.module('starter.controllers', [])
         }); // end go
     }; //end function
 
+    var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.currentUser = localstorage.getObject('userData');
+
+    //watches for changes in data - maybe use bindTo?
+    var obj = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("notifications")).$asObject();
+    var unwatch = obj.$watch(function() {
+        console.log("data changed!");
+    });
+
+
     if ($scope.currentUser.notifications != null) {
         for (i = 0; i < Object.keys($scope.currentUser.notifications).length; i++) {
             //console.log($scope.currentUser.notifications[3571064178]);
