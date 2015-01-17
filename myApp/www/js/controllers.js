@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 .factory("Auth", ["$firebaseAuth",
-    function($firebaseAuth) {
+    function ($firebaseAuth) {
         var ref = new Firebase("https://huggr.firebaseio.com/");
         return $firebaseAuth(ref);
     }
@@ -11,7 +11,7 @@ angular.module('starter.controllers', [])
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 //Important: This is a synchronised method, so you have to use UserInfo.getProfile({profileID}).then(function(returnData){...})
 .factory('UserInfo', ["$firebase", "$q",
-    function($firebase, $q) {
+    function ($firebase, $q) {
         //initialize firebase
         var ref = new Firebase("https://huggr.firebaseio.com/users/data");
         var dataRef = $firebase(ref).$asArray();
@@ -20,10 +20,10 @@ angular.module('starter.controllers', [])
         var deferred = $q.defer();
 
         return {
-            getProfile: function(ID) {
+            getProfile: function (ID) {
                 console.log(ID);
                 dataRef.$loaded()
-                    .then(function(data) {
+                    .then(function (data) {
                         var record = data.$getRecord(ID);
                         var profileData = {
                             "profileID": record.profileID,
@@ -45,7 +45,7 @@ angular.module('starter.controllers', [])
 
                     }) // end then
 
-                .catch(function(error) {
+                .catch(function (error) {
                     console.error("Error getting UserInfo:", error);
                     deferred.reject("Error getting UserInfo: " + error)
                 }); // end catch
@@ -58,9 +58,9 @@ angular.module('starter.controllers', [])
 
 .factory('helper', [
 
-    function() {
+    function () {
         return {
-            calcAge: function(date) {
+            calcAge: function (date) {
                 var ageDifMs = Date.now() - date.getTime();
                 var ageDate = new Date(ageDifMs); // miliseconds from epoch
                 return Math.abs(ageDate.getUTCFullYear() - 1970);
@@ -70,18 +70,18 @@ angular.module('starter.controllers', [])
 ])
 
 .factory('localstorage', ['$window',
-    function($window) {
+    function ($window) {
         return {
-            set: function(key, value) {
+            set: function (key, value) {
                 $window.localStorage[key] = value;
             },
-            get: function(key, defaultValue) {
+            get: function (key, defaultValue) {
                 return $window.localStorage[key] || defaultValue;
             },
-            setObject: function(key, value) {
+            setObject: function (key, value) {
                 $window.localStorage[key] = JSON.stringify(value);
             },
-            getObject: function(key) {
+            getObject: function (key) {
                 return JSON.parse($window.localStorage[key] || '{}');
             }
         }
@@ -89,7 +89,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService) {
+.controller('loginCtrl', function ($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $http) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -109,7 +109,7 @@ angular.module('starter.controllers', [])
     });
 
     //function for logout
-    $scope.logout = function() {
+    $scope.logout = function () {
 
         //disconnects user from auth object, needs to relogin
         $scope.auth.$unauth();
@@ -118,10 +118,10 @@ angular.module('starter.controllers', [])
         window.location.reload();
     } // end function
 
-    $scope.login = function(authProvider) {
+    $scope.login = function (authProvider) {
         if (authProvider == "google") {
 
-            ref.authWithOAuthPopup("google", function(err, authData) {
+            ref.authWithOAuthPopup("google", function (err, authData) {
                 if (authData) {
 
 
@@ -159,7 +159,7 @@ angular.module('starter.controllers', [])
         }
         if (authProvider == "facebook") {
 
-            ref.authWithOAuthPopup("facebook", function(err, authData) {
+            ref.authWithOAuthPopup("facebook", function (err, authData) {
 
                 if (authData) {
                     var userSigninIdentifier = authData.facebook.id;
@@ -200,7 +200,7 @@ angular.module('starter.controllers', [])
         }
     };
 
-    $scope.register = function(authProvider, authData) {
+    $scope.register = function (authProvider, authData) {
 
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
@@ -218,7 +218,7 @@ angular.module('starter.controllers', [])
                 ID: authData.google.id,
                 AccessToken: authData.google.accessToken,
                 profileID: newProfileID
-            }).then(function(x) {
+            }).then(function (x) {
                 $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                     profileID: newProfileID,
                     googleID: authData.google.id,
@@ -230,14 +230,14 @@ angular.module('starter.controllers', [])
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
                     numberHuggs: 0
-                }).then(function(data) {
+                }).then(function (data) {
 
                     //initialize user object with blocked array
                     $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
                         0: 1000000000001
-                    }).then(function(y) {
+                    }).then(function (y) {
                         $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-                        $scope.dataRef.$loaded().then(function(data) {
+                        $scope.dataRef.$loaded().then(function (data) {
                             //load data into local storage
                             var profileData = data.$getRecord(newProfileID);
                             //Store profile Data persistently in local storage for global usage
@@ -251,6 +251,32 @@ angular.module('starter.controllers', [])
         }
         if (authProvider == "facebook") {
             //write authentification data into database
+            var pictureURL;
+
+            var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
+            
+            // Due to use of $http promise needed to handle asynchronous call
+            
+            pictureData.then(function (result) {
+                
+                // Help? - Need to push URL of high-res pic to firebase db instead of using 100x100px URL
+                
+                // firebase.push(result)
+                /*$firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                    picture: result.data.data.url;
+                });*/
+                
+                // URL of High-res facebook profile picture                 
+                console.log(result.data.data.url);
+                
+                // $scope.currentUser.picture = result.data.data.url;
+                // pictureURL = result.data.data.url;
+            }, function (err) {
+                console.log(err);
+            });
+
+            // console.log(pictureURL);
+
             $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                 displayName: authData.facebook.displayName,
                 token: authData.token,
@@ -259,7 +285,7 @@ angular.module('starter.controllers', [])
                 ID: authData.facebook.id,
                 AccessToken: authData.facebook.accessToken,
                 profileID: newProfileID
-            }).then(function(y) {
+            }).then(function (y) {
                 $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                     profileID: newProfileID,
                     googleID: null,
@@ -272,15 +298,15 @@ angular.module('starter.controllers', [])
                     lastname: authData.facebook.cachedUserProfile.last_name,
                     rating: 0,
                     numberHuggs: 0
-                }).then(function(data) {
+                }).then(function (data) {
 
                     $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
                         0: 1000000000001
-                    }).then(function(y) {
+                    }).then(function (y) {
 
                         //initialize user object with blocked array
                         $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-                        $scope.dataRef.$loaded().then(function(data) {
+                        $scope.dataRef.$loaded().then(function (data) {
                             //load data into local storage
                             var profileData = data.$getRecord(newProfileID);
                             //Store profile Data persistently in local storage for global usage
@@ -301,49 +327,49 @@ angular.module('starter.controllers', [])
 
     $ionicModal.fromTemplateUrl('templates/tos.html', {
         scope: $scope
-    }).then(function(modalTos) {
+    }).then(function (modalTos) {
         $scope.modalTos = modalTos;
     });
 
     // Triggered in the login modalTos to close it
-    $scope.closeTos = function() {
+    $scope.closeTos = function () {
         $scope.modalTos.hide();
     };
 
     // Open the login modalTos
-    $scope.tos = function() {
+    $scope.tos = function () {
         $scope.modalTos.show();
     };
 
     $ionicModal.fromTemplateUrl('templates/privacy.html', {
         scope: $scope
-    }).then(function(modalPriv) {
+    }).then(function (modalPriv) {
         $scope.modalPriv = modalPriv;
     });
 
     // Triggered in the login modalPriv to close it
-    $scope.closePriv = function() {
+    $scope.closePriv = function () {
         $scope.modalPriv.hide();
     };
 
     // Open the login modalPriv
-    $scope.privacy = function() {
+    $scope.privacy = function () {
         $scope.modalPriv.show();
     };
 
-    $scope.goHome = function() {
+    $scope.goHome = function () {
         $state.go('app.home');
     }
 })
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
 
 })
 
 //this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
 //These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+.controller('ExtProfileCtrl', function ($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
@@ -357,13 +383,13 @@ angular.module('starter.controllers', [])
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
-    UserInfo.getProfile($scope.profileID).then(function(value) {
+    UserInfo.getProfile($scope.profileID).then(function (value) {
         $scope.data = value;
 
         var userObject = $firebase(ref.child("users").child("data").child($scope.data.profileID)).$asObject();
 
         //displays information
-        userObject.$bindTo($scope, "data").then(function() {
+        userObject.$bindTo($scope, "data").then(function () {
             $scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
         }); //end bindTo
     }); //end getProfile
@@ -373,7 +399,7 @@ angular.module('starter.controllers', [])
 
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
             0: blockProfileID
-        }).then(function(y) {
+        }).then(function (y) {
             console.log("Successfully blocked user");
             return 1;
         }); //end set
@@ -395,7 +421,7 @@ angular.module('starter.controllers', [])
             answerFirstName: $scope.currentUser.firstname,
             answerRating: $scope.currentUser.rating
 
-        }).then(function(data) {
+        }).then(function (data) {
 
             //add notification for user that requested the hugg
             $firebase(ref.child("users").child("data").child($scope.profileID).child("notifications").child(huggID)).$set({
@@ -406,7 +432,7 @@ angular.module('starter.controllers', [])
                 profileID: $scope.currentUser.profileID,
                 type: "answer",
                 change: "add"
-            }).then(function(x) {
+            }).then(function (x) {
                 console.log("Successfully answered hugg");
                 return 1;
             });
@@ -417,7 +443,7 @@ angular.module('starter.controllers', [])
 
 }) //end controller
 
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+.controller('ProfileCtrl', function ($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
@@ -428,7 +454,7 @@ angular.module('starter.controllers', [])
 
     //show data in profile
     var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
-    userObject.$bindTo($scope, "currentUser").then(function() {
+    userObject.$bindTo($scope, "currentUser").then(function () {
         $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
         localstorage.setObject("userData", $scope.currentUser)
     }); // end bindTo
@@ -465,7 +491,7 @@ angular.module('starter.controllers', [])
     //waiting on this reference to be loaded
     //this reference is for huggs that this users requested
     //in DB: profileID of user is in reqProfileID field
-    $scope.orderOwnHuggRef.$loaded().then(function(data) {
+    $scope.orderOwnHuggRef.$loaded().then(function (data) {
 
         var i = 0;
         //loop to get all the elements
@@ -543,7 +569,7 @@ angular.module('starter.controllers', [])
     //waitig on this reference to be loadd
     //this reference is for huggs that other users requested and that this user answered
     //in DB: profileID of user is in answerProfileID field
-    $scope.orderOtherHuggRef.$loaded().then(function(data) {
+    $scope.orderOtherHuggRef.$loaded().then(function (data) {
 
         var i = 0;
         //loop to get all elements
@@ -677,13 +703,13 @@ angular.module('starter.controllers', [])
 
     //doesn't work with currentUser ...
     var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asArray();
-    userArray.$loaded().then(function(data) {
+    userArray.$loaded().then(function (data) {
         console.log(data.$getRecord("blocked"));
     });
 
     //remove users from block list
     $scope.unblockUser = function unblockUser(unblockProfileID) {
-        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
+        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function (y) {
             console.log("Successfully unblocked user");
             return 1;
         });
@@ -692,9 +718,9 @@ angular.module('starter.controllers', [])
 
     //remove huggs that nobody has answered yet from unanswered huggs list
     $scope.removeHugg = function removeHugg(huggID) {
-        $firebase(ref.child("hugg")).$remove(huggID).then(function(data) {
+        $firebase(ref.child("hugg")).$remove(huggID).then(function (data) {
 
-        }).then(function(data) {
+        }).then(function (data) {
             console.log("Successfully removed hugg");
             return 1;
         }); //end then
@@ -704,7 +730,7 @@ angular.module('starter.controllers', [])
     $scope.acceptHugg = function acceptHugg(huggID, answerProfileID) {
         $firebase(ref.child("hugg").child(huggID)).$update({
             accepted: 1
-        }).then(function(data) {
+        }).then(function (data) {
             var date = new Date();
             var today = date.getTime();
 
@@ -717,7 +743,7 @@ angular.module('starter.controllers', [])
                 profileID: $scope.currentUser.profileID,
                 type: "accept",
                 change: "add"
-            }).then(function(x) {
+            }).then(function (x) {
                 console.log("successfully accepted hugg!");
                 return 1;
             })
@@ -737,11 +763,11 @@ angular.module('starter.controllers', [])
             answerTime: null,
             answerFirstName: null,
             answerRating: null
-        }).then(function(x) {
+        }).then(function (x) {
 
             $firebase(ref.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
                 1: answerProfileID
-            }).then(function(y) {
+            }).then(function (y) {
                 console.log("Successfully declined hugg");
                 return 1;
             }); //end then
@@ -762,7 +788,7 @@ angular.module('starter.controllers', [])
             answerTime: null,
             answerFirstName: null,
             answerRating: null
-        }).then(function(x) {
+        }).then(function (x) {
             console.log("Successfully revoked hugg answer!");
             return 1;
         }); //end then
@@ -777,16 +803,16 @@ angular.module('starter.controllers', [])
         //update status in huggRef DB
         $firebase(ref.child("hugg").child(huggID)).$update({
             done: 1
-        }).then(function(x) {
+        }).then(function (x) {
 
             //define ref for huggs
-            $scope.huggRef.$loaded().then(function(huggData) {
+            $scope.huggRef.$loaded().then(function (huggData) {
                 //load infos for selected hugg
                 var record = huggData.$getRecord(huggID);
 
                 //define ref for users
                 $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
-                $scope.userRef.$loaded().then(function(userData) {
+                $scope.userRef.$loaded().then(function (userData) {
 
                     //load current number of huggs for both users and add 1
                     var reqNumberHuggs = userData.$getRecord(record.reqProfileID).numberHuggs + 1;
@@ -795,12 +821,12 @@ angular.module('starter.controllers', [])
                     //update info on number of huggs for requestor
                     $firebase(ref.child("users").child("data").child(record.reqProfileID)).$update({
                         numberHuggs: reqNumberHuggs
-                    }).then(function(x) {
+                    }).then(function (x) {
 
                         //update info on number of huggs for answerer
                         $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
                             numberHuggs: answerNumberHuggs
-                        }).then(function(y) {
+                        }).then(function (y) {
                             //finalize
                             console.log("Successfully marked done!");
                             return 1;
@@ -819,7 +845,7 @@ angular.module('starter.controllers', [])
         //get rating of other user
         //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
         //in this case the total rating is calulated and added to the db
-        $scope.huggRef.$loaded().then(function(huggData) {
+        $scope.huggRef.$loaded().then(function (huggData) {
             var reqRating = huggData.$getRecord(huggID).rating.reqRating;
             if (reqRating != ".") {
                 var total = (reqRating + rating) / 2;
@@ -830,20 +856,20 @@ angular.module('starter.controllers', [])
             //add the rating of the user to the db
             $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                 answerRating: rating
-            }).then(function(x) {
+            }).then(function (x) {
 
                 //calculates the rating of the other user
                 //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                 //then the rating for this hugg is added and the result is devided by the new number of huggs
                 //the result is the new avarage rating for the user and is saved to the db
                 $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
-                $scope.userRef.$loaded().then(function(userData) {
+                $scope.userRef.$loaded().then(function (userData) {
 
                     var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs);
 
                     $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
                         rating: answerRating
-                    }).then(function(y) {
+                    }).then(function (y) {
                         console.log("Successfully rated");
                         return 1;
                     }); //end update
@@ -858,7 +884,7 @@ angular.module('starter.controllers', [])
     //the user that answered the hugg can rate the user that requested the hugg
     $scope.rateReqHugg = function rateReqHugg(huggID, rating, reqProfileID) {
 
-        $scope.huggRef.$loaded().then(function(huggData) {
+        $scope.huggRef.$loaded().then(function (huggData) {
 
             //get rating of other user
             //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
@@ -874,20 +900,20 @@ angular.module('starter.controllers', [])
             //add the rating of the user to the db
             $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
                 reqRating: rating
-            }).then(function(x) {
+            }).then(function (x) {
 
                 //calculates the rating of the other user
                 //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                 //then the rating for this hugg is added and the result is devided by the new number of huggs
                 //the result is the new avarage rating for the user and is saved to the db
                 $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
-                $scope.userRef.$loaded().then(function(userData) {
+                $scope.userRef.$loaded().then(function (userData) {
 
                     var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
 
                     $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
                         rating: reqRating
-                    }).then(function(y) {
+                    }).then(function (y) {
                         console.log("Successfully rated");
                         return 1;
                     }); //end update
@@ -902,7 +928,7 @@ angular.module('starter.controllers', [])
 }) //end ProfileCtrl
 
 .controller("SampleCtrl", ["$scope", "$firebase", "Auth", "$stateParams",
-    function($scope, Auth, $firebase, $stateParams) {
+    function ($scope, Auth, $firebase, $stateParams) {
         //$scope.auth = Auth;
         //$scope.user = $scope.auth.$getAuth();
         console.log($stateParams);
@@ -910,7 +936,7 @@ angular.module('starter.controllers', [])
     }
 ])
 
-.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
+.controller('SettingsCtrl', function ($scope, localstorage, $firebase, $cordovaCamera) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
 
@@ -950,12 +976,12 @@ angular.module('starter.controllers', [])
 
     $scope.connect = function connect(provider) {
         if (provider == "toGoogle") {
-            connectRef.authWithOAuthPopup("google", function(err, user) {
+            connectRef.authWithOAuthPopup("google", function (err, user) {
                 if (err) {
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.onAuth(function(authData) {
+                    connectRef.onAuth(function (authData) {
                         $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
                             displayName: authData.google.displayName,
                             token: authData.token,
@@ -974,12 +1000,12 @@ angular.module('starter.controllers', [])
             });
         }
         if (provider == "toFacebook") {
-            connectRef.authWithOAuthPopup("facebook", function(err, user) {
+            connectRef.authWithOAuthPopup("facebook", function (err, user) {
                 if (err) {
                     console.log(err);
                 }
                 if (user) {
-                    connectRef.onAuth(function(authData) {
+                    connectRef.onAuth(function (authData) {
                         $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                             displayName: authData.facebook.displayName,
                             token: authData.token,
@@ -998,7 +1024,7 @@ angular.module('starter.controllers', [])
         }
     }
 
-    document.addEventListener("deviceready", function() {
+    document.addEventListener("deviceready", function () {
 
         var options = {
             quality: 50,
@@ -1011,10 +1037,10 @@ angular.module('starter.controllers', [])
             popoverOptions: CameraPopoverOptions,
             saveToPhotoAlbum: false
         };
-        $scope.takeNewPicture = function() {
-            $cordovaCamera.getPicture(options).then(function(imageData) {
+        $scope.takeNewPicture = function () {
+            $cordovaCamera.getPicture(options).then(function (imageData) {
                 $scope.userData.picture = "data:image/jpeg;base64," + imageData;
-            }, function(err) {
+            }, function (err) {
                 // error
             });
         };
@@ -1025,53 +1051,53 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PlaylistCtrl', function ($scope, $stateParams) {
 
 })
 
-.controller('homeCtrl', function($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase) {
+.controller('homeCtrl', function ($scope, $ionicLoading, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase) {
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
         lng: 8.506636
     };
 
-    $scope.$on('mapInitialized', function(event, map) {
+    $scope.$on('mapInitialized', function (event, map) {
         $scope.map = map;
         //hole die GPS/IP-Geolocation
         $cordovaGeolocation
             .getCurrentPosition()
-            .then(function(position) {
+            .then(function (position) {
                 //wandle in google Maps format um
                 var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 $scope.positions.lat = pos.k;
                 $scope.positions.lng = pos.D;
-            }, function(err) {
+            }, function (err) {
                 alert("error locating the user");
             });
     });
 
     $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
         scope: $scope,
-    }).then(function(popover) {
+    }).then(function (popover) {
         $scope.popover = popover;
     });
-    $scope.openPopover = function($event) {
+    $scope.openPopover = function ($event) {
         $scope.popover.show($event);
     };
-    $scope.closePopover = function() {
+    $scope.closePopover = function () {
         $scope.popover.hide();
     };
     //Cleanup the popover when we're done with it!
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
         $scope.popover.remove();
     });
     // Execute action on hide popover
-    $scope.$on('popover.hidden', function() {
+    $scope.$on('popover.hidden', function () {
         // Execute action
     });
     // Execute action on remove popover
-    $scope.$on('popover.removed', function() {
+    $scope.$on('popover.removed', function () {
         // Execute action
     });
 
@@ -1083,7 +1109,7 @@ angular.module('starter.controllers', [])
     }
 
     //function that is executed on "Search"-Click in Popover
-    $scope.displayResults = function() {
+    $scope.displayResults = function () {
 
         var male = $scope.huggRequest.male;
         var female = $scope.huggRequest.female;
@@ -1106,7 +1132,7 @@ angular.module('starter.controllers', [])
 
     //watches for changes in data - maybe use bindTo?
     var obj = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("notifications")).$asObject();
-    var unwatch = obj.$watch(function() {
+    var unwatch = obj.$watch(function () {
         console.log("data changed!");
     });
 
@@ -1127,7 +1153,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading) {
+.controller('resultCtrl', function ($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -1171,7 +1197,7 @@ angular.module('starter.controllers', [])
         //create random huggID
         var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-        $scope.huggRef.$loaded().then(function(data) {
+        $scope.huggRef.$loaded().then(function (data) {
 
             //check whether huggID already exists in db
             while (data.$getRecord(huggID) != null) {
@@ -1185,7 +1211,7 @@ angular.module('starter.controllers', [])
             //get GPS coordinates
             $cordovaGeolocation
                 .getCurrentPosition()
-                .then(function(position) {
+                .then(function (position) {
 
                     //save data to firebase in new child with calculated huggID
                     $firebase(ref.child("hugg").child(huggID)).$set({
@@ -1204,13 +1230,13 @@ angular.module('starter.controllers', [])
                         reqRating: $scope.currentUser.rating,
                         blocked: $scope.currentUser.blocked
 
-                    }).then(function(x) {
+                    }).then(function (x) {
 
                         $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
                             reqRate: ".",
                             answerRate: ".",
                             totalRating: "."
-                        }).then(function(y) {
+                        }).then(function (y) {
                             console.log("Successfully requested hugg");
                             return 1;
                         }); //end then
@@ -1236,12 +1262,12 @@ angular.module('starter.controllers', [])
     function getHuggs() {
         var deferred = $q.defer();
 
-        $scope.orderHuggRef.$loaded().then(function(data) {
+        $scope.orderHuggRef.$loaded().then(function (data) {
             var i = 0;
             //get GPS locaion
             $cordovaGeolocation
                 .getCurrentPosition()
-                .then(function(position) {
+                .then(function (position) {
 
                     //save coordinates to var
                     currentLat = position.coords.latitude;
@@ -1258,11 +1284,11 @@ angular.module('starter.controllers', [])
                         //check whether filter gender of searching person and gender of requestor match
                         //check whether gender of searching person and filter of requestor match
                         //check whether current user's profile ID is among the blocked profile IDs
-                        load().then(function(record) {
+                        load().then(function (record) {
                             if (((gender == "both") || (gender != "both" && record.reqGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
 
                                 $scope.huggRef = $firebase(ref.child("hugg").child(record.huggID).child("blocked")).$asArray();
-                                $scope.huggRef.$loaded().then(function(data) {
+                                $scope.huggRef.$loaded().then(function (data) {
 
                                     //check whether user is blocked in results                            
                                     if (data.$getRecord($scope.currentUser.profileID) == null) {
@@ -1308,7 +1334,7 @@ angular.module('starter.controllers', [])
         return deferred.promise;
     } //end function
 
-    getHuggs().then(function(array) {
+    getHuggs().then(function (array) {
         $scope.resultList = array;
         console.log(array);
     });
