@@ -7813,7 +7813,7 @@ $ios-transition-box-shadow-end: -200px 0px 200px rgba(0,0,0,0.15), -5px 0px 5px 
   font-weight: normal;
   font-style: normal; }
 
-[class^="sp-"], [class*=" sp-"] {
+[class^="icon-"], [class*=" icon-"] {
   font-family: 'icomoon';
   speak: none;
   font-style: normal;
@@ -7825,15 +7825,8 @@ $ios-transition-box-shadow-end: -200px 0px 200px rgba(0,0,0,0.15), -5px 0px 5px 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
-.sp-huggr:before {
+.icon-huggr:before {
   content: "\e600"; }
-
-.sp-huggr-colored {
-  color: #F05331 !important; }
-
-.override-icon-position:before {
-  line-height: 2 !important;
-  font-size: 45px !important; }
 
 .button-facebook {
   border-color: #3b5998;
