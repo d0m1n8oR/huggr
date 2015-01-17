@@ -343,11 +343,17 @@ angular.module('starter.controllers', [])
 
 //this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
 //These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
+$scope.$on("$ionicView.enter", function(scopes, states) {
+        console.log("enter");
+        console.log($scope);
+        //
+
+    });
 
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
