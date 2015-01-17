@@ -128,7 +128,8 @@ angular.module('starter.controllers', [])
                     var userSigninIdentifier = authData.google.id;
                     if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
                         console.warn("new user, registering...");
-                        $scope.register(authProvider, authData);
+                        $scope.showPopUp(authProvider, authData);
+                        //$scope.register(authProvider, authData);
                     } else {
                         $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
                         $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
@@ -169,7 +170,7 @@ angular.module('starter.controllers', [])
 
                     if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
                         console.warn("new user, registering...");
-                        $scope.register(authProvider, authData);
+                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
                         $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
@@ -201,11 +202,21 @@ angular.module('starter.controllers', [])
     };
 
     $scope.loginModel = {}
+    var popupAuthProvider;
+    var popupAuthData;
+    
+    $scope.showPopUp = function(authProvider, authData)
+    {
+        $scope.popover.show(angular.element(document.getElementById('fb')));
+        popupAuthProvider = authProvider;
+        popupAuthData =authData;
+    }
 
-    $scope.print = function() {
+    $scope.toRegister = function() {
         if ($scope.loginModel.gender != null && $scope.loginModel.birthdate != null) {
             console.log($scope.loginModel);
             $scope.popover.hide();
+            $scope.register(popupAuthProvider, popupAuthData);
         }
     }
 
@@ -258,7 +269,8 @@ angular.module('starter.controllers', [])
                     displayName: authData.google.displayName,
                     email: authData.google.email,
                     picture: authData.google.cachedUserProfile.picture,
-                    gender: authData.google.cachedUserProfile.gender,
+                    gender: $scope.loginModel.gender,
+                    birthdate: $scope.loginModel.birthdate.getTime(),
                     firstname: authData.google.cachedUserProfile.given_name,
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
@@ -300,7 +312,8 @@ angular.module('starter.controllers', [])
                     displayName: authData.facebook.displayName,
                     email: authData.facebook.email,
                     picture: authData.facebook.cachedUserProfile.picture.data.url,
-                    gender: authData.facebook.cachedUserProfile.gender,
+                    gender: $scope.loginModel.gender,
+                    birthdate: $scope.loginModel.birthdate.getTime(),
                     firstname: authData.facebook.cachedUserProfile.first_name,
                     lastname: authData.facebook.cachedUserProfile.last_name,
                     rating: 0,
