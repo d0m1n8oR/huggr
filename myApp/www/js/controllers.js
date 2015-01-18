@@ -89,7 +89,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -296,6 +296,33 @@ angular.module('starter.controllers', [])
         }
         if (authProvider == "facebook") {
             //write authentification data into database
+            
+                 var pictureURL;
+
+            var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
+            
+            // Due to use of $http promise needed to handle asynchronous call
+            
+            pictureData.then(function (result) {
+                
+                // Help? - Need to push URL of high-res pic to firebase db instead of using 100x100px URL
+                
+                // firebase.push(result)
+                /*$firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                    picture: result.data.data.url;
+                });*/
+                
+                // URL of High-res facebook profile picture                 
+                console.log(result.data.data.url);
+                
+                // $scope.currentUser.picture = result.data.data.url;
+                // pictureURL = result.data.data.url;
+            }, function (err) {
+                console.log(err);
+            });
+
+            // console.log(pictureURL);
+        
             $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                 displayName: authData.facebook.displayName,
                 token: authData.token,
