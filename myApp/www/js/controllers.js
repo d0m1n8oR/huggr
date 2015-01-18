@@ -25,6 +25,7 @@ angular.module('starter.controllers', [])
                 dataRef.$loaded()
                     .then(function(data) {
                         var record = data.$getRecord(ID);
+                    console.log(record.age);
                         var profileData = {
                             "profileID": record.profileID,
                             "displayName": record.displayName,
@@ -37,7 +38,8 @@ angular.module('starter.controllers', [])
                             "firstname": record.firstname,
                             "lastname": record.lastname,
                             "numberHuggs": record.numberHuggs,
-                            "rating": record.rating
+                            "rating": record.rating,
+                            "age": record.age
                         };
                         //console.log(profileData);
                         deferred.resolve(profileData);
@@ -124,7 +126,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -313,7 +315,8 @@ angular.module('starter.controllers', [])
                     firstname: authData.google.cachedUserProfile.given_name,
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
-                    numberHuggs: 0
+                    numberHuggs: 0,
+                    age: helper.calcAge($scope.loginModel.birthdate)
                 }).then(function(data) {
 
                     //initialize user object with blocked array
@@ -360,7 +363,8 @@ angular.module('starter.controllers', [])
                         firstname: authData.facebook.cachedUserProfile.first_name,
                         lastname: authData.facebook.cachedUserProfile.last_name,
                         rating: 0,
-                        numberHuggs: 0
+                        numberHuggs: 0,
+                    age: helper.calcAge($scope.loginModel.birthdate)
                     }).then(function(data) {
 
                         $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
