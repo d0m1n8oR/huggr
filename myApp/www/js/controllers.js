@@ -985,6 +985,15 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
             $scope.huggRef.$loaded().then(function(huggData) {
                 //load infos for selected hugg
                 var record = huggData.$getRecord(huggID);
+                
+                var otherProfileID
+                if(record.reqProfileID == $scope.currentUser.profileID)
+                {
+                    otherProfileID = record.answerProfileID;
+                }
+                else{
+                    otherProfileID = record.reqProfileID;
+                }
 
                 //define ref for users
                 $scope.userRef = $firebase(ref.child("users").child("data")).$asArray();
@@ -1004,8 +1013,19 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
                             numberHuggs: answerNumberHuggs
                         }).then(function(y) {
                             //finalize
-                            console.log("Successfully marked done!");
-                            return 1;
+                            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "done",
+                change: "add"
+            }).then(function(x) {
+                console.log("successfully marked as done!");
+                return 1;
+            })
                         }); //end then (finalize)
                     }); //end then (update answerer)
                 }); //end then (load userRef)
