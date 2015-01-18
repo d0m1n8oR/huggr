@@ -1395,7 +1395,7 @@ angular.module('starter.controllers', [])
 }); //end resultCTRL
 
 
-/*
+
 .controller('ChatCtrl', function($scope, $stateParams, $firebase) {
     
     //Reference to Firebase
@@ -1437,4 +1437,3 @@ angular.module('starter.controllers', [])
         messageList[0].scrollTop = messageList[0].scrollHeight;
     }   
 )});
-*/
