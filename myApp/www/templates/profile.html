@@ -26,12 +26,17 @@
                         </p>
                         <p>
                             <span>Your current Rating:</span>
-                            <rating ng-model="currentUser.rating" max="5"></rating>
+                            <rating ng-model="userRatingForView" max="5"></rating>
                             <a href="" class="subdued">Number of huggs: {{currentUser.numberHuggs}}</a>
                         </p>
 
                     </div>
                 </div>
+                <div class="padding">
+        <button class="button" ng-click="showToast('testing the bottom', 'long', 'bottom')">Long Bottom</button>
+        <button class="button" ng-click="showToast('testing the top', 'short', 'top')">Short Top</button>
+        <button class="button" ng-click="showToast('this is a test', 'long', 'center')">Long Center</button>
+    </div>
             </ion-content>
         </ion-tab>
 
@@ -120,6 +125,7 @@
                             </div>
                             <ion-item ng-repeat="item in ownDoneHuggs.hugg" item="item" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
+                                <h2>Please rate your hug with {{item.answerFirstName}}</h2>
                                 <p>
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
                                            <rating ng-model="item.answerRating" max="5"></rating>
