@@ -787,19 +787,15 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
             } else {
                 $scope.blockedUsers = [];
                 $scope.noBlockedUsers = false;
-
-                for (i = 0; i < Object.keys($scope.profileIDs).length; i++) {
                     var p = $scope.profileIDs;
                     for (var key in p) {
                         if (p.hasOwnProperty(key) && key != "1000000000001") {
-                            console.log(key);
                             UserInfo.getProfile(p[key]).then(function(value) {
                                 $scope.returnedProfile = value;
                                 $scope.blockedUsers.push($scope.returnedProfile);
                             });
                         }
                     }
-                }
             }
         });
 
