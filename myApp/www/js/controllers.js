@@ -11,6 +11,7 @@ angular.module('starter.controllers', [])
 //Usage: UserInfo in den Controller injecten, dann im Code: UserInfo.getProfile(ProfileID);
 //Important: This is a synchronised method, so you have to use UserInfo.getProfile({profileID}).then(function(returnData){...})
 .factory('UserInfo', ["$firebase", "$q",
+<<<<<<< HEAD
         function($firebase, $q) {
             //initialize firebase
             var ref = new Firebase("https://huggr.firebaseio.com/users/data");
@@ -55,6 +56,54 @@ angular.module('starter.controllers', [])
             };
         } // end function
     ]) //end factory
+=======
+    function($firebase, $q) {
+        //initialize firebase
+        var ref = new Firebase("https://huggr.firebaseio.com/users/data");
+        var dataRef = $firebase(ref).$asArray();
+
+        //$q for synchronous method call
+        var deferred = $q.defer();
+
+        return {
+            getProfile: function(ID) {
+                console.log(ID);
+                dataRef.$loaded()
+                    .then(function(data) {
+                        var record = data.$getRecord(ID);
+                    console.log(record.age);
+                        var profileData = {
+                            "profileID": record.profileID,
+                            "displayName": record.displayName,
+                            "email": record.email,
+                            "picture": record.picture,
+                            "birthdate": record.birthdate,
+                            "age": record.age,
+                            "hobby": record.hobby,
+                            "gender": record.gender,
+                            "firstname": record.firstname,
+                            "lastname": record.lastname,
+                            "numberHuggs": record.numberHuggs,
+                            "rating": record.rating,
+                            "age": record.age
+                        };
+                        //console.log(profileData);
+                        deferred.resolve(profileData);
+                        //return profileData;
+
+                    }) // end then
+
+                .catch(function(error) {
+                    console.error("Error getting UserInfo:", error);
+                    deferred.reject("Error getting UserInfo: " + error)
+                }); // end catch
+
+                return deferred.promise;
+            } // end function(ID)
+        };
+    } // end function
+]) //end factory
+>>>>>>> FETCH_HEAD
 
 .factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading) {
     return {
@@ -123,8 +172,26 @@ angular.module('starter.controllers', [])
     }
 ])
 
+.controller('logoutCtrl', function($scope, $firebase, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
+    
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
+    $scope.auth = Auth;
+    $scope.check = $scope.auth.$getAuth();
+    
+    console.log("here");
+    //function for logout
+    $scope.logout = function() {
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http) {
+        //disconnects user from auth object, needs to relogin
+        $scope.auth.$unauth();
+
+        //reloads window to show login fields
+        $state.go('app.homef');
+    } // end function
+})
+
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -302,7 +369,8 @@ angular.module('starter.controllers', [])
                     firstname: authData.google.cachedUserProfile.given_name,
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
-                    numberHuggs: 0
+                    numberHuggs: 0,
+                    age: helper.calcAge($scope.loginModel.birthdate)
                 }).then(function(data) {
 
                     //initialize user object with blocked array
@@ -349,7 +417,8 @@ angular.module('starter.controllers', [])
                         firstname: authData.facebook.cachedUserProfile.first_name,
                         lastname: authData.facebook.cachedUserProfile.last_name,
                         rating: 0,
-                        numberHuggs: 0
+                        numberHuggs: 0,
+                    age: helper.calcAge($scope.loginModel.birthdate)
                     }).then(function(data) {
 
                         $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
@@ -868,6 +937,7 @@ angular.module('starter.controllers', [])
                 var today = date.getTime();
 
                 //add notification for user that requested the hugg
+<<<<<<< HEAD
                 $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
                     huggID: huggID,
                     firstName: $scope.currentUser.firstname,
@@ -880,12 +950,60 @@ angular.module('starter.controllers', [])
                     console.log("successfully accepted hugg!");
                     return 1;
                 })
+=======
+            $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "accept",
+                change: "remove"
+            }).then(function(x) {
+                console.log("successfully declined hugg!");
+                return 1;
+            })
+>>>>>>> FETCH_HEAD
             }); //end then
 
         }; //end function
 
+<<<<<<< HEAD
         //decline a hugg answer to a request that was made by this user
         $scope.declineHugg = function declineHugg(huggID, answerProfileID) {
+=======
+    //revoke an answer to a hugg (the hugg is requested from somebody else, the user answered the hugg, the hugg is not yet accepted)
+    //the user doesn't want to participate in the offered hugg
+    $scope.revokeAnswer = function revokeAnswer(huggID, reqProfileID) {
+
+        $firebase(ref.child("hugg").child(huggID)).$update({
+            answered: 0,
+            accepted: 0,
+            answerProfileID: null,
+            answerPicture: null,
+            answerGender: null,
+            answerTime: null,
+            answerFirstName: null,
+            answerRating: null
+        }).then(function(x) {
+            var date = new Date();
+            var today = date.getTime();
+            
+            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(reqProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "answer",
+                change: "remove"
+            }).then(function(x) {
+                 console.log("Successfully revoked hugg answer!");
+            return 1;
+            });
+        }); //end then
+>>>>>>> FETCH_HEAD
 
             $firebase(ref.child("hugg").child(huggID)).$update({
                 answered: 0,
@@ -904,6 +1022,7 @@ angular.module('starter.controllers', [])
                     var date = new Date();
                     var today = date.getTime();
 
+<<<<<<< HEAD
                     //add notification for user that requested the hugg
                     $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
                         huggID: huggID,
@@ -918,6 +1037,21 @@ angular.module('starter.controllers', [])
                         return 1;
                     })
                 }); //end then
+=======
+            //define ref for huggs
+            $scope.huggRef.$loaded().then(function(huggData) {
+                //load infos for selected hugg
+                var record = huggData.$getRecord(huggID);
+                
+                var otherProfileID
+                if(record.reqProfileID == $scope.currentUser.profileID)
+                {
+                    otherProfileID = record.answerProfileID;
+                }
+                else{
+                    otherProfileID = record.reqProfileID;
+                }
+>>>>>>> FETCH_HEAD
 
             }); //end then
         }; //end function
@@ -947,10 +1081,34 @@ angular.module('starter.controllers', [])
         //after this the hugg can be rated
         $scope.markDone = function markDone(huggID) {
 
+<<<<<<< HEAD
             //update status in huggRef DB
             $firebase(ref.child("hugg").child(huggID)).$update({
                 done: 1
             }).then(function(x) {
+=======
+                        //update info on number of huggs for answerer
+                        $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
+                            numberHuggs: answerNumberHuggs
+                        }).then(function(y) {
+                            //finalize
+                            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "done",
+                change: "add"
+            }).then(function(x) {
+                console.log("successfully marked as done!");
+                return 1;
+            })
+                        }); //end then (finalize)
+                    }); //end then (update answerer)
+                }); //end then (load userRef)
+>>>>>>> FETCH_HEAD
 
                 //define ref for huggs
                 $scope.huggRef.$loaded().then(function(huggData) {
@@ -1297,15 +1455,13 @@ angular.module('starter.controllers', [])
 
 
     if ($scope.currentUser.notifications != null) {
-        for (i = 0; i < Object.keys($scope.currentUser.notifications).length; i++) {
-            //console.log($scope.currentUser.notifications[3571064178]);
+            console.log("number of notifications: "+Object.keys($scope.currentUser.notifications).length);
             var p = $scope.currentUser.notifications
             for (var key in p) {
                 if (p.hasOwnProperty(key)) {
-                    console.log("Benachrichtigung von " + p[key].firstName);
+                    console.log("Benachrichtigung: " + p[key].firstName+" HuggID "+p[key].huggID +" Type: "+p[key].type+", "+p[key].change);
                 }
             }
-        }
         //console.log($scope.currentUser.notifications);
     }
 

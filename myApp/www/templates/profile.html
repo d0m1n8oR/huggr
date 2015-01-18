@@ -68,7 +68,7 @@
                                     <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm:ss'}}
 
                                 </p>
-                                <p><i class="icon ion-location"> at </i>{{item.lat}} {{item.long}}
+                                <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
                                 </p>
 
                                 <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
@@ -93,7 +93,7 @@
                                     {{item.reqFirstName}} is {{item.reqGender}} and has
                                     <br> a rating of {{item.reqRating}} <i class="icon ion-star"></i>
                                 </p>
-                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID, item.reqProfileID)"></ion-option-button>
                             </ion-item>
                             <div class="item item-divider padding-top">
                                 own Accepted huggs

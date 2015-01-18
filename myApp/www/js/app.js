@@ -54,6 +54,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
+    
+        .state('app.logout', {
+        url: "/logout",
+        views: {
+            'menuContent': {
+                controller: 'logoutCtrl',
+                templateUrl: "templates/logout.html"
+            }
+        }
+    })
 
     .state('app.home', {
         url: "/home",
