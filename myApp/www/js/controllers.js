@@ -140,7 +140,7 @@ angular.module('starter.controllers', [])
         $scope.auth.$unauth();
 
         //reloads window to show login fields
-        $state.go('app.home');
+        $state.go('app.homef');
     } // end function
 })
 
@@ -1354,15 +1354,13 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
 
 
     if ($scope.currentUser.notifications != null) {
-        for (i = 0; i < Object.keys($scope.currentUser.notifications).length; i++) {
-            //console.log($scope.currentUser.notifications[3571064178]);
+            console.log("number of notifications: "+Object.keys($scope.currentUser.notifications).length);
             var p = $scope.currentUser.notifications
             for (var key in p) {
                 if (p.hasOwnProperty(key)) {
                     console.log("Benachrichtigung: " + p[key].firstName+" HuggID "+p[key].huggID +" Type: "+p[key].type+", "+p[key].change);
                 }
             }
-        }
         //console.log($scope.currentUser.notifications);
     }
 
