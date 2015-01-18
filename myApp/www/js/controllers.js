@@ -1411,7 +1411,7 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
     $firebase(ref.child("chat").$set({
                message: "hallo",
                user : $scope.currentUser.firstname
-    }))
+    }));
 
     
         //Register chat elements
