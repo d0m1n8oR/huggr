@@ -89,7 +89,7 @@ angular.module('starter.controllers', [])
 ])
 
 
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -213,7 +213,6 @@ angular.module('starter.controllers', [])
 
     $scope.toRegister = function() {
         if ($scope.loginModel.gender != null && $scope.loginModel.birthdate != null) {
-            console.log($scope.loginModel);
             $scope.popover.hide();
             $scope.register(popupAuthProvider, popupAuthData);
         }
