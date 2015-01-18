@@ -926,8 +926,8 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
                 picture: $scope.currentUser.picture,
                 time: today,
                 profileID: $scope.currentUser.profileID,
-                type: "decline",
-                change: "add"
+                type: "accept",
+                change: "remove"
             }).then(function(x) {
                 console.log("successfully declined hugg!");
                 return 1;
@@ -939,7 +939,7 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
 
     //revoke an answer to a hugg (the hugg is requested from somebody else, the user answered the hugg, the hugg is not yet accepted)
     //the user doesn't want to participate in the offered hugg
-    $scope.revokeAnswer = function revokeAnswer(huggID) {
+    $scope.revokeAnswer = function revokeAnswer(huggID, reqProfileID) {
 
         $firebase(ref.child("hugg").child(huggID)).$update({
             answered: 0,
@@ -951,8 +951,22 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
             answerFirstName: null,
             answerRating: null
         }).then(function(x) {
-            console.log("Successfully revoked hugg answer!");
+            var date = new Date();
+            var today = date.getTime();
+            
+            //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(reqProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "answer",
+                change: "remove"
+            }).then(function(x) {
+                 console.log("Successfully revoked hugg answer!");
             return 1;
+            });
         }); //end then
 
     }; //end function
@@ -1317,7 +1331,7 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
             var p = $scope.currentUser.notifications
             for (var key in p) {
                 if (p.hasOwnProperty(key)) {
-                    console.log("Benachrichtigung von " + p[key].firstName);
+                    console.log("Benachrichtigung: " + p[key].firstName+" HuggID "+p[key].huggID +" Type: "+p[key].type+", "+p[key].change);
                 }
             }
         }
