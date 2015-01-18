@@ -45,21 +45,25 @@
                             <div class="item item-divider padding-top">
                                 Answered huggs
                             </div>
-                            <ion-item ng-repeat="item in answeredHuggs.hugg" item="item" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
-                                <img ng-src="{{item.reqPicture}}">
+                            <ion-item ng-repeat="item in answeredHuggs.hugg" item="item" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.answerPicture}}">
                                 <p>
+                                    {{item.huggID}} {{item.lat}} {{item.long}}{{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}}
                                 </p>
-                                <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
+
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
+                                <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.reqProfileID)"></ion-option-button>
                             </ion-item>
                             <div class="item item-divider">
                                 Unanswered huggs
                             </div>
-                            <ion-item ng-repeat="item in unansweredHuggs.hugg" item="item" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
-                                <img ng-src="{{item.reqPicture}}">
+                            <ion-item ng-repeat="item in unansweredHuggs.hugg" item="item" class="item-thumbnail-left">
+                                <img ng-src="{{currentUser.picture}}">
+                                <h2>You have requested this hug</h2>
                                 <p>
+                                    {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}}
                                 </p>
-                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
-                                <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.reqProfileID)"></ion-option-button>
+                                <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
                     </ion-content>
@@ -76,23 +80,17 @@
                             <ion-item ng-repeat="item in unacceptedHuggs.hugg" item="item" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <p>
-                                    {{item.huggID}}
-                                    {{item.lat}}
-                                    {{item.long}}
-                                    {{item.reqFirstName}}
-                                    {{item.reqGender}}
-                                    {{item.reqRating}}
-                                    {{item.reqTime}}
-                                    {{item.reqPicture}}
+                                    {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqFirstName}} {{item.reqGender}} {{item.reqRating}} {{item.reqTime}} {{item.reqPicture}}
                                 </p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
                             </ion-item>
                             <div class="item item-divider padding-top">
                                 own Accepted huggs
                             </div>
-                            <ion-item ng-repeat="item in ownAcceptedHuggs.hugg" item="item" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
-                                <img ng-src="{{item.reqPicture}}">
+                            <ion-item ng-repeat="item in ownAcceptedHuggs.hugg" item="item" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.answerPicture}}">
                                 <p>
+                                    {{item.huggID}} {{item.lat}} {{item.long}} {{item.answerFirstName}} {{item.answerGender}} {{item.reqTime}} {{item.answerTime}}
                                 </p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
                                 <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
@@ -103,6 +101,7 @@
                             <ion-item ng-repeat="item in otherAcceptedHuggs.hugg" item="item" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <p>
+                                    {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqFirstName}} {{item.reqGender}} {{item.reqRating}} {{item.reqTime}} {{item.reqPicture}}
                                 </p>
                                 <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
                             </ion-item>
@@ -111,16 +110,17 @@
                 </ion-tab>
 
                 <ion-tab title="Done" icon="ion-thumbsup">
-                <ion-content class="has-header">
+                    <ion-content class="has-header">
                         <!-- Please do not remove this -->
                         <div class="padding-top padding-bottom">done huggs</div>
                         <ion-list>
                             <div class="item item-divider padding-top">
                                 own done huggs
                             </div>
-                            <ion-item  item="item" class="item-thumbnail-left">
-                                <img ng-src="{{item.reqPicture}}">
+                            <ion-item ng-repeat="item in ownDoneHugg.hugg" item="item" class="item-thumbnail-left">
+                                <img ng-src="{{item.answerPicture}}">
                                 <p>
+                                    {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
                                 </p>
                                 <ion-option-button class="button-energized button-outline icon ion-star override-icon-position" ng-click="openRatingPopover(item.huggID)"></ion-option-button>
                             </ion-item>
