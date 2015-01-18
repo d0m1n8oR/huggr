@@ -125,6 +125,24 @@ angular.module('starter.controllers', [])
     }
 ])
 
+.controller('logoutCtrl', function($scope, $firebase, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
+    
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    var sync = $firebase(ref).$asObject();
+    $scope.auth = Auth;
+    $scope.check = $scope.auth.$getAuth();
+    
+    console.log("here");
+    //function for logout
+    $scope.logout = function() {
+
+        //disconnects user from auth object, needs to relogin
+        $scope.auth.$unauth();
+
+        //reloads window to show login fields
+        $state.go('app.home');
+    } // end function
+})
 
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
 
@@ -144,16 +162,6 @@ angular.module('starter.controllers', [])
     $ionicViewService.nextViewOptions({
         disableBack: true
     });
-
-    //function for logout
-    $scope.logout = function() {
-
-        //disconnects user from auth object, needs to relogin
-        $scope.auth.$unauth();
-
-        //reloads window to show login fields
-        window.location.reload();
-    } // end function
 
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
