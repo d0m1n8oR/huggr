@@ -1238,7 +1238,7 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
         $scope.huggRequest.range = "none";
 
         //remove popover when showing results
-        $scope.popover.remove();
+        $scope.popover.hide();
 
         //this opens the results view with the parameters
         $state.go('app.results', {
