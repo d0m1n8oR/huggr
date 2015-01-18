@@ -520,6 +520,54 @@ angular.module('starter.controllers', [])
 
     } //end function
 
+    $scope.chatUserRef = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("chat")).$asArray();
+    $scope.chatRef = $firebase(ref.child("chat")).$asArray();
+
+    $scope.startChat = function startChat(otherProfileID) {
+        $scope.chatUserRef.$loaded().then(function(data)
+                                          {
+            //check whether there has been a chat between the users
+            if(data.$getRecord(otherProfileID) == null)
+            {
+                $scope.chatRef.$loaded().then(function(chatRefData)
+                 {
+                    var newChatID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+                    while ($scope.chatRef.$getRecord(newChatID) != null) {
+                        newChatID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+                    }
+                    console.log(newChatID);
+                    $firebase(ref.child("chat").child(newChatID)).$set({
+                        profileIDA: $scope.currentUser.profileID,
+                        profileIDB: otherProfileID,
+                        chatID: newChatID
+                    }).then(function(x){
+                        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("chat").child(otherProfileID)).$set({
+                            otherProfileID: otherProfileID,
+                            chatID: newChatID
+                        }).then(function(y){
+                             $firebase(ref.child("users").child("data").child(otherProfileID).child("chat").child(otherProfileID)).$set({
+                            otherProfileID: $scope.currentUser.profileID,
+                            chatID: newChatID
+                        }).then(function(y){
+                                 console.log("Successfully created chat with ID "+newChatID);
+                                 return 1;
+                             });
+                        })
+                    })
+                })
+            }
+            
+            else{
+               console.log("already existing");
+                $scope.chatUserRef.$loaded().then(function(data)
+                                                  {
+                    var chatID = data.$getRecord(otherProfileID).chatID;
+                    console.log(chatID);
+                })
+            }
+        })
+    };
+
 }) //end controller
 
 .controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover) {
@@ -1566,7 +1614,7 @@ angular.module('starter.controllers', [])
 
     //Reference to Firebase
     $scope.currentUser = localstorage.getObject('userData');
-
+    var ref = $firebase(new Firebase("https://huggr.firebaseio.com/chat"));
     var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat"));
     $scope.chatList = sync.$asArray();
 
