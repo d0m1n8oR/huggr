@@ -489,31 +489,31 @@ angular.module('starter.controllers', [])
     }); // end bindTo
 
     //initialize various arrays to save data to
-    var unansweredHuggs = {
+    $scope.unansweredHuggs = {
         hugg: []
     };
 
-    var answeredHuggs = {
+    $scope.answeredHuggs = {
         hugg: []
     };
 
-    var unacceptedHuggs = {
+    $scope.unacceptedHuggs = {
         hugg: []
     };
 
-    var ownAcceptedHuggs = {
+    $scope.ownAcceptedHuggs = {
         hugg: []
     };
 
-    var otherAcceptedHuggs = {
+    $scope.otherAcceptedHuggs = {
         hugg: []
     };
 
-    var ownDoneHuggs = {
+    $scope.ownDoneHuggs = {
         hugg: []
     };
 
-    var otherDoneHuggs = {
+    $scope.otherDoneHuggs = {
         hugg: []
     };
 
@@ -531,7 +531,7 @@ angular.module('starter.controllers', [])
 
             //unanswered huggs are also not accepted and not done
             if (record.answered == 0) {
-                unansweredHuggs.hugg.push({
+                $scope.unansweredHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -543,7 +543,7 @@ angular.module('starter.controllers', [])
             //get huggs that the user requested, somebody else answered them but they are not yet done
             //corresponding button is acceptHugg() or declineHugg()
             if (record.answered == 1 && record.done == 0 && record.accepted == 0) {
-                answeredHuggs.hugg.push({
+                $scope.answeredHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -560,7 +560,7 @@ angular.module('starter.controllers', [])
             //the hugg has not yet taken place
             //corresponding button is declineHugg() and markDone()
             if (record.answered == 1 && record.done == 0 && record.accepted == 1) {
-                ownAcceptedHuggs.hugg.push({
+                $scope.ownAcceptedHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -576,7 +576,7 @@ angular.module('starter.controllers', [])
             //get huggs that are done and requested by this user
             //corresponding: Rating
             if (record.done == 1) {
-                ownDoneHuggs.hugg.push({
+                $scope.ownDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -611,7 +611,7 @@ angular.module('starter.controllers', [])
             //unanswered huggs are also not accepted and not done
             //corresponding button is revokeAnswer()
             if (record.answered == 1 && record.accepted == 0) {
-                unacceptedHuggs.hugg.push({
+                $scope.unacceptedHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -628,7 +628,7 @@ angular.module('starter.controllers', [])
             //the hugg has not yet taken place
             //corresponding button is declineHugg()
             if (record.answered == 1 && record.accepted == 1 && record.done == 0) {
-                otherAcceptedHuggs.hugg.push({
+                $scope.otherAcceptedHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -645,7 +645,7 @@ angular.module('starter.controllers', [])
             //the hugg is done
             //corresponding element: Rating
             if (record.done == 1) {
-                otherDoneHuggs.hugg.push({
+                $scope.otherDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
@@ -672,59 +672,64 @@ angular.module('starter.controllers', [])
          *******************************************************************************************/
         console.log("Profile of User")
         console.log("Huggs from you that nobody has yet answered:");
-        for (i = 0; i < unansweredHuggs.hugg.length; i++) {
+        for (i = 0; i < $scope.unansweredHuggs.hugg.length; i++) {
             console.log("hallo");
-            console.log(i + " " + unansweredHuggs.hugg[i].huggID);
+            console.log(i + " " + $scope.unansweredHuggs.hugg[i].huggID);
+                        console.log($scope.unansweredHuggs);
+
         }
         console.log("\nHuggs from you that someone else answered and you have not yet accepted:");
-        for (i = 0; i < answeredHuggs.hugg.length; i++) {
-            console.log(i + " " + answeredHuggs.hugg[i].huggID);
+        for (i = 0; i < $scope.answeredHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.answeredHuggs.hugg[i].huggID);
+                                    console.log($scope.answeredHuggs);
+
         }
         console.log("\nHuggs that you answered but the other person has not yet accepted:");
-        for (i = 0; i < unacceptedHuggs.hugg.length; i++) {
-            console.log(i + " " + unacceptedHuggs.hugg[i].huggID);
+        for (i = 0; i < $scope.unacceptedHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.unacceptedHuggs.hugg[i].huggID);
+            console.log($scope.unacceptedHuggs);
         }
         console.log("\nHuggs that someone else answered and you accepted");
-        for (i = 0; i < ownAcceptedHuggs.hugg.length; i++) {
-            console.log(i + " " + ownAcceptedHuggs.hugg[i].huggID);
+        for (i = 0; i < $scope.ownAcceptedHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.ownAcceptedHuggs.hugg[i].huggID);
         }
         console.log("\nHuggs that you answered and the other person accepted");
-        for (i = 0; i < otherAcceptedHuggs.hugg.length; i++) {
-            console.log(i + " " + otherAcceptedHuggs.hugg[i].huggID);
+        for (i = 0; i < $scope.otherAcceptedHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.otherAcceptedHuggs.hugg[i].huggID);
         }
         console.log("\nHuggs that you requested and that are done");
-        for (i = 0; i < ownDoneHuggs.hugg.length; i++) {
-            console.log(i + " " + ownDoneHuggs.hugg[i].huggID);
-            if (ownDoneHuggs.hugg[i].reqRating == ".") {
+        for (i = 0; i < $scope.ownDoneHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.ownDoneHuggs.hugg[i].huggID);
+            if ($scope.ownDoneHuggs.hugg[i].reqRating == ".") {
                 console.log("Please rate this hugg!");
             } else {
-                console.log("Your rating was " + ownDoneHuggs.hugg[i].reqRating);
+                console.log("Your rating was " + $scope.ownDoneHuggs.hugg[i].reqRating);
             }
-            if (ownDoneHuggs.hugg[i].answerRating == ".") {
+            if ($scope.ownDoneHuggs.hugg[i].answerRating == ".") {
                 console.log("Waiting for the other user to rate!");
             } else {
-                console.log("The other rating was " + ownDoneHuggs.hugg[i].answerRating);
+                console.log("The other rating was " + $scope.ownDoneHuggs.hugg[i].answerRating);
             }
-            if (ownDoneHuggs.hugg[i].totalRating != ".") {
-                console.log("The rating for this hugg is " + ownDoneHuggs.hugg[i].totalRating);
+            if ($scope.ownDoneHuggs.hugg[i].totalRating != ".") {
+                console.log("The rating for this hugg is " + $scope.ownDoneHuggs.hugg[i].totalRating);
             }
         }
 
         console.log("\nHuggs that you answered and that are done");
-        for (i = 0; i < otherDoneHuggs.hugg.length; i++) {
-            console.log(i + " " + otherDoneHuggs.hugg[i].huggID);
-            if (otherDoneHuggs.hugg[i].answerRating == ".") {
+        for (i = 0; i < $scope.otherDoneHuggs.hugg.length; i++) {
+            console.log(i + " " + $scope.otherDoneHuggs.hugg[i].huggID);
+            if ($scope.otherDoneHuggs.hugg[i].answerRating == ".") {
                 console.log("Please rate this hugg!");
             } else {
-                console.log("Your rating was " + otherDoneHuggs.hugg[i].answerRating);
+                console.log("Your rating was " + $scope.otherDoneHuggs.hugg[i].answerRating);
             }
-            if (otherDoneHuggs.hugg[i].reqRating == ".") {
+            if ($scope.otherDoneHuggs.hugg[i].reqRating == ".") {
                 console.log("Waiting for the other user to rate!");
             } else {
-                console.log("The other rating was " + otherDoneHuggs.hugg[i].reqRating);
+                console.log("The other rating was " + $scope.otherDoneHuggs.hugg[i].reqRating);
             }
-            if (otherDoneHuggs.hugg[i].totalRating != ".") {
-                console.log("The rating for this hugg is " + otherDoneHuggs.hugg[i].totalRating);
+            if ($scope.otherDoneHuggs.hugg[i].totalRating != ".") {
+                console.log("The rating for this hugg is " + $scope.otherDoneHuggs.hugg[i].totalRating);
             }
         }
 
@@ -888,7 +893,7 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
 
     }; //end function
 
-$ionicPopover.fromTemplateUrl('popovers/huggRating.html', {
+$ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
     scope: $scope,
   }).then(function(popover) {
     $scope.popover = popover;
