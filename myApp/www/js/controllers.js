@@ -173,6 +173,11 @@ angular.module('starter.controllers', [])
                         $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
+                        
+                        var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
+            var FbProfilePicture;
+            pictureData.then(function(result) {
+                FbProfilePicture = result.data.data.url;
                         $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
                             token: authData.token,
                             expires: authData.expires,
@@ -181,7 +186,7 @@ angular.module('starter.controllers', [])
                         $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                             displayName: authData.facebook.displayName,
                             email: authData.facebook.email,
-                            picture: authData.facebook.cachedUserProfile.picture.data.url
+                            picture: FbProfilePicture
                         });
                         console.log("Logged in as:", authData.uid);
 
@@ -189,6 +194,7 @@ angular.module('starter.controllers', [])
                         //Store profile Data persistently in local storage for global usage
                         localstorage.setObject("userData", profileData);
                         $state.go('app.home');
+            });//end pictureData
                     }
                 }
                 if (err) {
