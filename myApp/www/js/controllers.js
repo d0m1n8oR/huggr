@@ -517,6 +517,13 @@ angular.module('starter.controllers', [])
         hugg: []
     };
 
+    $scope.ownHistoryHuggs = {
+        hugg: []
+    };
+    
+    $scope.otherHistoryHuggs = {
+        hugg: []
+    };
     //waiting on this reference to be loaded
     //this reference is for huggs that this users requested
     //in DB: profileID of user is in reqProfileID field
@@ -575,7 +582,7 @@ angular.module('starter.controllers', [])
 
             //get huggs that are done and requested by this user
             //corresponding: Rating
-            if (record.done == 1) {
+            if (record.done == 1 && record.done.totalRating == ".") {
                 $scope.ownDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
@@ -586,11 +593,27 @@ angular.module('starter.controllers', [])
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName,
-                    "reqRating": record.rating.reqRating,
-                    "answerRating": record.rating.answerRating,
-                    "totalRating": record.rating.totalRating
+                    "reqRating": record.rating.reqRating
                 }); //end push
             } //end if
+            
+            //get huggs that are done and requested by this user
+            //corresponding: Rating
+            if (record.done == 1 && record.done.totalRating != ".") {
+                $scope.ownDoneHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "reqTime": record.reqTime,
+                    "answerProfileID": record.answerProfileID,
+                    "answerTime": record.answerTime,
+                    "answerPicture": record.answerPicture,
+                    "answerGender": record.answerGender,
+                    "answerFirstName": record.answerFirstName,
+                    "reqRating": record.rating.totalRating
+                }); //end push
+            } //end if
+
 
             i++;
         } //end while
@@ -644,7 +667,7 @@ angular.module('starter.controllers', [])
             //queries for huggs that other users request and this user answered the hugg
             //the hugg is done
             //corresponding element: Rating
-            if (record.done == 1) {
+            if (record.done == 1 && record.rating.totalRating == ".") {
                 $scope.otherDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
@@ -654,9 +677,21 @@ angular.module('starter.controllers', [])
                     "reqPicture": record.reqPicture,
                     "reqGender": record.reqGender,
                     "reqFirstName": record.reqFirstName,
-                    "reqRating": record.rating.reqRating,
                     "answerRating": record.rating.answerRating,
-                    "totalRating": record.rating.totalRating
+                }); //end push
+            } //end if
+            
+             if (record.done == 1 && record.rating.totalRating != ".") {
+                $scope.otherDoneHuggs.hugg.push({
+                    "huggID": record.huggID,
+                    "lat": record.reqLat,
+                    "long": record.reqLong,
+                    "reqTime": record.reqTime,
+                    "reqProfileID": record.reqProfileID,
+                    "reqPicture": record.reqPicture,
+                    "reqGender": record.reqGender,
+                    "reqFirstName": record.reqFirstName,
+                    "answerRating": record.rating.totalRating
                 }); //end push
             } //end if
 
