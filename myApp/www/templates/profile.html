@@ -37,48 +37,111 @@
 
         <ion-tab title="Your Huggs" icon="sp-huggr">
             <ion-tabs class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
-                <ion-tab title="Blocked users" icon="ion-help-circled">
+                <ion-tab title="Unanswered" icon="ion-help">
+                    <ion-content class="has-header">
+                        <!-- Please do not remove this -->
+                        <div class="padding-top padding-bottom">Unanswered huggs</div>
+                        <ion-list>
+                            <div class="item item-divider padding-top">
+                                Answered huggs
+                            </div>
+                            <ion-item ng-repeat="item in answeredHuggs" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
+                            </ion-item>
+                            <div class="item item-divider">
+                                Unanswered huggs
+                            </div>
+                            <ion-item ng-repeat="item in unansweredHuggs" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.requesterProfileID)"></ion-option-button>
+                                <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.requesterProfileID)"></ion-option-button>
+                            </ion-item>
+                        </ion-list>
+
+                        <button>Accept Hugg 3571064178 from 7293129584</button>
+                        <button ng-click="declineHugg(6189690408, 6062503658)">Decline Hugg 6189690408 from 6062503658</button>
+                        <button ng-click="markDone(6189690408)">Mark hugg 6189690408 done</button>
+                        <button ng-click="rateAnswerHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 5 stars</button>
+                        <button ng-click="rateReqHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 2 stars</button>
+                    </ion-content>
                 </ion-tab>
-                <ion-tab title="Blocked users" icon="ion-home">
+
+                <ion-tab title="Accepted" icon="ion-checkmark">
+                    <ion-content class="has-header">
+                        <!-- Please do not remove this -->
+                        <div class="padding-top padding-bottom">Accepted huggs</div>
+                        <ion-list>
+                            <div class="item item-divider padding-top">
+                                huggs you can unaccept
+                            </div>
+                            <ion-item ng-repeat="item in unacceptedHuggs" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
+                            </ion-item>
+                            <div class="item item-divider padding-top">
+                                own Accepted huggs
+                            </div>
+                            <ion-item ng-repeat="item in ownAcceptedHuggs" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.requesterProfileID)"></ion-option-button>
+                                <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
+                            </ion-item>
+                            <div class="item item-divider">
+                                other accepted huggs
+                            </div>
+                            <ion-item ng-repeat="item in otherAcceptedHuggs" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
+                            </ion-item>
+                        </ion-list>
+                    </ion-content>
                 </ion-tab>
-                <ion-tab title="Blocked users" icon="ion-home">
+
+                <ion-tab title="Done" icon="ion-thumbsup">
+                <ion-content class="has-header">
+                        <!-- Please do not remove this -->
+                        <div class="padding-top padding-bottom">done huggs</div>
+                        <ion-list>
+                            <div class="item item-divider padding-top">
+                                own done huggs
+                            </div>
+                            <ion-item  item="item" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-energized button-outline icon ion-star override-icon-position" ng-click="openRatingPopover(item.huggID)"></ion-option-button>
+                            </ion-item>
+                            <div class="item item-divider">
+                                other done huggs
+                            </div>
+                            <ion-item ng-repeat="item in otherDoneHuggs" item="item" class="item-thumbnail-left">
+                                <img ng-src="{{item.picture}}">
+                                <p>
+                                </p>
+                                <ion-option-button class="button-energized button-outline icon ion-star override-icon-position" ng-click="openRatingPopover(item.huggID)"></ion-option-button>
+                            </ion-item>
+                        </ion-list>
+
+                        <button ng-click="rateAnswerHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 5 stars</button>
+                        <button ng-click="rateReqHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 2 stars</button>
+                    </ion-content>
                 </ion-tab>
-                <ion-tab title="Blocked users" icon="ion-home">
-                </ion-tab>
-                <ion-tab title="Blocked users" icon="ion-home">
+
+                <ion-tab title="History" icon="sp-history override-sptabs">
                 </ion-tab>
             </ion-tabs>
 
-
-            <ion-content class="has-header">
-                <!-- Please do not remove this -->
-                <div class="padding-top padding-bottom">Hugg history</div>
-
-
-
-                <ion-list>
-
-                    <ion-item href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left huggr-thumbnail-right">
-                        <img ng-src="{{currentUser.picture}}">
-                        <img src="img/avatars/img2.jpg">
-                        <p>
-                        </p>
-
-                        <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
-                        <ion-option-button class="button-royal icon ion-map override-icon-position" ng-click=""></ion-option-button>
-                        <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.requesterProfileID)"></ion-option-button>
-
-                    </ion-item>
-
-                </ion-list>
-
-                <button>Accept Hugg 3571064178 from 7293129584</button>
-                <button ng-click="declineHugg(6189690408, 6062503658)">Decline Hugg 6189690408 from 6062503658</button>
-                <button ng-click="revokeAnswer(6189690408)">Revoke hugg 6189690408</button>
-                <button ng-click="markDone(6189690408)">Mark hugg 6189690408 done</button>
-                <button ng-click="rateAnswerHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 5 stars</button>
-                <button ng-click="rateReqHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 2 stars</button>
-            </ion-content>
         </ion-tab>
 
         <ion-tab title="Blocked users" icon="sp-blocked">

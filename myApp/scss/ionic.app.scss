@@ -59,6 +59,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.sp-huggr:before {
+  content: "\e600";
+}
+
+.sp-history:before {
+  content: "\e94d";
+}
+
 .sp-user:before {
   content: "\e971";
 }
@@ -103,16 +112,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   content: "\ea0e";
 }
 
-.sp-huggr:before {
-  content: "\e600";
-}
-
 .sp-huggr-colored {
   color: #F05331 !important;
 }
 .override-icon-position:before{
   line-height: 2 !important;
   font-size: 45px !important;
+}
+.override-sptabs {
+  line-height: inherit !important;
 }
 
 

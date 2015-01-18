@@ -472,7 +472,7 @@ angular.module('starter.controllers', [])
 
 }) //end controller
 
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
@@ -887,6 +887,20 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
         }); //end then
 
     }; //end function
+
+$ionicPopover.fromTemplateUrl('popovers/huggRating.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+
+  $scope.openRatingPopover = function($event) {
+    $scope.popover.show($event);
+  };
+  $scope.closeRatingPopover = function() {
+    $scope.popover.remove(); //Attention: actually destroys popover from DOM...
+  };
 
     //the user that requested the hugg can rate the user that answered
     $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
