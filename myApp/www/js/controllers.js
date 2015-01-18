@@ -433,7 +433,7 @@ angular.module('starter.controllers', [])
 
 //this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
 //These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state) {
+.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
@@ -470,7 +470,7 @@ angular.module('starter.controllers', [])
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
             0: blockProfileID
         }).then(function(y) {
-            console.log("Successfully blocked user");
+            toast.pop("You have successfully blocked this user");
             return 1;
         }); //end set
 
@@ -503,7 +503,7 @@ angular.module('starter.controllers', [])
                 type: "answer",
                 change: "add"
             }).then(function(x) {
-                console.log("Successfully answered hugg");
+                toast.pop("Successfully answered hugg")
                 return 1;
             });
 
@@ -1323,7 +1323,7 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
 
 })         
             
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -1414,6 +1414,8 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
                             answerRate: ".",
                             totalRating: "."
                         }).then(function(y) {
+                            toast.pop("Successfully requested hugg!")
+                            $state.go("app.home");
                             console.log("Successfully requested hugg "+huggID);
                             return 1;
                         }); //end then

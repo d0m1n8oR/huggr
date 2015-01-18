@@ -158,6 +158,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   border-radius: 50%; // set radius in percents
 }
 
+.pointr {
+  cursor: pointer;
+}
+
 .huggr-thumbnail-right .item-content > img:nth-child(2) {
     position: absolute;
     top: 10px;
