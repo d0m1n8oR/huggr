@@ -51,8 +51,8 @@
                                     {{item.huggID}} {{item.lat}} {{item.long}}{{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}}
                                 </p>
 
-                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
-                                <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.reqProfileID)"></ion-option-button>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.answerProfileID)"></ion-option-button>
+                                <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.answerProfileID)"></ion-option-button>
                             </ion-item>
                             <div class="item item-divider">
                                 Unanswered huggs
@@ -118,28 +118,28 @@
                             <div class="item item-divider padding-top">
                                 own done huggs
                             </div>
-                            <ion-item ng-repeat="item in ownDoneHugg.hugg" item="item" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in ownDoneHuggs.hugg" item="item" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <p>
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
+                                           <rating ng-model="item.answerRating" max="5"></rating>
+
+                                    
                                 </p>
-                                <ion-option-button class="button-energized button-outline icon ion-star override-icon-position" ng-click="openRatingPopover(item.huggID)"></ion-option-button>
                             </ion-item>
                             <div class="item item-divider">
                                 other done huggs
                             </div>
-                            <ion-item ng-repeat="item in otherDoneHugg.hugg" item="item" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in otherDoneHuggs.hugg" item="item" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <p>
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.reqProfileID}} {{item.reqPicture}} {{item.reqGender}} {{item.reqFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
+                                           <rating ng-model="item.reqRating" max="5"></rating>
+
 
                                 </p>
-                                <ion-option-button class="button-energized button-outline icon ion-star override-icon-position" ng-click="openRatingPopover(item.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
-
-                        <button ng-click="rateAnswerHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 5 stars</button>
-                        <button ng-click="rateReqHugg(6189690408, 2, 6062503658)">Rate hugg 6189690408 with 2 stars</button>
                     </ion-content>
                 </ion-tab>
 
