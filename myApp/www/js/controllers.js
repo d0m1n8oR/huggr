@@ -588,7 +588,8 @@ angular.module('starter.controllers', [])
 
             //get huggs that are done and requested by this user
             //corresponding: Rating
-            if (record.done == 1 && record.done.totalRating == ".") {
+            if (record.done == 1 && record.rating.totalRating == ".") {
+                console.log(record.huggID);
                 $scope.ownDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
@@ -605,7 +606,7 @@ angular.module('starter.controllers', [])
             
             //get huggs that are done and requested by this user
             //corresponding: Rating
-            if (record.done == 1 && record.done.totalRating != ".") {
+            if (record.done == 1 && record.rating.totalRating != ".") {
                 $scope.ownDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
@@ -674,6 +675,7 @@ angular.module('starter.controllers', [])
             //the hugg is done
             //corresponding element: Rating
             if (record.done == 1 && record.rating.totalRating == ".") {
+                console.log(record.huggID);
                 $scope.otherDoneHuggs.hugg.push({
                     "huggID": record.huggID,
                     "lat": record.reqLat,
