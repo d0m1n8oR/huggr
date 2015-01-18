@@ -563,6 +563,7 @@ angular.module('starter.controllers', [])
                                                   {
                     var chatID = data.$getRecord(otherProfileID).chatID;
                     console.log(chatID);
+                    $state.go('app.chat', {chatID: chatID});
                 })
             }
         })
@@ -1611,11 +1612,13 @@ angular.module('starter.controllers', [])
 
 
 .controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage) {
+    
+    chatID = $stateParams.chatID;
+    console.log(chatID);
 
     //Reference to Firebase
     $scope.currentUser = localstorage.getObject('userData');
-    var ref = $firebase(new Firebase("https://huggr.firebaseio.com/chat"));
-    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat"));
+    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat/"+chatID));
     $scope.chatList = sync.$asArray();
 
 
