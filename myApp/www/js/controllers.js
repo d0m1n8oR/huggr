@@ -733,20 +733,28 @@ angular.module('starter.controllers', [])
     //show users currently blocked
 
     //doesn't work with currentUser ...
-    var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asArray();
-    userArray.$loaded().then(function(data) {
-        $scope.blockedUsers = data.$getRecord("blocked");
-                console.log($scope.blockedUsers);
+var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
+        userArray.$loaded().then(function(data) {
+            $scope.profileIDs = data.blocked;
+            if (Object.keys($scope.profileIDs)[0] == "1000000000001") {
+                $scope.noBlockedUsers = true;
+            } else {
+                $scope.blockedUsers = [];
+                $scope.noBlockedUsers = false;
 
-        for (i = 0; i < Object.keys($scope.blockedUsers.length); i++) {
-            var p = $scope.blockedUsers;
-            for (var key in p) {
-                if (p.hasOwnProperty(key)) {
-                    console.log("Blockierter nutzer " + p[key]);
+                for (i = 0; i < Object.keys($scope.profileIDs).length; i++) {
+                    var p = $scope.profileIDs;
+                    for (var key in p) {
+                        if (p.hasOwnProperty(key)) {
+                            UserInfo.getProfile(p[key]).then(function(value) {
+                                $scope.returnedProfile = value;
+                                $scope.blockedUsers.push($scope.returnedProfile);
+                            });
+                        }
+                    }
                 }
             }
-        }
-    });
+        });
 
     //remove users from block list
     $scope.unblockUser = function unblockUser(unblockProfileID) {
@@ -1392,7 +1400,7 @@ angular.module('starter.controllers', [])
         console.log(array);
     });
 
-}); //end resultCTRL
+}) //end resultCTRL
 
 
 
