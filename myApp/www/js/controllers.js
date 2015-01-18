@@ -860,8 +860,22 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
             $firebase(ref.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
                 1: answerProfileID
             }).then(function(y) {
-                console.log("Successfully declined hugg");
+                var date = new Date();
+            var today = date.getTime();
+                
+                //add notification for user that requested the hugg
+            $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
+                huggID: huggID,
+                firstName: $scope.currentUser.firstname,
+                picture: $scope.currentUser.picture,
+                time: today,
+                profileID: $scope.currentUser.profileID,
+                type: "decline",
+                change: "add"
+            }).then(function(x) {
+                console.log("successfully declined hugg!");
                 return 1;
+            })
             }); //end then
 
         }); //end then
