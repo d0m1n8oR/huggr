@@ -204,12 +204,11 @@ angular.module('starter.controllers', [])
     $scope.loginModel = {}
     var popupAuthProvider;
     var popupAuthData;
-    
-    $scope.showPopUp = function(authProvider, authData)
-    {
+
+    $scope.showPopUp = function(authProvider, authData) {
         $scope.popover.show(angular.element(document.getElementById('fb')));
         popupAuthProvider = authProvider;
-        popupAuthData =authData;
+        popupAuthData = authData;
     }
 
     $scope.toRegister = function() {
@@ -295,48 +294,53 @@ angular.module('starter.controllers', [])
             }); //end set signinDB
         }
         if (authProvider == "facebook") {
-            //write authentification data into database
-            $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
-                displayName: authData.facebook.displayName,
-                token: authData.token,
-                expires: authData.expires,
-                uid: authData.uid,
-                ID: authData.facebook.id,
-                AccessToken: authData.facebook.accessToken,
-                profileID: newProfileID
-            }).then(function(y) {
-                $firebase(ref.child("users").child("data").child(newProfileID)).$set({
-                    profileID: newProfileID,
-                    googleID: null,
-                    facebookID: authData.facebook.id,
+            var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
+            var FbProfilePicture;
+            pictureData.then(function(result) {
+                FbProfilePicture = result.data.data.url;
+                //write authentification data into database
+                $firebase(ref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
                     displayName: authData.facebook.displayName,
-                    email: authData.facebook.email,
-                    picture: authData.facebook.cachedUserProfile.picture.data.url,
-                    gender: $scope.loginModel.gender,
-                    birthdate: $scope.loginModel.birthdate.getTime(),
-                    firstname: authData.facebook.cachedUserProfile.first_name,
-                    lastname: authData.facebook.cachedUserProfile.last_name,
-                    rating: 0,
-                    numberHuggs: 0
-                }).then(function(data) {
+                    token: authData.token,
+                    expires: authData.expires,
+                    uid: authData.uid,
+                    ID: authData.facebook.id,
+                    AccessToken: authData.facebook.accessToken,
+                    profileID: newProfileID
+                }).then(function(y) {
+                    $firebase(ref.child("users").child("data").child(newProfileID)).$set({
+                        profileID: newProfileID,
+                        googleID: null,
+                        facebookID: authData.facebook.id,
+                        displayName: authData.facebook.displayName,
+                        email: authData.facebook.email,
+                        picture: FbProfilePicture,
+                        gender: $scope.loginModel.gender,
+                        birthdate: $scope.loginModel.birthdate.getTime(),
+                        firstname: authData.facebook.cachedUserProfile.first_name,
+                        lastname: authData.facebook.cachedUserProfile.last_name,
+                        rating: 0,
+                        numberHuggs: 0
+                    }).then(function(data) {
 
-                    $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
-                        0: 1000000000001
-                    }).then(function(y) {
+                        $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
+                            0: 1000000000001
+                        }).then(function(y) {
 
-                        //initialize user object with blocked array
-                        $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
-                        $scope.dataRef.$loaded().then(function(data) {
-                            //load data into local storage
-                            var profileData = data.$getRecord(newProfileID);
-                            //Store profile Data persistently in local storage for global usage
-                            console.log("Successfully registered");
-                            localstorage.setObject("userData", profileData);
-                            $state.go('app.home');
-                        }); //end load data
-                    }); //end set blocked
-                }); //end set usersData
-            }); //end set signinData
+                            //initialize user object with blocked array
+                            $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                            $scope.dataRef.$loaded().then(function(data) {
+                                //load data into local storage
+                                var profileData = data.$getRecord(newProfileID);
+                                //Store profile Data persistently in local storage for global usage
+                                console.log("Successfully registered");
+                                localstorage.setObject("userData", profileData);
+                                $state.go('app.home');
+                            }); //end load data
+                        }); //end set blocked
+                    }); //end set usersData
+                }); //end set signinData
+            });
 
         }
 
@@ -967,19 +971,19 @@ angular.module('starter.controllers', [])
 .controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
-    
+
 
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
-    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData), function(x){
+    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData), function(x) {
         $scope.userData.birthdate = new Date($scope.userData.birthdate);
     });
     //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
-    
+
     $scope.userData.birthdate = new Date($scope.userData.birthdate);
-    
-   // $scope.date = $scope.userDate.birthdate.toDateString();
+
+    // $scope.date = $scope.userDate.birthdate.toDateString();
     var returnval = 0;
     if ($scope.userData.googleID != null) {
         returnval = returnval + 10;
