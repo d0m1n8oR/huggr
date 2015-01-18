@@ -36,6 +36,20 @@
         </ion-tab>
 
         <ion-tab title="Your Huggs" icon="sp-huggr">
+            <ion-tabs class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
+                <ion-tab title="Blocked users" icon="ion-help-circled">
+                </ion-tab>
+                <ion-tab title="Blocked users" icon="ion-home">
+                </ion-tab>
+                <ion-tab title="Blocked users" icon="ion-home">
+                </ion-tab>
+                <ion-tab title="Blocked users" icon="ion-home">
+                </ion-tab>
+                <ion-tab title="Blocked users" icon="ion-home">
+                </ion-tab>
+            </ion-tabs>
+
+
             <ion-content class="has-header">
                 <!-- Please do not remove this -->
                 <div class="padding-top padding-bottom">Hugg history</div>
@@ -70,7 +84,11 @@
         <ion-tab title="Blocked users" icon="sp-blocked">
             <!-- Please do not remove this -->
             <div class="padding-top padding-bottom">Hugg history</div>
-
+            <ion-list>
+                <ion-item ng-repeat="user in blockedUsers" item="item">
+                    {{user}}
+                </ion-item>
+            </ion-list>
             <button ng-click="unblockUser(6389391535)">Unblock user 6389391535</button>
 
         </ion-tab>

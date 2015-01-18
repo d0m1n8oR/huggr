@@ -735,7 +735,17 @@ angular.module('starter.controllers', [])
     //doesn't work with currentUser ...
     var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asArray();
     userArray.$loaded().then(function(data) {
-        console.log(data.$getRecord("blocked"));
+        $scope.blockedUsers = data.$getRecord("blocked");
+                console.log($scope.blockedUsers);
+
+        for (i = 0; i < Object.keys($scope.blockedUsers.length); i++) {
+            var p = $scope.blockedUsers;
+            for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                    console.log("Blockierter nutzer " + p[key]);
+                }
+            }
+        }
     });
 
     //remove users from block list
