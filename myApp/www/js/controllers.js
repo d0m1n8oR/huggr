@@ -1278,7 +1278,7 @@ angular.module('starter.controllers', [])
                             answerRate: ".",
                             totalRating: "."
                         }).then(function(y) {
-                            console.log("Successfully requested hugg");
+                            console.log("Successfully requested hugg "+huggID);
                             return 1;
                         }); //end then
 
