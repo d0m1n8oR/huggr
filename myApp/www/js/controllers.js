@@ -56,6 +56,41 @@ angular.module('starter.controllers', [])
     } // end function
 ]) //end factory
 
+.factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading) {
+    return {
+        show: function(message, duration, position) {
+            message = message || "There was a problem...";
+            duration = duration || 'short';
+            position = position || 'top';
+
+
+            if (duration == 'short') {
+                duration = 2000;
+            } else {
+                duration = 5000;
+            }
+
+            var myPopup = $ionicPopup.show({
+                template: "<div class='toast'>" + message + "</div>",
+                scope: $rootScope,
+                buttons: []
+            });
+
+            $timeout(function() {
+                myPopup.close();
+            }, duration);
+
+        },
+        pop: function(msg) {
+            var myToast = $ionicLoading.show({
+                template: msg,
+                noBackdrop: false,
+                duration: 2500
+            });
+        }
+    }
+})
+
 .factory('helper', [
 
     function() {
@@ -486,6 +521,8 @@ angular.module('starter.controllers', [])
     $scope.orderOwnHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
     $scope.orderOtherHuggRef = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+    $scope.userRatingForView = $scope.currentUser.rating;
 
     //show data in profile
     var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();

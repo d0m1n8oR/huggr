@@ -32,11 +32,6 @@
 
                     </div>
                 </div>
-                <div class="padding">
-        <button class="button" ng-click="showToast('testing the bottom', 'long', 'bottom')">Long Bottom</button>
-        <button class="button" ng-click="showToast('testing the top', 'short', 'top')">Short Top</button>
-        <button class="button" ng-click="showToast('this is a test', 'long', 'center')">Long Center</button>
-    </div>
             </ion-content>
         </ion-tab>
 
@@ -109,7 +104,7 @@
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqFirstName}} {{item.reqGender}} {{item.reqRating}} {{item.reqTime}} {{item.reqPicture}}
                                 </p>
                                 <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
-                                  <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
+                                <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
                     </ion-content>
@@ -128,9 +123,9 @@
                                 <h2>Please rate your hug with {{item.answerFirstName}}</h2>
                                 <p>
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.answerProfileID}} {{item.answerTime}} {{item.answerPicture}} {{item.answerGender}} {{item.answerFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
-                                           <rating ng-model="item.answerRating" max="5"></rating>
+                                    <rating ng-model="item.answerRating" max="5"></rating>
 
-                                    
+
                                 </p>
                             </ion-item>
                             <div class="item item-divider">
@@ -140,7 +135,7 @@
                                 <img ng-src="{{item.reqPicture}}">
                                 <p>
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqTime}} {{item.reqProfileID}} {{item.reqPicture}} {{item.reqGender}} {{item.reqFirstName}} {{item.reqRating}} {{item.answerRating}} {{item.totalRating}}
-                                           <rating ng-model="item.reqRating" max="5"></rating>
+                                    <rating ng-model="item.reqRating" max="5"></rating>
 
 
                                 </p>
