@@ -1287,7 +1287,7 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
 
 })         
             
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -1346,7 +1346,13 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
             $cordovaGeolocation
                 .getCurrentPosition()
                 .then(function(position) {
-
+                
+                console.log(position.coords.latitude +" "+position.coords.longitude);
+                var reverseGeocode = $http.get("http://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude);
+                reverseGeocode.then(function(result){
+                    var reqLocation = result.data.results[0].address_components[1].long_name+", "+result.data.results[0].address_components[2].long_name;
+                    console.log(reqLocation);
+                                                
                     //save data to firebase in new child with calculated huggID
                     $firebase(ref.child("hugg").child(huggID)).$set({
                         huggID: huggID,
@@ -1362,7 +1368,8 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
                         reqFirstName: $scope.currentUser.firstname,
                         reqPicture: $scope.currentUser.picture,
                         reqRating: $scope.currentUser.rating,
-                        blocked: $scope.currentUser.blocked
+                        blocked: $scope.currentUser.blocked,
+                        reqLocation: reqLocation
 
                     }).then(function(x) {
 
@@ -1376,7 +1383,7 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
                         }); //end then
 
                     }); //end then (rating)
-
+});//end reverseGeocode
                 }); // end then (GPS)
 
         }); // end then (Loaded)
