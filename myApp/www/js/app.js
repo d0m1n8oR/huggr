@@ -152,7 +152,25 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 }
             }
         }
+    })
+    
+    .state('app.chat', {
+        url: "/chat",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/chat.html",
+                controller: 'ExtProfileCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
     });
+    
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
 });
