@@ -1618,11 +1618,11 @@ angular.module('starter.controllers', [])
 
     //Reference to Firebase
     $scope.currentUser = localstorage.getObject('userData');
-    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat/"+chatID));
+    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat/"+chatID+"/message"));
     $scope.chatList = sync.$asArray();
 
 
-    $scope.messageInput;
+    $scope.messageInput = "hallo";
     $scope.chatData;
 
     $scope.sendMessage = function() {
@@ -1631,7 +1631,7 @@ angular.module('starter.controllers', [])
             user: $scope.currentUser.firstname
         });
         $scope.messageInput = '';
-    }
+    };
 
     var obj = sync.$asObject();
     obj.$loaded().then(function() {
