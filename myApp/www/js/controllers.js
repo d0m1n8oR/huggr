@@ -1395,3 +1395,46 @@ angular.module('starter.controllers', [])
 }); //end resultCTRL
 
 
+/*
+.controller('ChatCtrl', function($scope, $stateParams, $firebase) {
+    
+    //Reference to Firebase
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $firebase(ref.child("chat").$set({
+               message: "hallo",
+               user : $scope.currentUser.firstname
+    }))
+
+    
+        //Register chat elements
+    var messageField = $('#messageInput');
+    var username = $scope.currentUser.firstname;
+    var messageList = $('#example-messages');
+    
+    $scope.sendMessage = function(){
+        var chatmessage = messageField.val();
+        ref.child("chat").push({message: chatmessage, user: username});
+        messageField.val('');
+    }
+    
+    //Add Callback
+    ref.child("chat").limitToLast(10).on('child_added', function(snapshot) {
+        //get Data
+        var data = snapshot.val();
+        var username = data.user;
+        var message = data.message;
+    
+        //Create Elements Message
+        var messageElement = $("<li>");
+        var nameElement = $("<strong class='example-chat-username'></strong>");
+        nameElement.text(username);
+        messageElement.text(message).prepend(nameElement);
+        
+        //Add Message
+        messageList.append(messageElement);
+        
+        //Scroll to Bottom of messageList
+        messageList[0].scrollTop = messageList[0].scrollHeight;
+    }   
+)});
+*/
