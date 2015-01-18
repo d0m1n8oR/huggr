@@ -159,7 +159,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         views: {
             'menuContent': {
                 templateUrl: "templates/chat.html",
-                controller: 'ExtProfileCtrl',
+                controller: 'ChatCtrl',
                 resolve: {
                     "currentAuth": ["Auth",
                         function(Auth) {
