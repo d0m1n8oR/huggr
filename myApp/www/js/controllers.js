@@ -585,7 +585,8 @@ angular.module('starter.controllers', [])
                     "huggID": record.huggID,
                     "lat": record.reqLat,
                     "long": record.reqLong,
-                    "reqTime": record.reqTime
+                    "reqTime": record.reqTime,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //endif
 
@@ -602,7 +603,8 @@ angular.module('starter.controllers', [])
                     "answerTime": record.answerTime,
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
-                    "answerFirstName": record.answerFirstName
+                    "answerFirstName": record.answerFirstName,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
 
@@ -619,7 +621,8 @@ angular.module('starter.controllers', [])
                     "answerTime": record.answerTime,
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
-                    "answerFirstName": record.answerFirstName
+                    "answerFirstName": record.answerFirstName,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
 
@@ -637,7 +640,8 @@ angular.module('starter.controllers', [])
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName,
-                    "reqRating": record.rating.reqRating
+                    "reqRating": record.rating.reqRating,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
             
@@ -654,7 +658,8 @@ angular.module('starter.controllers', [])
                     "answerPicture": record.answerPicture,
                     "answerGender": record.answerGender,
                     "answerFirstName": record.answerFirstName,
-                    "reqRating": record.rating.totalRating
+                    "reqRating": record.rating.totalRating,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
 
@@ -687,7 +692,8 @@ angular.module('starter.controllers', [])
                     "reqPicture": record.reqPicture,
                     "reqGender": record.reqGender,
                     "reqRating": record.reqRating,
-                    "reqFirstName": record.reqFirstName
+                    "reqFirstName": record.reqFirstName,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //endif
 
@@ -704,7 +710,8 @@ angular.module('starter.controllers', [])
                     "reqPicture": record.reqPicture,
                     "reqGender": record.reqGender,
                     "reqRating": record.reqRating,
-                    "reqFirstName": record.reqFirstName
+                    "reqFirstName": record.reqFirstName,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //endif
 
@@ -723,6 +730,7 @@ angular.module('starter.controllers', [])
                     "reqGender": record.reqGender,
                     "reqFirstName": record.reqFirstName,
                     "answerRating": record.rating.answerRating,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
             
@@ -736,7 +744,8 @@ angular.module('starter.controllers', [])
                     "reqPicture": record.reqPicture,
                     "reqGender": record.reqGender,
                     "reqFirstName": record.reqFirstName,
-                    "answerRating": record.rating.totalRating
+                    "answerRating": record.rating.totalRating,
+                    "reqLocation": record.reqLocation
                 }); //end push
             } //end if
 
@@ -983,20 +992,6 @@ var userArray = $firebase(ref.child("users").child("data").child($scope.currentU
         }); //end then
 
     }; //end function
-
-$ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
-    scope: $scope,
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
-
-
-  $scope.openRatingPopover = function($event) {
-    $scope.popover.show($event);
-  };
-  $scope.closeRatingPopover = function() {
-    $scope.popover.remove(); //Attention: actually destroys popover from DOM...
-  };
 
     //the user that requested the hugg can rate the user that answered
     $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
