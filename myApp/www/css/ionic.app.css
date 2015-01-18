@@ -7158,12 +7158,37 @@ a.button {
   max-height: 80px;
   width: 100%; }
 
-.list .item.item-accordion {
-  line-height: 38px;
-  transition: 0.09s all linear; }
+.messages {
+  margin: 0;
+  padding: 0;
+  list-style-type: none; }
 
-.list .item.item-accordion.ng-hide {
-  line-height: 0px; }
+.messages li {
+  display: block;
+  clear: both;
+  max-width: 50%;
+  margin: 0 0 1rem 0;
+  padding: 0; }
 
-.list .item.item-accordion.ng-hide-add, .list .item.item-accordion.ng-hide-remove {
-  display: block !important; }
+.messages li:nth-child(even) {
+  float: right; }
+
+.messages li:nth-child(even) img {
+  float: right; }
+
+.messages p {
+  border-radius: 0.75rem;
+  background: #e6e5eb;
+  color: #383641;
+  padding: 0.6875rem;
+  margin: 0;
+  font-size: 0.875rem; }
+
+.messages li:nth-child(even) p {
+  background: #158ffe;
+  color: #fff; }
+
+.messages img {
+  display: block;
+  max-width: 65%;
+  border-radius: 0.75rem; }

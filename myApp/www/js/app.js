@@ -169,6 +169,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 }
             }
         }
+    })
+
+        .state('app.logout', {
+        url: "/logout",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/logout.html",
+                controller: 'LogoutCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
     });
     
     // if none of the above states are matched, use this as the fallback

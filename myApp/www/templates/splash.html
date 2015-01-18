@@ -12,13 +12,10 @@
             <div>
 
                 <div class="row">
-                    <div ng-hide="check" class="col col-bottom text-center">
+                    <div class="col col-bottom text-center">
                         <br>Login with:</div>
                 </div>
-                <div class="row" ng-show="check">
-                    <button ng-click="logout()" class="button button-block button-assertive icon-left ion-log-out">Log Out</button>
-                </div>
-                <div class="row" ng-hide="check">
+                <div class="row">
                     <div class="col">
                         <button ng-click="login('facebook')" class="button button-block button-facebook icon-left ion-social-facebook" id="fb">Facebook</button>
                     </div>
@@ -26,7 +23,7 @@
                         <button ng-click="login('google')" class="button button-block button-gplus icon-left ion-social-googleplus">Google+</button>
                     </div>
                 </div>
-                <div class="row" ng-hide="check">
+                <div class="row">
                     <div class="col text-center tosGrey">By logging in, you accept our <a class="splashLinks" ng-click="privacy()">privacy policy</a> and our <a class="splashLinks" ng-click="tos()">terms of service</a>.</div>
                 </div>
             </div>
