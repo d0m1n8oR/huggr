@@ -981,7 +981,7 @@ angular.module('starter.controllers', [])
                     picture: $scope.currentUser.picture,
                     time: today,
                     profileID: $scope.currentUser.profileID,
-                    type: "decline",
+                    type: "accept",
                     change: "remove"
                 }).then(function(x) {
                     console.log("successfully declined hugg!");
