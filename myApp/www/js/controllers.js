@@ -1466,10 +1466,10 @@ $ionicPopover.fromTemplateUrl('templates/popovers/huggRating.html', {
     //Reference to Firebase
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.currentUser = localstorage.getObject('userData');
-    $firebase(ref.child("chat").$set({
+    $firebase(ref.child("chat")).$set({
                message: "hallo",
                user : $scope.currentUser.firstname
-    }));
+    });
 
     
         //Register chat elements
