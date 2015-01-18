@@ -104,6 +104,7 @@
                                     {{item.huggID}} {{item.lat}} {{item.long}} {{item.reqFirstName}} {{item.reqGender}} {{item.reqRating}} {{item.reqTime}} {{item.reqPicture}}
                                 </p>
                                 <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
+                                  <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
                     </ion-content>
