@@ -1,0 +1,26 @@
+<ion-popover-view style="width: 70%">
+
+    <div class="item item-text-wrap">
+        <div class="card">
+            <p>{{currentUser.displayName}}</p>
+        </div>
+        <div class="card">
+        <p>
+            {{currentUser.email}}
+        </p>
+        </div>
+        <div class="card">
+        <label class="item item-input">
+            <input type="text" ng-model="request.subject" placeholder="Subject">
+        </label>
+        </div>
+        <div class="card">
+        <label class="item item-input">
+            <textarea rows="10" placeholder="What do you need help with?" ng-model="request.message"></textarea>
+        </label>
+        </div>
+        <div class="card" ng-click="sendRequest()">
+            Request assistance!
+        </div>
+    </div>
+</ion-popover-view>

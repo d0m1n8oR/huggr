@@ -24,17 +24,7 @@
                 </div>
                 <div class="card">
                     <div class="item item-text-wrap">
-                        <p>{{currentUser.displayName}}</p>
-                        <p>
-                            {{currentUser.email}}
-                        </p>
-                        <label class="item item-input">
-                            <input type="text" ng-model="request.subject" placeholder="Subject">
-                        </label>
-                        <label class="item item-input">
-                            <textarea rows="10" placeholder="What do you need help with?" ng-model="request.message"></textarea>
-                        </label>
-                        <button ng-click="sendRequest()" class="button button-balanced button-block">
+                        <button ng-click="openPopover($event)" class="button button-balanced button-block">
                             Request assistance!
                         </button>
 
@@ -43,18 +33,18 @@
                         Your unanswered support requests:
                     </div>
 
-                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '0'" href="#/app/about/support/{{item.supportID}}">
+                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '0'" href="#/app/about/support/{{value.supportID}}">
                         <h2>{{value.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
                     </ion-item>
                     <div class="item item-divider padding-top">
                         Your answered support requests:
                     </div>
-                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{item.supportID}}">
+                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{value.supportID}}">
                         <h2>{{value.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
                     </ion-item>
-
+                </div>
             </ion-content>
         </ion-tab>
     </ion-tabs>

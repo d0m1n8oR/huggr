@@ -5,17 +5,18 @@
     $scope.orderSupportRef = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asArray();
 
     $scope.request = {
-        message: ""
-    }
+        message: "",
+        subject: ""
+    };
 
     $scope.support = {
         requests: [],
         answers: []
     }
-    
+
     var userObject = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asObject();
     userObject.$bindTo($scope, "supportData").then(function() {
-        
+
     }); // end bindTo
 
     $scope.orderSupportRef.$loaded().then(function(data) {
@@ -33,11 +34,10 @@
                     "reqest": record.request,
                     "done": record.done,
                     "supportID": record.supportID,
-                    "profileID": record.profileID, 
+                    "profileID": record.profileID,
                     "subject": record.subject
                 });
-            }
-            else{
+            } else {
                 $scope.support.answers.push({
                     displayName: record.displayName,
                     firstName: record.firstname,
@@ -46,7 +46,7 @@
                     reqest: record.request,
                     done: record.done,
                     supportID: record.supportID,
-                    profileID: record.profileID, 
+                    profileID: record.profileID,
                     answer: record.answer,
                     subject: record.subject
                 });
@@ -57,7 +57,7 @@
 
     $scope.sendRequest = function sendRequest() {
         //console.log($scope.request.message);
-        if ($scope.request.message.length > 40) {
+        if ($scope.request.message.length > 40 && $scope.request.subject.length > 15) {
             console.log($scope.request.message);
             var request = $scope.request.message;
             var supportID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
@@ -84,6 +84,12 @@
                     profileID: $scope.currentUser.profileID,
                     subject: $scope.request.subject
                 }).then(function(y) {
+                    $scope.popover.hide();
+                    $scope.request = {
+                        message: "",
+                        subject: ""
+                    };
+
                     toast.pop("Successfully sent request");
                 });
             });
@@ -91,7 +97,31 @@
         } else {
             toast.pop("Please enter a longer message");
         }
-    }
+    };
+
+    $ionicPopover.fromTemplateUrl('templates/popovers/requestSupport.html', {
+        scope: $scope,
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+    $scope.openPopover = function($event) {
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+        // Execute action
+    });
 
 
 })
