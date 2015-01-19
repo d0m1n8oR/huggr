@@ -86,7 +86,7 @@ angular.module('starter.controllers', [])
     }
 ])
 .factory('notifications', [function($firebase, $window) {
-	var ref = new Firebase("https://huggr.firebaseio.com/");
+	/*var ref = new Firebase("https://huggr.firebaseio.com/");
     var currentUser = JSON.parse($window.localStorage['userData'] || '{}');
 
     //watches for changes in data - maybe use bindTo?
@@ -97,7 +97,7 @@ angular.module('starter.controllers', [])
 
 	return {
 
-	};
+	};*/
 }])
 .factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading) {
     return {
