@@ -33,7 +33,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
-    .state('index', {
+        .state('index', {
         url: "/index",
         templateUrl: "templates/splash.html",
         controller: "loginCtrl"
@@ -54,12 +54,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
-    
-        .state('app.logout', {
+
+    .state('app.logout', {
         url: "/logout",
         views: {
             'menuContent': {
-                controller: 'logoutCtrl',
+                controller: 'LogoutCtrl',
                 templateUrl: "templates/logout.html"
             }
         }
@@ -98,54 +98,40 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
-        .state('app.test', {
-            url: "/test/:params",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/test.html",
-                    controller: "SampleCtrl",
-                    resolve: {
-                        "currentAuth": ["Auth",
-                            function(Auth) {
-                                return Auth.$requireAuth();
-                            }
-                        ]
-                    }
+
+    .state('app.profile', {
+        url: "/profile",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/profile.html",
+                controller: "ProfileCtrl",
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
                 }
             }
-        })
-        .state('app.profile', {
-            url: "/profile",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/profile.html",
-                    controller: "ProfileCtrl",
-                    resolve: {
-                        "currentAuth": ["Auth",
-                            function(Auth) {
-                                return Auth.$requireAuth();
-                            }
-                        ]
-                    }
+        }
+    })
+
+    .state('app.settings', {
+        url: "/settings",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/settings.html",
+                controller: 'SettingsCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
                 }
             }
-        })
-        .state('app.settings', {
-            url: "/settings",
-            views: {
-                'menuContent': {
-                    templateUrl: "templates/settings.html",
-                    controller: 'SettingsCtrl',
-                    resolve: {
-                        "currentAuth": ["Auth",
-                            function(Auth) {
-                                return Auth.$requireAuth();
-                            }
-                        ]
-                    }
-                }
-            }
-        })
+        }
+    })
 
     .state('app.externalProfile', {
         url: "/profile/:profileID/:huggID",
@@ -163,7 +149,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
-    
+
+    .state('app.chatOverview', {
+        url: "/chat",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/chatoverview.html",
+                controller: 'ChatOverviewCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
+
     .state('app.chat', {
         url: "/chat/:chatID",
         views: {
@@ -180,7 +183,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
-    
+
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
 });

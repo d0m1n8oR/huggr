@@ -6,7 +6,7 @@
 
         <ion-list>
 
-            <ion-item ng-repeat="person in chatResults" item="item" href="" class="item-avatar">
+            <ion-item ng-repeat="person in chatResults track by $index" item="item" href="" class="item-avatar">
                 <img ng-src="{{person.picture}}">
                 <h2>{{item.firstName}}</h2>
                 <p>

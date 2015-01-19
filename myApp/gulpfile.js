@@ -1,18 +1,20 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var bower = require('bower');
-var concat = require('gulp-concat');
+var concat = require('gulp-continuous-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var watch = require('gulp-watch');
+
+
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
-  js: ['./www/js/**/*.Ctrl.js']
+  sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['sass', 'scripts']);
+gulp.task('default', ['sass', 'merge', 'watch']);
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -28,13 +30,16 @@ gulp.task('sass', function(done) {
 
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
-  gulp.watch(paths.js, ['scripts']);
+  gulp.watch('./www/js/controllers/*.Ctrl.js', ['merge']);
+  gulp.watch('./www/js/factories/*.js', ['merge']);
 });
 
-gulp.task('scripts', function() {
-  gulp.src('./www/js/**/*Ctrl.js')
-    .pipe(concat({ path: 'distC.js', stat: { mode: 0666 }}))
-    .pipe(gulp.dest('./www/js/'))
+gulp.task('merge', function() {
+  gulp.src(['./www/js/controllers/_index.js','./www/js/factories/*.js','./www/js/**/*Ctrl.js','./www/js/controllers/_last.js'])
+    .pipe(watch('./www/js/**/*Ctrl.js'))
+    .pipe(watch('./www/js/factories/*.js'))
+    .pipe(concat('controllers.js'))
+    .pipe(gulp.dest('./www/js/'));
 });
 
 gulp.task('install', ['git-check'], function() {
