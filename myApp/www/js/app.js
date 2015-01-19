@@ -200,6 +200,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
+    
+    .state('app.supportitem', {
+        url: "/supportitem/:supportID",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/supportitem.html",
+                controller: 'supportitemCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
