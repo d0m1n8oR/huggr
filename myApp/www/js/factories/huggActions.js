@@ -1,6 +1,6 @@
-.factory('huggActions', ["$firebase", "toast",
+.factory('huggActions', ["$firebase", "toast", "$state",
 
-    function($firebase, toast) {
+    function($firebase, toast, $state) {
         return {
             answerHugg: function(huggID,currentUser, profileID) {
                 var ref = new Firebase("https://huggr.firebaseio.com/");
@@ -29,7 +29,7 @@
                         type: "answer",
                         change: "add"
                     }).then(function(x) {
-                        toast.pop("Successfully answered hugg")
+                        toast.pop("Successfully answered hugg");
                         return 1;
                     });
 
