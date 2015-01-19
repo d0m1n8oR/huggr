@@ -2,58 +2,16 @@
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.supportRef = $firebase(ref.child("admin").child("support")).$asArray();
-    $scope.orderSupportRef = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asArray();
 
     $scope.request = {
         message: "",
         subject: ""
     };
 
-    $scope.support = {
-        requests: [],
-        answers: []
-    }
-
     var userObject = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asObject();
     userObject.$bindTo($scope, "supportData").then(function() {
 
     }); // end bindTo
-
-    $scope.orderSupportRef.$loaded().then(function(data) {
-
-        var i = 0;
-        //loop to get all the elements
-        while (data.$keyAt(i) != null) {
-            var record = data.$getRecord(data.$keyAt(i));
-            if (record.done == 0) {
-                $scope.support.requests.push({
-                    "displayName": record.displayName,
-                    "firstName": record.firstName,
-                    "email": record.email,
-                    "time": record.time,
-                    "reqest": record.request,
-                    "done": record.done,
-                    "supportID": record.supportID,
-                    "profileID": record.profileID,
-                    "subject": record.subject
-                });
-            } else {
-                $scope.support.answers.push({
-                    displayName: record.displayName,
-                    firstName: record.firstname,
-                    email: record.email,
-                    time: record.tome,
-                    reqest: record.request,
-                    done: record.done,
-                    supportID: record.supportID,
-                    profileID: record.profileID,
-                    answer: record.answer,
-                    subject: record.subject
-                });
-            }
-            i++;
-        }
-    })
 
     $scope.sendRequest = function sendRequest() {
         //console.log($scope.request.message);
