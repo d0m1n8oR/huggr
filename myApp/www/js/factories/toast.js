@@ -26,7 +26,7 @@
         pop: function(msg) {
             var myToast = $ionicLoading.show({
                 template: msg,
-                noBackdrop: false,
+                noBackdrop: true,
                 duration: 2500
             });
         }

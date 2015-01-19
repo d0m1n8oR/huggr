@@ -1,4 +1,4 @@
-.controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage) {
+.controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage, toast) {
 
     chatID = $stateParams.chatID;
     $scope.ctitle = $stateParams.chatTitle;
@@ -20,7 +20,7 @@
             name: $scope.currentUser.firstname
         }).then(function(sync) {
             var id = sync.key();
-            console.log("added record with id " + id);
+            toast.pop("Message sent!");
             $scope.messageInput = '';
 
         });
