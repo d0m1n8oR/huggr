@@ -1,4 +1,4 @@
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast, answerHugg) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast, huggActions) {
 
     //initialize all the stuff
     $scope.auth = Auth;
@@ -25,15 +25,11 @@
         gender = "both";
     }
 
-    //chek for range values
-    if ($stateParams.range == "5 km") {
-        range = 5;
-    }
-    if ($stateParams.range == "10 km") {
-        range = 10;
-    }
-    if ($stateParams.range == "Forever alone 100 km") {
-        range = 100;
+    range = $stateParams.range;
+    
+    $scope.answerHugg = function(huggID, profileID)
+    {
+        huggActions.answerHugg(huggID, $scope.currentUser, profileID);
     }
 
     //function to request a hugg in case the presented huggs are not suitable
