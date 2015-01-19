@@ -31,19 +31,18 @@
                     <div class="item item-divider padding-top">
                         Your answered support requests:
                     </div>
-                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{value.supportID}}">
-                        <h2>{{value.subject}}</h2>
-                        <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
+                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '1'" href="#/app/about/support/{{item.supportID}}">
+                        <h2>{{item.subject}}</h2>
+                        <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}</p>
                     </ion-item>
                 </div>
                 <div class="card">
                     <div class="item item-divider padding-top">
                         Your unanswered support requests:
                     </div>
-
-                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '0'" href="#/app/about/support/{{value.supportID}}">
-                        <h2>{{value.subject}}</h2>
-                        <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
+                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/about/support/{{item.supportID}}">
+                        <h2>{{item.subject}}</h2>
+                        <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}</p>
                     </ion-item>
                 </div>
             </ion-content>
