@@ -7170,10 +7170,10 @@ a.button {
   margin: 0 0 1rem 0;
   padding: 0; }
 
-.messages li:nth-child(even) {
+.message-me {
   float: right; }
 
-.messages li:nth-child(even) img {
+.message-me img {
   float: right; }
 
 .messages p {
@@ -7184,7 +7184,7 @@ a.button {
   margin: 0;
   font-size: 0.875rem; }
 
-.messages li:nth-child(even) p {
+.message-me p {
   background: #158ffe;
   color: #fff; }
 

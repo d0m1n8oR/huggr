@@ -27,6 +27,7 @@
                             "firstname": record.firstname,
                             "lastname": record.lastname,
                             "numberHuggs": record.numberHuggs,
+                            "chat": record.chat,
                             "rating": record.rating
                         };
                         //console.log(profileData);

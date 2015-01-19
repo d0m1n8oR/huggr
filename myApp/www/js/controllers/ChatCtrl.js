@@ -1,28 +1,33 @@
 .controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage) {
-    
+
     chatID = $stateParams.chatID;
-    console.log(chatID);
+    $scope.ctitle = $stateParams.chatTitle;
+    console.log("ChatID:" +chatID);
 
     //Reference to Firebase
     $scope.currentUser = localstorage.getObject('userData');
-    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat/"+chatID+"/message"));
+    var sync = $firebase(new Firebase("https://huggr.firebaseio.com/chat/" + chatID + "/message"));
     $scope.chatList = sync.$asArray();
 
 
-    $scope.messageInput = "hallo";
+    $scope.messageInput = "";
     $scope.chatData;
 
     $scope.sendMessage = function() {
         $scope.chatList.$add({
             message: $scope.messageInput,
-            user: $scope.currentUser.firstname
+            user: $scope.currentUser.profileID,
+            name: $scope.currentUser.firstname
+        }).then(function(sync) {
+            var id = sync.key();
+            console.log("added record with id " + id);
+            $scope.messageInput = '';
+
         });
-        $scope.messageInput = '';
     };
 
     var obj = sync.$asObject();
     obj.$loaded().then(function() {
-        console.log(obj);
         obj.$bindTo($scope, "chatData");
     });
 })

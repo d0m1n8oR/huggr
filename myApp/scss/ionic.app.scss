@@ -184,11 +184,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   padding:0;
 }
 
-.messages li:nth-child(even) {
+.message-me {
   float:right;
 }
 
-.messages li:nth-child(even) img {
+.message-me img {
   float:right;
 }
 
@@ -201,7 +201,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-size:.875rem;
 }
 
-.messages li:nth-child(even) p {
+.message-me p {
   background:#158ffe;
   color:#fff;
 }

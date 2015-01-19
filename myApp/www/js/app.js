@@ -168,7 +168,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
     })
 
     .state('app.chat', {
-        url: "/chat/:chatID",
+        url: "/chat/:chatID/:chatTitle",
         views: {
             'menuContent': {
                 templateUrl: "templates/chat.html",

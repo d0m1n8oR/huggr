@@ -6,10 +6,12 @@
 
         <ion-list>
 
-            <ion-item ng-repeat="person in chatResults track by $index" item="item" href="" class="item-avatar">
+            <ion-item ng-repeat="person in chatResults track by $index" item="item" href="#/app/chat/{{person.chref}}/{{person.displayName}}" class="item-avatar">
                 <img ng-src="{{person.picture}}">
                 <h2>{{person.displayName}}</h2>
                 <p>
+                    TODO: chat text!
+                    <span></span>
                 </p>
             </ion-item>
         </ion-list>
