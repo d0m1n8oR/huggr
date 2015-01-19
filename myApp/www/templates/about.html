@@ -34,13 +34,21 @@
                             {{currentUser.email}}
                         </p>
                         <label class="item item-input">
-                            <textarea rows="20" placeholder="What do you need help with?" ng-model="request.message"></textarea>
+                            <textarea rows="10" placeholder="What do you need help with?" ng-model="request.message"></textarea>
                         </label>
                         <button ng-click="sendRequest()" class="button button-balanced button-block">
                             Request assistance!
                         </button>
 
                     </div>
+                    <ion-item ng-repeat="item in support.requests" item="item" href="#/app/about/support/{{item.supportID}}" class="item-thumbnail-left">
+                        <p>ID: {{item.supportID}}
+                        </p>
+                    </ion-item>
+                    <ion-item ng-repeat="item in support.answers" item="item" href="#/app/about/support/{{item.supportID}}" class="item-thumbnail-left">
+                        <p>ID: {{item.supportID}}
+                        </p>
+                    </ion-item>
 
             </ion-content>
         </ion-tab>
