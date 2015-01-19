@@ -8,10 +8,9 @@
         var dataRef = $firebase(ref).$asArray();
 
         //$q for synchronous method call
-        var deferred = $q.defer();
 
         return {
-            getProfile: function(ID) {
+            getProfile: function(ID, deferred) {
                 console.log(ID);
                 dataRef.$loaded()
                     .then(function(data) {

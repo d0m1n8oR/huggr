@@ -1039,7 +1039,7 @@ angular.module('starter.controllers', [])
     }, false);
 
 })
-.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast) {
+.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -1123,7 +1123,7 @@ angular.module('starter.controllers', [])
         console.log("data changed!");
     });
 
-/*
+
     if ($scope.currentUser.notifications != null) {
         console.log("number of notifications: " + Object.keys($scope.currentUser.notifications).length);
         var p = $scope.currentUser.notifications
@@ -1135,7 +1135,7 @@ angular.module('starter.controllers', [])
         }
         //console.log($scope.currentUser.notifications);
     }
-*/
+
 
 })
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {

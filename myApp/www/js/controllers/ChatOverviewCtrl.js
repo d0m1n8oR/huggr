@@ -1,4 +1,4 @@
-.controller('ChatOverviewCtrl', function($scope, $firebase, localstorage, UserInfo) {
+.controller('ChatOverviewCtrl', function($scope, $firebase, localstorage, UserInfo, $q) {
 
     $scope.currentUser = localstorage.getObject('userData');
     var sync = $firebase(new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID + "/chat/"));
@@ -10,7 +10,8 @@
         for (var i = 0; i < ($scope.chatList).length; i++) {
         	                                console.log($scope.chatList[i].otherProfileID);
 
-            UserInfo.getProfile($scope.chatList[i].otherProfileID).then(function(value) {
+            var deferred = $q.defer();
+            UserInfo.getProfile($scope.chatList[i].otherProfileID, deferred).then(function(value) {
                                 console.log(value);
 
             });
