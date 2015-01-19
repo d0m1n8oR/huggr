@@ -12,6 +12,12 @@
         requests: [],
         answers: []
     }
+    
+    var userObject = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asObject();
+    console.log(userObject);
+    userObject.$bindTo($scope, "supportData").then(function() {
+        
+    }); // end bindTo
 
     $scope.orderSupportRef.$loaded().then(function(data) {
 
