@@ -5,7 +5,7 @@
     $scope.orderSupportRef = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asArray();
 
     $scope.request = {
-        message: null
+        message: ""
     }
 
     $scope.support = {
@@ -14,7 +14,6 @@
     }
     
     var userObject = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asObject();
-    console.log(userObject);
     userObject.$bindTo($scope, "supportData").then(function() {
         
     }); // end bindTo
@@ -34,7 +33,8 @@
                     "reqest": record.request,
                     "done": record.done,
                     "supportID": record.supportID,
-                    "profileID": record.profileID,                    
+                    "profileID": record.profileID, 
+                    "subject": record.subject
                 });
             }
             else{
@@ -47,7 +47,8 @@
                     done: record.done,
                     supportID: record.supportID,
                     profileID: record.profileID, 
-                    answer: record.answer
+                    answer: record.answer,
+                    subject: record.subject
                 });
             }
             i++;
@@ -80,7 +81,8 @@
                     request: request,
                     done: 0,
                     supportID: supportID,
-                    profileID: $scope.currentUser.profileID
+                    profileID: $scope.currentUser.profileID,
+                    subject: $scope.request.subject
                 }).then(function(y) {
                     toast.pop("Successfully sent request");
                 });
