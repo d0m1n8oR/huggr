@@ -10,7 +10,9 @@
         for (var i = 0; i < ($scope.chatList).length; i++) {
 
             var deferred = $q.defer();
+            var chatID = $scope.chatList[i].chatID;
             UserInfo.getProfile($scope.chatList[i].otherProfileID, deferred).then(function(value) {
+                                console.log("test"+chatID);
                                 $scope.chatResults.push(value);
                                 
 
