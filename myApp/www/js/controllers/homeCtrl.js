@@ -48,7 +48,7 @@
     $scope.huggRequest = {
         male: "none",
         female: "none",
-        range: "10 km"
+        range: "10"
     }
 
     //function that is executed on "Search"-Click in Popover

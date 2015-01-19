@@ -1,31 +1,18 @@
-<ion-popover-view style="height: 50%">
-    <div class="bar bar-header bar-balanced">
+<ion-popover-view style="height: 345px; width: 75%">
+    <ion-header-bar class="bar-balanced">
         <h1 class="title">Give us some details</h1>
-    </div>
+    </ion-header-bar>
     <ion-content>
 
-        <!-- need to get value from here -->
-        <div class="range">
-            <i class="icon ion-volume-low"></i>
-            <input type="range" name="volume">
-            <i class="icon ion-volume-high"></i>
-        </div>
         <div class="list">
+            <div class="item range range-positive">
+                <i class="icon ion-ios7-location-outline"></i>
+                <input type="range" min="5" max="100" step="5" value="20" ng-model="huggRequest.range">
+                <i class="icon ion-ios7-location"></i>
+            </div>
+                            <span class="item text-center">Huggs within {{huggRequest.range}}km</span>
 
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Range
-                </div>
-                <select ng-model="huggRequest.range">
-                    <option>5 km</option>
-                    <option selected>10 km</option>
-                    <option>Forever alone 100 km</option>
-                </select>
-            </label>
-
-        </div>
-
-
+        
         <ul class="list">
             <li class="item item-checkbox">
                 <label class="checkbox">
@@ -40,7 +27,7 @@
                 Female
             </li>
         </ul>
-
+</div>
         <button class="button button-energized button-block" ng-click="displayResults()">
             Search
         </button>
