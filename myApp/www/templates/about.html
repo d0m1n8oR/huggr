@@ -7,7 +7,7 @@
   <button class="button button-icon icon ion-gear-a"></button>
   </ion-nav-buttons>
 -->
-    <ion-tabs class="tabs-positive tabs-icon-only">
+    <ion-tabs class="tabs-positive tabs-icon-only has-header">
 
         <ion-tab title="About" icon="ion-information">
             <ion-content class="has-header">
@@ -24,7 +24,24 @@
         <ion-tab title="Support" icon="ion-help-buoy">
             <ion-content class="has-header">
                 <!-- Please do not remove this -->
-                <div class="padding-top padding-bottom">Support</div>
+                <div class="item item-text-wrap">
+                    <div class="padding-top padding-bottom">Support</div>
+                </div>
+                <div class="card">
+                    <div class="item item-text-wrap">
+                        <p>{{currentUser.displayName}}</p>
+                        <p>
+                            {{currentUser.email}}
+                        </p>
+                        <label class="item item-input">
+                            <textarea rows="20" placeholder="What do you need help with?" ng-model="request.message"></textarea>
+                        </label>
+                        <button ng-click="sendRequest()" class="button button-balanced button-block">
+                            Request assistance!
+                        </button>
+
+                    </div>
+
             </ion-content>
         </ion-tab>
     </ion-tabs>
