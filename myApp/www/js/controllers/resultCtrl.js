@@ -1,4 +1,4 @@
-.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast) {
+.controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast, answerHugg) {
 
     //initialize all the stuff
     $scope.auth = Auth;
