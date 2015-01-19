@@ -218,6 +218,56 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         }
     })
 
+    .state('app.adminlogin', {
+        url: "/admin/login",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/admin/login.html",
+                controller: 'adminloginCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
+    
+    .state('app.adminsupportoverview', {
+        url: "/admin/supportoverview",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/admin/supportoverview.html",
+                controller: 'adminsupportoverviewCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
+    
+     .state('app.adminsupportitem', {
+        url: "/admin/supportitem/:supportID",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/admin/supportitem.html",
+                controller: 'adminsupportitemCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
 });
