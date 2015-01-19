@@ -8,11 +8,11 @@
 
     $scope.chatList.$loaded().then(function() {
         for (var i = 0; i < ($scope.chatList).length; i++) {
-        	                                console.log($scope.chatList[i].otherProfileID);
 
             var deferred = $q.defer();
             UserInfo.getProfile($scope.chatList[i].otherProfileID, deferred).then(function(value) {
-                                console.log(value);
+                                $scope.chatResults.push(value);
+                                
 
             });
         };

@@ -2,15 +2,14 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <ion-content class="has-header has-subheader">
+    <ion-content class="has-header">
 
         <ion-list>
 
             <ion-item ng-repeat="person in chatResults track by $index" item="item" href="" class="item-avatar">
                 <img ng-src="{{person.picture}}">
-                <h2>{{item.firstName}}</h2>
+                <h2>{{person.displayName}}</h2>
                 <p>
-                    {{item.lastMessage}}
                 </p>
             </ion-item>
         </ion-list>
