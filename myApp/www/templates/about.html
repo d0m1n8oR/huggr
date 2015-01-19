@@ -50,8 +50,8 @@
                         <p>ID: {{item.supportID}}
                         </p>
                     </ion-item>-->
-                    <ion-item ng-repeat="(key, value) in supportData" href="#/app/about/support/{{item.supportID}}" class="item-thumbnail-left">
-                        <p>ID: {{key}} Value {{value}}
+                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{item.supportID}}" class="item-thumbnail-left">
+                        <p>ID: {{key}} Value {{value.done}}
                         </p>
                     </ion-item>
 
