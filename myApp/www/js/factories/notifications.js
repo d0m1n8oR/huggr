@@ -1,14 +1,16 @@
-.service('notifications', [function($firebase, $window) {
-	var ref = new Firebase("https://huggr.firebaseio.com/");
-    /*var currentUser = JSON.parse($window.localStorage['userData'] || '{}');
+.service('notifications', [$rootScope, $firebase,
 
-    //watches for changes in data - maybe use bindTo?
-    var obj = $firebase(ref.child("users").child("data").child(currentUser.profileID).child("notifications")).$asObject();
-    var unwatch = obj.$watch(function() {
-        console.log("data changed!");
-    });
+    function($rootScope, $firebase) {
 
-	return {
-
-	};*/
-}])
+        return {
+            sync: function(ID) {
+                console.log(ID);
+                var obj = $firebase(new Firebase("https://huggr.firebaseio.com/users/data/" + ID + "/notifications")).$asObject();
+                obj.$loaded()
+                    .then(function(data) {
+                        obj.$bindTo($rootScope, "data");
+                    });
+            }
+        };
+    }
+])
