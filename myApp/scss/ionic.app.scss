@@ -162,6 +162,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   cursor: pointer;
 }
 
+.item .icon .icon-badge {
+  position: absolute; 
+  top: 3px;
+  right: 0px;
+  font-size: 8px;
+}
+
 .huggr-thumbnail-right .item-content > img:nth-child(2) {
     position: absolute;
     top: 10px;

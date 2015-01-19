@@ -34,5 +34,19 @@
         </ion-content>
     </ion-side-menu>
     <ion-side-menu side="right">
-</ion-side-menu>
+        <header class="bar bar-header bar-positive ">
+            <h1 class="title">Notifications</h1>
+        </header>
+        <ion-content class="has-header">
+            <ion-list>
+                <ion-item ng-repeat="notificationItem in notificationData" item="item" menu-close class="item-avatar">
+                    <img ng-src="{{notificationItem.picture}}">
+                    <h2>{{notificationItem.firstName}}</h2>
+                    <p>has {{notificationItem.type}}ed
+                    </p>
+                    <p>Todo!!!</p>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
 </ion-side-menus>

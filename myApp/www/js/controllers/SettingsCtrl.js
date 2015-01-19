@@ -1,6 +1,7 @@
-.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera) {
+.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera, notifications) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
+    notifications.sync($scope.userData.profileID);
 
 
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);

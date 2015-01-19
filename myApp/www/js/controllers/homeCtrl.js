@@ -1,4 +1,5 @@
 .controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -75,6 +76,7 @@
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.currentUser = localstorage.getObject('userData');
+    notifications.sync($scope.currentUser.profileID);
 
     //watches for changes in data - maybe use bindTo?
     var obj = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("notifications")).$asObject();
@@ -83,17 +85,18 @@
     });
 
 
-    if ($scope.currentUser.notifications != null) {
-        console.log("number of notifications: " + Object.keys($scope.currentUser.notifications).length);
-        var p = $scope.currentUser.notifications
-        for (var key in p) {
-            if (p.hasOwnProperty(key)) {
-                console.log("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
-                toast.pop("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
+    /*
+        if ($scope.currentUser.notifications != null) {
+            console.log("number of notifications: " + Object.keys($scope.currentUser.notifications).length);
+            var p = $scope.currentUser.notifications
+            for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                    console.log("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
+                    toast.pop("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
+                }
             }
-        }
-        //console.log($scope.currentUser.notifications);
-    }
+            //console.log($scope.currentUser.notifications);
+        }*/
 
 
 })

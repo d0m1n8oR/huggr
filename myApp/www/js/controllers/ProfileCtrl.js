@@ -1,4 +1,4 @@
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
@@ -6,6 +6,7 @@
     $scope.orderOwnHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
     $scope.orderOtherHuggRef = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID).limitToFirst(100)).$asArray();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+    notifications.sync($scope.currentUser.profileID);
 
     $scope.userRatingForView = $scope.currentUser.rating;
 
