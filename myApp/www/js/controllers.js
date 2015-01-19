@@ -16,9 +16,10 @@ angular.module('starter.controllers', [])
         var dataRef = $firebase(ref).$asArray();
 
         //$q for synchronous method call
+        var deferred = $q.defer();
 
         return {
-            getProfile: function(ID, deferred) {
+            getProfile: function(ID) {
                 console.log(ID);
                 dataRef.$loaded()
                     .then(function(data) {
@@ -84,9 +85,9 @@ angular.module('starter.controllers', [])
         }
     }
 ])
-.factory('notifications', [function($firebase, $window) {
-	/*var ref = new Firebase("https://huggr.firebaseio.com/");
-    var currentUser = JSON.parse($window.localStorage['userData'] || '{}');
+.service('notifications', [function($firebase, $window) {
+	var ref = new Firebase("https://huggr.firebaseio.com/");
+    /*var currentUser = JSON.parse($window.localStorage['userData'] || '{}');
 
     //watches for changes in data - maybe use bindTo?
     var obj = $firebase(ref.child("users").child("data").child(currentUser.profileID).child("notifications")).$asObject();
@@ -160,7 +161,7 @@ angular.module('starter.controllers', [])
         obj.$bindTo($scope, "chatData");
     });
 })
-.controller('ChatOverviewCtrl', function($scope, $firebase, localstorage, UserInfo, $q) {
+.controller('ChatOverviewCtrl', function($scope, $firebase, localstorage, UserInfo) {
 
     $scope.currentUser = localstorage.getObject('userData');
     var sync = $firebase(new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID + "/chat/"));
@@ -172,8 +173,7 @@ angular.module('starter.controllers', [])
         for (var i = 0; i < ($scope.chatList).length; i++) {
         	                                console.log($scope.chatList[i].otherProfileID);
 
-            var deferred = $q.defer();
-            UserInfo.getProfile($scope.chatList[i].otherProfileID, deferred).then(function(value) {
+            UserInfo.getProfile($scope.chatList[i].otherProfileID).then(function(value) {
                                 console.log(value);
 
             });
@@ -1039,7 +1039,7 @@ angular.module('starter.controllers', [])
     }, false);
 
 })
-.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast) {
+.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -1123,7 +1123,7 @@ angular.module('starter.controllers', [])
         console.log("data changed!");
     });
 
-/*
+
     if ($scope.currentUser.notifications != null) {
         console.log("number of notifications: " + Object.keys($scope.currentUser.notifications).length);
         var p = $scope.currentUser.notifications
@@ -1135,7 +1135,7 @@ angular.module('starter.controllers', [])
         }
         //console.log($scope.currentUser.notifications);
     }
-*/
+
 
 })
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
