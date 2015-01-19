@@ -22,9 +22,36 @@
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
 
+    var blockedUserObject = $firebase(ref.child("data").child("users").child($scope.currentUser.profileID)).$asObject();
+    blockedUserObject.$bindTo($scope, "blockedUserData").then(function() {
+
+        blockedUserObject.$loaded().then(function(data) {
+            $scope.profileIDs = data.blocked;
+            if (Object.keys($scope.profileIDs)[0] == "1000000000001") {
+                $scope.noBlockedUsers = true;
+            } else {
+                $scope.blockedUsers = [];
+                $scope.noBlockedUsers = false;
+                var p = $scope.profileIDs;
+                for (var key in p) {
+                    if (p.hasOwnProperty(key) && key != "1000000000001") {
+                        UserInfo.getProfile(p[key]).then(function(value) {
+                            $scope.returnedProfile = value;
+                            $scope.blockedUsers.push($scope.returnedProfile);
+                        });
+                    }
+                }
+            }
+        });
+
+    }); // end bindTo
+
+    //$scope.noBlockedUsers;
+    //  $scope.blockedUsers = {[]}
+
     //show users currently blocked
 
-    //doesn't work with currentUser ...
+    /* //doesn't work with currentUser ...
     var userArray = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
     userArray.$loaded().then(function(data) {
         $scope.profileIDs = data.blocked;
@@ -43,7 +70,7 @@
                 }
             }
         }
-    });
+    });*/
 
     //remove users from block list
     $scope.unblockUser = function unblockUser(unblockProfileID) {
