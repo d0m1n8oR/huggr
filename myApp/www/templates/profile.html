@@ -45,6 +45,10 @@
                             <div class="item item-divider padding-top">
                                 Answered huggs
                             </div>
+                             <ion-item ng-repeat="(key, value) in ownHuggData" ng-if="value.answered == '1'" class="item-thumbnail-left">
+                                {{value.answered}}hallo
+                            </ion-item>
+                            <!--
                             <ion-item ng-repeat="item in answeredHuggs.hugg" item="item" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>{{item.answerFirstName}} has responded</h2>
@@ -57,21 +61,16 @@
 
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.answerProfileID)"></ion-option-button>
                                 <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.answerProfileID)"></ion-option-button>
-                            </ion-item>
+                            </ion-item>-->
                             <div class="item item-divider">
                                 Unanswered huggs
                             </div>
-                            <ion-item ng-repeat="item in unansweredHuggs.hugg" item="item" class="item-thumbnail-left">
-                                <img ng-src="{{currentUser.picture}}">
-                                <h2>You have requested this hug</h2>
-                                <p>
-                                    <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm:ss'}}
-
-                                </p>
-                                <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
-                                </p>
-
-                                <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
+                            <ion-item ng-repeat="(key, value) in ownHuggData" ng-if="value.answered == '0'" class="item-thumbnail-left">
+                                <img ng-src="{{value.reqPicture}}">
+                                <h2>You requested this hug</h2>
+                                <p><i class="icon ion-calendar"> </i>{{value.reqTime | date:'dd.MM.yyyy HH:mm'}}</p>
+                                <p><i class="icon ion-location"> at </i>{{value.reqLocation}}</p>
+                                <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(value.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
                     </ion-content>
@@ -91,7 +90,7 @@
                                 <p><i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm:ss'}}</p>
                                 <p>
                                     {{item.reqFirstName}} is {{item.reqGender}} and has
-                                    <br> a rating of {{item.reqRating}} <i class="icon ion-star"></i>
+                                    <br>a rating of {{item.reqRating}} <i class="icon ion-star"></i>
                                 </p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID, item.reqProfileID)"></ion-option-button>
                             </ion-item>
@@ -115,7 +114,7 @@
                                 <h2>Have you hugged {{item.reqFirstName}}?</h2>
                                 <p>
                                     {{item.reqFirstName}} is {{item.reqGender}} and has
-                                    <br> a rating of {{item.reqRating}} <i class="icon ion-star"></i>
+                                    <br>a rating of {{item.reqRating}} <i class="icon ion-star"></i>
                                 </p>
                                 <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>

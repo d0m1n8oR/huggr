@@ -16,6 +16,14 @@
         localstorage.setObject("userData", $scope.currentUser)
     }); // end bindTo
 
+    var ownHuggObject = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    ownHuggObject.$bindTo($scope, "ownHuggData").then(function() {
+    }); // end bindTo
+    
+    var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {
+    }); // end bindTo
+    
     //initialize various arrays to save data to
     $scope.unansweredHuggs = {
         hugg: []

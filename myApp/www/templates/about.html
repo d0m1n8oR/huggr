@@ -2,7 +2,7 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <ion-tabs class="tabs-positive tabs-icon-only has-header">
+    <ion-tabs class="tabs-striped tabs-color-assertive">
 
         <ion-tab title="About" icon="ion-information">
             <ion-content class="has-header">
@@ -22,25 +22,26 @@
                 <div class="item item-text-wrap">
                     <div class="padding-top padding-bottom">Support</div>
                 </div>
-                <div class="card">
-                    <div class="item item-text-wrap">
-                        <button ng-click="openPopover($event)" class="button button-balanced button-block">
-                            Request assistance!
-                        </button>
-
+                <div class="item item-text-wrap">
+                    <button ng-click="openPopover($event)" class="button button-balanced button-block">
+                        Request assistance!
+                    </button>
+                </div>
+                 <div class="card">
+                    <div class="item item-divider padding-top">
+                        Your answered support requests:
                     </div>
+                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{value.supportID}}">
+                        <h2>{{value.subject}}</h2>
+                        <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
+                    </ion-item>
+                </div>
+                <div class="card">
                     <div class="item item-divider padding-top">
                         Your unanswered support requests:
                     </div>
 
                     <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '0'" href="#/app/about/support/{{value.supportID}}">
-                        <h2>{{value.subject}}</h2>
-                        <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
-                    </ion-item>
-                    <div class="item item-divider padding-top">
-                        Your answered support requests:
-                    </div>
-                    <ion-item ng-repeat="(key, value) in supportData" ng-if="value.done == '1'" href="#/app/about/support/{{value.supportID}}">
                         <h2>{{value.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{value.time | date:'dd.MM.yyyy HH:mm'}}</p>
                     </ion-item>
