@@ -34,14 +34,14 @@
 
                     </div>
                 </div>
-            </ion-content>
+            </ion-content >
         </ion-tab>
 
         <ion-tab title="Your Huggs" icon="sp-huggr">
             <ion-tabs class="tabs-striped tabs-top tabs-background-positive tabs-color-light">
                 <ion-tab title="Unanswered" icon="ion-help">
                     <ion-header-bar class="bar-positive"></ion-header-bar>
-                    <ion-content class="has-header">
+                    <ion-content class="has-header has-footer" >
                         <ion-list>
                             <div class="item item-divider padding-top">
                                 Answered huggs
@@ -53,7 +53,7 @@
                                 <p>{{item.answerFirstName}} is {{item.answerGender}}
                                 </p>
                                 <p>
-                                    <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm:ss'}} {{item.answerTime}}
+                                    <i class="icon ion-calendar"> on </i>{{ item.answerTime | date : date:'dd-MM-yyy HH:mm'}}
 
                                 </p>
 
@@ -67,7 +67,7 @@
                                 <img ng-src="{{currentUser.picture}}">
                                 <h2>You have requested this hug</h2>
                                 <p>
-                                    <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm:ss'}}
+                                    <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyy HH:mm'}}
 
                                 </p>
                                 <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
@@ -81,7 +81,7 @@
 
                 <ion-tab title="Accepted" icon="ion-checkmark">
                     <ion-header-bar class="bar-positive"></ion-header-bar>
-                    <ion-content class="has-header">
+                    <ion-content class="has-header has-footer">
                         <ion-list>
                             <div class="item item-divider padding-top">
                                 huggs you can unaccept
@@ -127,7 +127,7 @@
 
                 <ion-tab title="Done" icon="ion-thumbsup">
                     <ion-header-bar class="bar-positive"></ion-header-bar>
-                    <ion-content class="has-header">
+                    <ion-content class="has-header has-footer">
                         <ion-list>
                             <div class="item item-divider padding-top">
                                 own done huggs
@@ -158,7 +158,7 @@
 
                 <ion-tab title="History" icon="sp-history override-sptabs">
                     <ion-header-bar class="bar-positive"></ion-header-bar>
-                    <ion-content class="has-header">
+                    <ion-content class="has-header has-footer">
                         <ion-list>
                             <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.rating.totalRating != '.'" item="item" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
@@ -187,7 +187,7 @@
 
         <ion-tab title="Blocked users" icon="sp-blocked">
             <ion-header-bar class="bar-positive"></ion-header-bar>
-            <ion-content class="has-header">
+            <ion-content class="has-header has-footer">
 
                 <ion-list>
                     <ion-item ng-repeat="user in blockedUsers" item="item" class="item-thumbnail-left">

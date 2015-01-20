@@ -20,7 +20,7 @@
             </ion-content>
         </ion-tab>
         <ion-tab title="Support" icon="ion-help-buoy">
-            <ion-content class="has-header">
+            <ion-content class="has-header has-footer">
                 <!-- Please do not remove this -->
                 <div class="item item-text-wrap">
                     <div class="padding-top padding-bottom">Support</div>
@@ -36,7 +36,7 @@
                     </div>
                     <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '1'" href="#/app/supportitem/{{item.supportID}}">
                         <h2>{{item.subject}}</h2>
-                        <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}</p>
+                        <p><i class="icon ion-calendar"> </i>{{item.time | date : date:'dd-MM-yyy HH:mm'}}</p>
                     </ion-item>
                 </div>
                 <div class="card">
@@ -45,7 +45,7 @@
                     </div>
                     <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/supportitem/{{item.supportID}}">
                         <h2>{{item.subject}}</h2>
-                        <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}</p>
+                        <p><i class="icon ion-calendar"> </i>{{item.time | date : date:'dd-MM-yyy HH:mm'}}</p>
                     </ion-item>
                 </div>
             </ion-content>
