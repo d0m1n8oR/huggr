@@ -102,7 +102,7 @@
                             <ion-item ng-repeat="item in ownHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>This hug is ready</h2>
-                                <p>You can change your mind, or mark this hug as done
+                                <p>You can change your mind, or mark this hugg as done
                                 </p>
                                 <p>{{item.answerFirstName}} is {{item.answerGender}} {{item.reqTime}} {{item.answerTime}}</p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
@@ -134,7 +134,7 @@
                             </div>
                             <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
-                                <h2>Please rate your hug with {{item.answerFirstName}}</h2>
+                                <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
                                 <p>
                                     <rating ng-model="item.answerRating" max="5" ng-click="rateAnswerHugg(item.huggID, item.answerRating, item.answerProfileID)"></rating>
                                 </p>
@@ -146,7 +146,7 @@
                             </div>
                             <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
-                                <h2>Please rate your hug with {{item.reqFirstName}}</h2>
+                                <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                                 <p>
                                     <rating ng-model="item.reqRating" max="5" ng-click="rateReqHugg(item.huggID, item.reqRating, item.reqProfileID)"></rating>
                                 </p>

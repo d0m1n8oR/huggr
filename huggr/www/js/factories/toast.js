@@ -27,7 +27,7 @@
             var myToast = $ionicLoading.show({
                 template: msg,
                 noBackdrop: true,
-                duration: 2500
+                duration: 1000
             });
         }
     }

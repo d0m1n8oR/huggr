@@ -1,4 +1,4 @@
-.controller('LogoutCtrl', function($scope, Auth) {
+.controller('LogoutCtrl', function($scope, Auth, $state) {
     $scope.auth = Auth;
     //function for logout
     $scope.logout = function() {
@@ -7,6 +7,6 @@
         $scope.auth.$unauth();
 
         //reloads window to show login fields
-        window.location.reload();
+        $state.go('app.home');
     } // end function
 })
