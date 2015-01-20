@@ -136,7 +136,7 @@
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>Please rate your hug with {{item.answerFirstName}}</h2>
                                 <p>
-                                    <rating ng-model="item.answerRating" max="5"></rating>
+                                    <rating ng-model="item.answerRating" max="5" ng-click="rateAnswerHugg(item.huggID, item.answerRating, item.answerProfileID)"></rating>
                                 </p>
                                 <p>{{item.answerFirstName}} has rated this hug with {{item.reqRating}} <i class="icon ion-star"></i> {{item.totalRating}}</p>
 

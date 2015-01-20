@@ -13,7 +13,6 @@
         //show data in profile
         var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
         userObject.$bindTo($scope, "currentUser").then(function() {
-            $scope.currentUser.age = helper.calcAge(new Date($scope.currentUser.birthdate));
             localstorage.setObject("userData", $scope.currentUser)
         }); // end bindTo
 
@@ -212,21 +211,21 @@
         }; //end function
 
         //the user that requested the hugg can rate the user that answered
-        $scope.rateAnswerHugg = function rateAnswerHugg(huggID, rating, answerProfileID) {
-
+        $scope.rateAnswerHugg = function(huggID, rating, answerProfileID) {
+            console.log("aufgerufen");
             //get rating of other user
             //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
             //in this case the total rating is calulated and added to the db
             $scope.huggRef.$loaded().then(function(huggData) {
-                var reqRating = huggData.$getRecord(huggID).rating.reqRating;
+                var reqRating = huggData.$getRecord(huggID).reqRating;
                 if (reqRating != ".") {
                     var total = (reqRating + rating) / 2;
-                    $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
+                    $firebase(ref.child("hugg").child(huggID)).$update({
                         totalRating: total
                     }); //end updae
                 }
                 //add the rating of the user to the db
-                $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
+                $firebase(ref.child("hugg").child(huggID)).$update({
                     answerRating: rating
                 }).then(function(x) {
 
