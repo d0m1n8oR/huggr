@@ -1,12 +1,14 @@
-.factory('huggActions', ["$firebase", "toast", "$state",
+.factory('huggActions', ["$firebase", "toast", "$state", "$cordovaGeolocation", "$http",
 
-    function($firebase, toast, $state) {
+    function($firebase, toast, $state, $cordovaGeolocation, $http) {
+        var ref = new Firebase("https://huggr.firebaseio.com/"),
+            huggRef = $firebase(ref.child("hugg")).$asArray();
+
         return {
-            answerHugg: function(huggID,currentUser, profileID) {
-                var ref = new Firebase("https://huggr.firebaseio.com/");
+
+            answerHugg: function(huggID, currentUser, profileID) {
                 var date = new Date();
                 var today = date.getTime();
-
                 //adds info of user that accepts hugg to database
                 $firebase(ref.child("hugg").child(huggID)).$update({
                     answered: 1,
@@ -30,12 +32,74 @@
                         change: "add"
                     }).then(function(x) {
                         toast.pop("Successfully answered hugg");
+                        $state.go("app.home");
                         return 1;
                     });
 
                 }); //end then
 
-            } //end function
+            }, //end function
+            //function to request a hugg in case the presented huggs are not suitable
+            requestHugg: function(currentUser, gender) {
+                //create random huggID
+                var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+
+                huggRef.$loaded().then(function(data) {
+
+                    //check whether huggID already exists in db
+                    while (data.$getRecord(huggID) != null) {
+                        huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+                    } //end while
+
+                    //time calulation
+                    var date = new Date();
+                    var today = date.getTime();
+
+                    //get GPS coordinates
+                    $cordovaGeolocation
+                        .getCurrentPosition()
+                        .then(function(position) {
+
+                            var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
+                            reverseGeocode.then(function(result) {
+                                var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
+                                console.log(reqLocation);
+
+                                //save data to firebase in new child with calculated huggID
+                                $firebase(ref.child("hugg").child(huggID)).$set({
+                                    huggID: huggID,
+                                    reqLat: position.coords.latitude,
+                                    reqLong: position.coords.longitude,
+                                    FilterGender: gender,
+                                    done: 0,
+                                    answered: 0,
+                                    accepted: 0,
+                                    reqProfileID: currentUser.profileID,
+                                    reqGender: currentUser.gender,
+                                    reqTime: today,
+                                    reqFirstName: currentUser.firstname,
+                                    reqPicture: currentUser.picture,
+                                    reqRating: currentUser.rating,
+                                    blocked: currentUser.blocked,
+                                    reqLocation: reqLocation,
+                                    reqRate: ".",
+                                    answerRate: ".",
+                                    totalRating: "."
+
+                                }).then(function(x) {
+                                    
+                                        toast.pop("Successfully requested hugg!")
+                                        $state.go("app.home");
+                                        console.log("Successfully requested hugg " + huggID);
+                                        return 1;
+                                }); //end then (rating)
+                            }); //end reverseGeocode
+                        }); // end then (GPS)
+
+                }); // end then (Loaded)
+
+            } // end function   
+
         };
     }
 ])

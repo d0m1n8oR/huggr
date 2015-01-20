@@ -4,7 +4,6 @@
     $scope.auth = Auth;
     $scope.user = $scope.auth.$getAuth();
     var ref = new Firebase("https://huggr.firebaseio.com/");
-    var sync = $firebase(ref).$asObject();
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
     $scope.currentUser = localstorage.getObject('userData');
     //displays all huggs that suit the request
@@ -31,73 +30,11 @@
     {
         huggActions.answerHugg(huggID, $scope.currentUser, profileID);
     }
-
-    //function to request a hugg in case the presented huggs are not suitable
-    $scope.requestHugg = function requestHugg(reqLat, reqLong) {
-
-        //create random huggID
-        var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-
-        $scope.huggRef.$loaded().then(function(data) {
-
-            //check whether huggID already exists in db
-            while (data.$getRecord(huggID) != null) {
-                huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-            } //end while
-
-            //time calulation
-            var date = new Date();
-            var today = date.getTime();
-
-            //get GPS coordinates
-            $cordovaGeolocation
-                .getCurrentPosition()
-                .then(function(position) {
-
-                    console.log(position.coords.latitude + " " + position.coords.longitude);
-                    var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
-                    reverseGeocode.then(function(result) {
-                        var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
-                        console.log(reqLocation);
-
-                        //save data to firebase in new child with calculated huggID
-                        $firebase(ref.child("hugg").child(huggID)).$set({
-                            huggID: huggID,
-                            reqLat: position.coords.latitude,
-                            reqLong: position.coords.longitude,
-                            FilterGender: gender,
-                            done: 0,
-                            answered: 0,
-                            accepted: 0,
-                            reqProfileID: $scope.currentUser.profileID,
-                            reqGender: $scope.currentUser.gender,
-                            reqTime: today,
-                            reqFirstName: $scope.currentUser.firstname,
-                            reqPicture: $scope.currentUser.picture,
-                            reqRating: $scope.currentUser.rating,
-                            blocked: $scope.currentUser.blocked,
-                            reqLocation: reqLocation
-
-                        }).then(function(x) {
-
-                            $firebase(ref.child("hugg").child(huggID).child("rating")).$set({
-                                reqRate: ".",
-                                answerRate: ".",
-                                totalRating: "."
-                            }).then(function(y) {
-                                toast.pop("Successfully requested hugg!")
-                                $state.go("app.home");
-                                console.log("Successfully requested hugg " + huggID);
-                                return 1;
-                            }); //end then
-
-                        }); //end then (rating)
-                    }); //end reverseGeocode
-                }); // end then (GPS)
-
-        }); // end then (Loaded)
-
-    }; // end function
+    
+    $scope.requestHugg = function(huggID, profileID)
+    {
+        huggActions.requestHugg($scope.currentUser, gender);
+    }
 
     //initialize JSON
     var huggArray = {
@@ -186,7 +123,6 @@
 
     getHuggs().then(function(array) {
         $scope.resultList = array;
-        console.log(array);
     });
 
 }) //end resultCTRL

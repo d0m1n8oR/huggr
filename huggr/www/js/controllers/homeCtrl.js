@@ -78,25 +78,5 @@
     $scope.currentUser = localstorage.getObject('userData');
     notifications.sync($scope.currentUser.profileID);
 
-    //watches for changes in data - maybe use bindTo?
-    var obj = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("notifications")).$asObject();
-    var unwatch = obj.$watch(function() {
-        console.log("data changed!");
-    });
-
-
-    /*
-        if ($scope.currentUser.notifications != null) {
-            console.log("number of notifications: " + Object.keys($scope.currentUser.notifications).length);
-            var p = $scope.currentUser.notifications
-            for (var key in p) {
-                if (p.hasOwnProperty(key)) {
-                    console.log("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
-                    toast.pop("Benachrichtigung: " + p[key].firstName + " HuggID " + p[key].huggID + " Type: " + p[key].type + ", " + p[key].change);
-                }
-            }
-            //console.log($scope.currentUser.notifications);
-        }*/
-
 
 })
