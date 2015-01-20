@@ -55,7 +55,7 @@
                 .then(function(position) {
 
                     console.log(position.coords.latitude + " " + position.coords.longitude);
-                    var reverseGeocode = $http.get("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
+                    var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
                     reverseGeocode.then(function(result) {
                         var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
                         console.log(reqLocation);
