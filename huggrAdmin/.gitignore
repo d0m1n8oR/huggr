@@ -4,3 +4,7 @@
 node_modules/
 platforms/
 plugins/
+www/js/controllers.js
+firebase.json
+.gitignore
+www/css/ionic.app.css

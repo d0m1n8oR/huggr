@@ -5,4 +5,5 @@ node_modules/
 platforms/
 plugins/
 www/js/controllers.js
+www/css/ionic.app.css
 
