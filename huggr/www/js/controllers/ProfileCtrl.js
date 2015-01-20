@@ -212,7 +212,6 @@
 
         //the user that requested the hugg can rate the user that answered
         $scope.rateAnswerHugg = function(huggID, rating, answerProfileID) {
-            console.log("aufgerufen");
             //get rating of other user
             //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
             //in this case the total rating is calulated and added to the db
@@ -253,23 +252,23 @@
         }; //end function
 
         //the user that answered the hugg can rate the user that requested the hugg
-        $scope.rateReqHugg = function rateReqHugg(huggID, rating, reqProfileID) {
+        $scope.rateReqHugg = function(huggID, rating, reqProfileID) {
 
             $scope.huggRef.$loaded().then(function(huggData) {
 
                 //get rating of other user
                 //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
                 //in this case the total rating is calulated and added to the db
-                var answerRating = huggData.$getRecord(huggID).rating.answerRating;
+                var answerRating = huggData.$getRecord(huggID).answerRating;
                 if (reqRating != ".") {
                     var total = (answerRating + rating) / 2;
-                    $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
+                    $firebase(ref.child("hugg").child(huggID)).$update({
                         totalRating: total
                     }); //end updae
                 }
 
                 //add the rating of the user to the db
-                $firebase(ref.child("hugg").child(huggID).child("rating")).$update({
+                $firebase(ref.child("hugg").child(huggID)).$update({
                     reqRating: rating
                 }).then(function(x) {
 

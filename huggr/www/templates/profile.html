@@ -132,7 +132,7 @@
                             <div class="item item-divider padding-top">
                                 own done huggs
                             </div>
-                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.rating.totalRating == '.'" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>Please rate your hug with {{item.answerFirstName}}</h2>
                                 <p>
@@ -144,11 +144,11 @@
                             <div class="item item-divider">
                                 other done huggs
                             </div>
-                            <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.rating.totalRating == '.'" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>Please rate your hug with {{item.reqFirstName}}</h2>
                                 <p>
-                                    <rating ng-model="item.reqRating" max="5"></rating>
+                                    <rating ng-model="item.reqRating" max="5" ng-click="rateReqHugg(item.huggID, item.reqRating, item.reqProfileID)"></rating>
                                 </p>
                                 <p>{{item.reqFirstName}} has rated this hug with {{item.answerRating}} <i class="icon ion-star"></i> {{item.totalRating}}</p>
                             </ion-item>
