@@ -1,4 +1,4 @@
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions) {
 
         //initialize stuff
         $scope.currentUser = localstorage.getObject('userData');
@@ -40,51 +40,24 @@
                 }
             }
         }); // end bindTo
-
-        //remove users from block list
-        $scope.unblockUser = function unblockUser(unblockProfileID) {
-            $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
-                toast.pop("Successfully unblocked user");
-                return 1;
-            });
-
-        }; //end function
-
-        //remove huggs that nobody has answered yet from unanswered huggs list
-        $scope.removeHugg = function removeHugg(huggID) {
-            $firebase(ref.child("hugg")).$remove(huggID).then(function(data) {
-
-            }).then(function(data) {
-                toast.pop("Successfully removed hugg");
-                return 1;
-            }); //end then
-        }; //end function
-
-        //accept a hugg answer to a request by this user
-        $scope.acceptHugg = function acceptHugg(huggID, answerProfileID) {
-            $firebase(ref.child("hugg").child(huggID)).$update({
-                accepted: 1
-            }).then(function(data) {
-                var date = new Date();
-                var today = date.getTime();
-
-                //add notification for user that requested the hugg
-                $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
-                    huggID: huggID,
-                    firstName: $scope.currentUser.firstname,
-                    picture: $scope.currentUser.picture,
-                    time: today,
-                    profileID: $scope.currentUser.profileID,
-                    type: "accept",
-                    change: "add"
-                }).then(function(x) {
-                    toast.pop("successfully accepted hugg!");
+    
+    $scope.unblockUser = function(unblockProfileID)
+    {
+        $firebase(ref.child("users").child("data").child(currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
+                    toast.pop("Successfully unblocked user");
                     return 1;
-                })
+                });
+    };
 
-            }); //end then
-
-        }; //end function
+    $scope.removeHugg = function(huggID)
+    {
+        huggActions.removeHugg(huggID);
+    }
+    
+    $scope.acceptHugg = function(huggID, answerProfileID)
+    {
+        huggActions.acceptHugg($scope.currentUser, huggID, answerProfileID);
+    }
 
         //decline a hugg answer to a request that was made by this user
         $scope.declineHugg = function declineHugg(huggID, answerProfileID) {

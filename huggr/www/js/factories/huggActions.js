@@ -7,13 +7,11 @@
         return {
 
             answerHugg: function(huggID, currentUser, profileID) {
-                var date = new Date();
-                var today = date.getTime();
                 //adds info of user that accepts hugg to database
                 $firebase(ref.child("hugg").child(huggID)).$update({
                     answered: 1,
                     answerProfileID: currentUser.profileID,
-                    answerTime: today,
+                    answerTime: Firebase.ServerValue.TIMESTAMP,
                     answerPicture: currentUser.picture,
                     answerGender: currentUser.gender,
                     answerFirstName: currentUser.firstname,
@@ -26,7 +24,7 @@
                         huggID: huggID,
                         firstName: currentUser.firstname,
                         picture: currentUser.picture,
-                        time: today,
+                        time: Firebase.ServerValue.TIMESTAMP,
                         profileID: currentUser.profileID,
                         type: "answer",
                         change: "add"
@@ -51,10 +49,6 @@
                         huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
                     } //end while
 
-                    //time calulation
-                    var date = new Date();
-                    var today = date.getTime();
-
                     //get GPS coordinates
                     $cordovaGeolocation
                         .getCurrentPosition()
@@ -76,7 +70,7 @@
                                     accepted: 0,
                                     reqProfileID: currentUser.profileID,
                                     reqGender: currentUser.gender,
-                                    reqTime: today,
+                                    reqTime: Firebase.ServerValue.TIMESTAMP,
                                     reqFirstName: currentUser.firstname,
                                     reqPicture: currentUser.picture,
                                     reqRating: currentUser.rating,
@@ -87,18 +81,53 @@
                                     totalRating: "."
 
                                 }).then(function(x) {
-                                    
-                                        toast.pop("Successfully requested hugg!")
-                                        $state.go("app.home");
-                                        console.log("Successfully requested hugg " + huggID);
-                                        return 1;
+
+                                    toast.pop("Successfully requested hugg!")
+                                    $state.go("app.home");
+                                    console.log("Successfully requested hugg " + huggID);
+                                    return 1;
                                 }); //end then (rating)
                             }); //end reverseGeocode
                         }); // end then (GPS)
 
                 }); // end then (Loaded)
 
-            } // end function   
+            }, // end function   
+
+            //remove huggs that nobody has answered yet from unanswered huggs list
+            removeHugg: function(huggID) {
+                $firebase(ref.child("hugg")).$remove(huggID).then(function(data) {
+                    toast.pop("Successfully removed hugg");
+                    return 1;
+                }); //end then
+            }, //end function
+            
+                    //accept a hugg answer to a request by this user
+        acceptHugg: function(currentUser, huggID, answerProfileID) {
+            $firebase(ref.child("hugg").child(huggID)).$update({
+                accepted: 1,
+                acceptTime: Firebase.ServerValue.TIMESTAMP
+            }).then(function(data) {
+                var date = new Date();
+                var today = date.getTime();
+
+                //add notification for user that requested the hugg
+                $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
+                    huggID: huggID,
+                    firstName: currentUser.firstname,
+                    picture: currentUser.picture,
+                    time: Firebase.ServerValue.TIMESTAMP,
+                    profileID: currentUser.profileID,
+                    type: "accept",
+                    change: "add"
+                }).then(function(x) {
+                    toast.pop("successfully accepted hugg!");
+                    return 1;
+                })
+
+            }) //end then
+
+        }, //end function
 
         };
     }

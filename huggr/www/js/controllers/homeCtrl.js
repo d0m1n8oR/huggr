@@ -49,7 +49,7 @@
     $scope.huggRequest = {
         male: "none",
         female: "none",
-        range: "10"
+        range: "50"
     }
 
     //function that is executed on "Search"-Click in Popover
@@ -61,7 +61,7 @@
         //reset huggRequest Object values
         $scope.huggRequest.male = "none";
         $scope.huggRequest.female = "none";
-        $scope.huggRequest.range = "none";
+        $scope.huggRequest.range = "50";
 
         //remove popover when showing results
         $scope.popover.hide();
