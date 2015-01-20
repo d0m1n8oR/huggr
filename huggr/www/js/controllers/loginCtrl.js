@@ -259,7 +259,7 @@
     }; //function register(authProvider)
 
 
-    $ionicModal.fromTemplateUrl('templates/tos.html', {
+    $ionicModal.fromTemplateUrl('templates/modals/tos.html', {
         scope: $scope
     }).then(function(modalTos) {
         $scope.modalTos = modalTos;
@@ -275,7 +275,7 @@
         $scope.modalTos.show();
     };
 
-    $ionicModal.fromTemplateUrl('templates/privacy.html', {
+    $ionicModal.fromTemplateUrl('templates/modals/privacy.html', {
         scope: $scope
     }).then(function(modalPriv) {
         $scope.modalPriv = modalPriv;
