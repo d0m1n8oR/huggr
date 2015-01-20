@@ -15,11 +15,6 @@
                 <input type="email" ng-model="userData.email" placeholder="{{userData.email}}">
             </label>
             <label class="item item-input item-stacked-label">
-                <i class="icon ion-egg placeholder-icon"></i>
-                <span class="input-label">Your Birthday</span>
-                <input type="date" ng-model="userData.birthdate" placeholder="{{userData.birthdate}}">
-            </label>
-            <label class="item item-input item-stacked-label">
                 <i class="icon ion-happy placeholder-icon"></i>
                 <span class="input-label">Tell us something about yourself</span>
                 <input type="text" ng-model="userData.hobby" placeholder="{{userData.hobby}}">
@@ -34,7 +29,7 @@
                 <i class="icon ion-camera"></i> Take a new picture
             </a>
         </div>
-        <button ng-show="fbProvider" ng-click="connect('toFacebook')" class="button button-block button-facebook icon-left ion-social-facebook">Conncect account with Facebook</button>
-        <button ng-show="gProvider" ng-click="connect('toGoogle')" class="button button-block button-gplus icon-left ion-social-googleplus">Conncect account with Google</button>
+        <button ng-hide="userData.facebookID" ng-click="connect('toFacebook')" class="button button-block button-facebook icon-left ion-social-facebook">Conncect account with Facebook</button>
+        <button ng-hide="userData.googleID" ng-click="connect('toGoogle')" class="button button-block button-gplus icon-left ion-social-googleplus">Conncect account with Google</button>
     </ion-content>
 </ion-view>

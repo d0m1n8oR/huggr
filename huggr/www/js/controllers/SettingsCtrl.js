@@ -1,4 +1,4 @@
-.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera, notifications) {
+.controller('SettingsCtrl', function($scope, localstorage, $firebase, $cordovaCamera, notifications, toast) {
     //Initial holen wir die Nutzerdaten aus dem Localstorage, damit wir mit der ProfileID arbeiten können.
     $scope.userData = localstorage.getObject('userData');
     notifications.sync($scope.userData.profileID);
@@ -7,36 +7,7 @@
     var ref = new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.userData.profileID);
     var userObject = $firebase(ref).$asObject();
     //Katsching! Three-Way-Databinding 4tw! <3 AngularFire
-    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData), function(x) {
-        $scope.userData.birthdate = new Date($scope.userData.birthdate);
-    });
-    //Todo: den tatsächlichen Connect zu dem jeweils anderen dienst
-
-    $scope.userData.birthdate = new Date($scope.userData.birthdate);
-
-    // $scope.date = $scope.userDate.birthdate.toDateString();
-    var returnval = 0;
-    if ($scope.userData.googleID != null) {
-        returnval = returnval + 10;
-    }
-    if ($scope.userData.facebookID != null) {
-        returnval = returnval + 1;
-    }
-    $scope.gProvider = false;
-    $scope.fbProvider = false;
-    if (returnval == 0) {
-        console.warn("Keine Services");
-    }
-    if (returnval == 1) {
-        $scope.gProvider = true;
-    }
-    if (returnval == 10) {
-        $scope.fbProvider = true;
-    }
-    if (returnval == 11) {
-        $scope.fbProvider = false;
-        $scope.gProvider = false;
-    }
+    userObject.$bindTo($scope, "userData").then(localstorage.setObject("userData", $scope.userData));
 
     var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
     $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
@@ -44,7 +15,7 @@
 
     var mainref = new Firebase("https://huggr.firebaseio.com/");
 
-    $scope.connect = function connect(provider) {
+    $scope.connect = function(provider) {
         if (provider == "toGoogle") {
             connectRef.authWithOAuthPopup("google", function(err, user) {
                 if (err) {
@@ -64,6 +35,7 @@
                         $firebase(ref).$update({
                             googleID: authData.google.id
                         });
+                        toast.pop("Successfully connected");
                     });
 
                 }
@@ -88,6 +60,7 @@
                         $firebase(ref).$update({
                             facebookID: authData.facebook.id
                         });
+                        toast.pop("Successfully connected");
                     });
                 }
             });
