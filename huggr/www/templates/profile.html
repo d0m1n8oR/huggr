@@ -24,7 +24,7 @@
                         <img class="full-image rounded" ng-src="{{currentUser.picture}}">
                         <p>
                             <span ng-show="currentUser.hobby">{{currentUser.hobby}}</span>
-                             <span>{{currentUser.lastSeenTime | date:'dd-MM-yyyy HH:mm'}}</span>
+                             <span>Last seen: {{currentUser.lastSeenTime | date:'dd-MM HH:mm'}}</span>
                             <span ng-hide="currentUser.hobby">Please tell us something about yourself</span>
                         </p>
                         <p>
@@ -54,7 +54,7 @@
                                 <p>{{item.answerFirstName}} is {{item.answerGender}}
                                 </p>
                                 <p>
-                                    <i class="icon ion-calendar"> on </i>{{ item.answerTime | date : date:'dd-MM-yyyy HH:mm'}}
+                                    <i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}
 
                                 </p>
 
@@ -68,7 +68,7 @@
                                 <img ng-src="{{currentUser.picture}}">
                                 <h2>You have requested this hug</h2>
                                 <p>
-                                    <i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyyy HH:mm'}}
+                                    <i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}
 
                                 </p>
                                 <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
@@ -90,10 +90,9 @@
                             <ion-item ng-repeat="item in otherHuggData" ng-if="item.answered == '1' && item.accepted == '0'" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>You have replied to {{item.reqFirstName}}</h2>
-                                <p><i class="icon ion-calendar"> on </i>{{ item.reqTime | date : date:'dd-MM-yyyy HH:mm:ss'}}</p>
+                                    <p><i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}</p>
                                 <p>
-                                    {{item.reqFirstName}} is {{item.reqGender}} and has
-                                    <br>a rating of {{item.reqRating}} <i class="icon ion-star"></i>
+                                    {{item.reqFirstName}} is {{item.reqGender}} and has a rating of {{item.reqRating}} <i class="icon ion-star"></i>
                                 </p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID, item.reqProfileID)"></ion-option-button>
                             </ion-item>
@@ -103,7 +102,7 @@
                             <ion-item ng-repeat="item in ownHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>This hug is ready</h2>
-                                <p>You can change your mind, or mark this hugg as done
+                                <p>You can change your mind, or <br />mark this hugg as done
                                 </p>
                                 <p>{{item.answerFirstName}} is {{item.answerGender}} {{item.reqTime}} {{item.answerTime}}</p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>

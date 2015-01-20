@@ -8,7 +8,7 @@
             <div class="item item-avatar">
                 <img ng-src="{{data.picture}}">
                 <h2>{{data.displayName}}</h2>
-                <p><span ng-show="currentUser.age">{{data.age}} years old</span>
+                <p><span ng-show="currentUser.age">{{data.age}} years old </span><span ng-show="currentUser.lastSeenTime">and was last seen at {{currentUser.lastSeenTime | date : 'HH:mm'}}</span>
                 </p>
             </div>
 
