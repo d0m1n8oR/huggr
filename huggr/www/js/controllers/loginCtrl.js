@@ -37,7 +37,8 @@
                         $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                             displayName: authData.google.displayName,
                             email: authData.google.email,
-                            picture: authData.google.cachedUserProfile.picture
+                            picture: authData.google.cachedUserProfile.picture,
+                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
                         });
                         console.log("Logged in as:" + authData.uid);
                         var profileData = $scope.dataRef.$getRecord($scope.profileID);
@@ -83,7 +84,8 @@
                             $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                                 displayName: authData.facebook.displayName,
                                 email: authData.facebook.email,
-                                picture: FbProfilePicture
+                                picture: FbProfilePicture,
+                                lastSeenTime: Firebase.ServerValue.TIMESTAMP
                             });
                             console.log("Logged in as:", authData.uid);
 
@@ -176,7 +178,9 @@
                     lastname: authData.google.cachedUserProfile.family_name,
                     rating: 0,
                     numberHuggs: 0,
-                    age: helper.calcAge($scope.loginModel.birthdate)
+                    age: helper.calcAge($scope.loginModel.birthdate),
+                    registerTime: Firebase.ServerValue.TIMESTAMP,
+                    lastSeenTime: Firebase.ServerValue.TIMESTAMP
                 }).then(function(data) {
 
                     //initialize user object with blocked array
@@ -224,7 +228,9 @@
                         lastname: authData.facebook.cachedUserProfile.last_name,
                         rating: 0,
                         numberHuggs: 0,
-                        age: helper.calcAge($scope.loginModel.birthdate)
+                        age: helper.calcAge($scope.loginModel.birthdate),
+                        registerTime: Firebase.ServerValue.TIMESTAMP,
+                        lastSeenTime: Firebase.ServerValue.TIMESTAMP
                     }).then(function(data) {
 
                         $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
