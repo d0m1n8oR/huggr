@@ -40,8 +40,16 @@
 
     $scope.unblockUser = function(unblockProfileID) {
         $firebase(ref.child("users").child("data").child(currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
-            toast.pop("Successfully unblocked user");
-            return 1;
+            var blockHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asArray();
+            blockHuggRef.$loaded().then(function(data) {
+                var i = 0;
+                while (data.$keyAt(i) != null) {
+                    $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(blockProfileID)).$remove();
+                    i++;
+                }
+                toast.pop("Unblocked user");
+                return 1;
+            });
         });
     };
 
