@@ -13,7 +13,7 @@
                 <img ng-src="{{item.picture}}">
                 <h2>{{item.firstName}}</h2>
                 <p>
-                    <button class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}}km</button>
+                    <a class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}}km</a>
                 </p>
                 <ion-option-button class="button-royal icon ion-map override-icon-position" ng-click="showPosition(item.lat, item.long)"></ion-option-button>
                 <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="answerHugg({{item.huggID}}, {{item.profileID}})"></ion-option-button>
