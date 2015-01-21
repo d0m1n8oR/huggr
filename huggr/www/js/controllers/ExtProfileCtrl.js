@@ -1,6 +1,6 @@
 //this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
 //These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions) {
+.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions, $ionicHistory) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
@@ -49,6 +49,7 @@
                     i++;
                 }
                 toast.pop("Blocked user");
+                $ionicHistory.goBack();
                 return 1;
             });
         }); //end set
