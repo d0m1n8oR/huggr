@@ -8,7 +8,7 @@
                 <div class="item item-divider padding-top">
                     Open support requests
                 </div>
-                <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/admin/supportitem/{{item.supportID}}">
+                <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/supportitem/{{item.supportID}}">
                     <h2>Subject {{item.subject}}</h2>
                     <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}, #{{item.supportID}}</p>
                     <p><i class="ion-person"> </i>{{item.profileID}}</p>
@@ -16,8 +16,12 @@
             </div>
             <div class="col">
                 <div class="item item-divider padding-top">
-                    Quick statistics             <i ng-click="getStats()" class="ion-loop">         </i>
+                    <p>Quick statistics             <button class="button button-clear" ng-click="getStats()"><i class="ion-loop"></i> Refresh</button></p> 
                 </div>
+                <ion-item>
+                    <div ng-if="statistics.connected == true"><h2><i class="ion-checkmark"> </i>Connected to Firebase</h2></div>
+                    <div ng-if="statistics.connected == false"><h2><i class="ion-close"> </i> No connection to Firebase</h2></div>
+                </ion-item>
                 <ion-item>
                     <h2>Number of huggs {{statistics.huggNumber}}</h2>
                </ion-item>

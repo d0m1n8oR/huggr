@@ -1,4 +1,4 @@
-<ion-view title="About huggr">
+<ion-view title="Support Overview">
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
@@ -12,7 +12,7 @@
                     <div class="item item-divider padding-top">
                         Currently open requests:
                     </div>
-                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/admin/supportitem/{{item.supportID}}">
+                    <ion-item ng-repeat="item in supportData | orderBy:'item.time'" item="item" ng-if="item.done == '0'" href="#/app/supportitem/{{item.supportID}}">
                         <h2>Subject {{item.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}, #{{item.supportID}}</p>
                         <p><i class="ion-person"> </i>{{item.profileID}}</p>
@@ -28,7 +28,7 @@
                     <div class="item item-divider padding-top">
                         Closed support requests:
                     </div>
-                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '1'" href="#/app/admin/supportitem/{{item.supportID}}">
+                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '1'" href="#/app/supportitem/{{item.supportID}}">
                         <h2>Subject {{item.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}, #{{item.supportID}}</p>
                         <p><i class="ion-person"> </i>{{item.profileID}}</p>

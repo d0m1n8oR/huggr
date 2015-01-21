@@ -112,6 +112,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
+    
+    .state('app.statistics', {
+        url: "/statistics",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/statistics.html",
+                controller: 'statisticsCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
 });

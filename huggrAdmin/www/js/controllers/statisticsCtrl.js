@@ -1,17 +1,7 @@
-.controller('dashboardCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+.controller('statisticsCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
-
-    $scope.request = {
-        message: "",
-        subject: ""
-    };
-
-    var supportObject = $firebase(ref.child("admin").child("support").orderByChild('time').limitToFirst(4)).$asObject();
-    supportObject.$bindTo($scope, "supportData").then(function() {
-
-    }); // end bindTo
-
-    $scope.statistics = {
+    
+     $scope.statistics = {
         huggNumber: null,
         userNumber: null,
         chatNumber: null,
