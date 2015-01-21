@@ -1,5 +1,6 @@
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions, $state) {
-
+.controller('ProfileCtrl', function($scope, $firebase, UserInfo, localstorage, $stateParams, notifications, toast, $state, $cordovaCamera) {
+    
+/****************Tab 1****************/
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
@@ -18,7 +19,91 @@
 
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
+
+/****************Tab 2****************/
     
+    var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
+    $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
+    $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
+
+    var mainref = new Firebase("https://huggr.firebaseio.com/");
+
+
+    $scope.connect = function(provider) {
+        if (provider == "toGoogle") {
+            connectRef.authWithOAuthPopup("google", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
+                            displayName: authData.google.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.google.id,
+                            AccessToken: authData.google.accessToken,
+                            profileID: $scope.currentUser.profileID
+                        });
+                        $firebase(ref).$update({
+                            googleID: authData.google.id
+                        });
+                        toast.pop("Successfully connected");
+                    });
+
+                }
+            });
+        }
+        if (provider == "toFacebook") {
+            connectRef.authWithOAuthPopup("facebook", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
+                            displayName: authData.facebook.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.facebook.id,
+                            AccessToken: authData.facebook.accessToken,
+                            profileID: $scope.currentUser.profileID
+                        });
+                        $firebase(ref).$update({
+                            facebookID: authData.facebook.id
+                        });
+                        toast.pop("Successfully connected");
+                    });
+                }
+            });
+        }
+    }
+
+    document.addEventListener("deviceready", function() {
+
+        var options = {
+            quality: 90,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+        $scope.takeNewPicture = function() {
+            $cordovaCamera.getPicture(options).then(function(imageData) {
+                $scope.currentUser.picture = "data:image/jpeg;base64," + imageData;
+            }, function(err) {
+                // error
+            });
+        };
+    }, false);
+
+
+
+/****************Tab 3****************/
     $scope.noBlockedUsers = true;
 
     var blockedUserObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked")).$asObject();

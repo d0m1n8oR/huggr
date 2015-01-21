@@ -117,12 +117,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         }
     })
 
-    .state('app.settings', {
-        url: "/settings",
+    .state('app.huggs', {
+        url: "/huggs",
         views: {
             'menuContent': {
-                templateUrl: "templates/settings.html",
-                controller: 'SettingsCtrl',
+                templateUrl: "templates/huggs.html",
+                controller: 'HuggCtrl',
                 resolve: {
                     "currentAuth": ["Auth",
                         function(Auth) {
