@@ -132,7 +132,7 @@
                             <div class="item item-divider padding-top">
                                 own done huggs
                             </div>
-                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.totalRating == null" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
                                 <p>
