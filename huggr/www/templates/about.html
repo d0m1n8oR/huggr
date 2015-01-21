@@ -5,7 +5,7 @@
      <ion-nav-buttons side="right">
    <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-if="notificationData" class="badge badge-assertive icon-badge">{{notificationData | keylength}}</span></button>
    </ion-nav-buttons>
-    <ion-tabs class="tabs-striped tabs-color-assertive">
+    <ion-tabs class="tabs-striped tabs-color-assertive has-header">
 
         <ion-tab title="About" icon="ion-information">
             <ion-content class="has-header">
@@ -19,12 +19,10 @@
                 <div class="padding-top padding-bottom">Team</div>
             </ion-content>
         </ion-tab>
-        <ion-tab title="Support" icon="ion-help-buoy">
-            <ion-content class="has-header has-footer">
+        <ion-tab title="Support" icon="ion-help-buoy" class="has-header">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
+            <ion-content class="has-header">
                 <!-- Please do not remove this -->
-                <div class="item item-text-wrap">
-                    <div class="padding-top padding-bottom">Support</div>
-                </div>
                 <div class="item item-text-wrap">
                     <button ng-click="openPopover($event)" class="button button-balanced button-block">
                         Request assistance!
