@@ -132,25 +132,25 @@
                             <div class="item item-divider padding-top">
                                 own done huggs
                             </div>
-                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == null" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
                                 <p>
                                     <rating ng-model="item.answerRating" max="5" ng-click="rateAnswerHugg(item.huggID, item.answerRating, item.answerProfileID)"></rating>
                                 </p>
-                                <p>{{item.answerFirstName}} has rated this hug with {{item.reqRating}} <i class="icon ion-star"></i> {{item.totalRating}}</p>
+                                <p>{{item.answerFirstName}} has rated this hug with {{item.huggReqRating}} <i class="icon ion-star"></i> {{item.huggTotalRating}}</p>
 
                             </ion-item>
                             <div class="item item-divider">
                                 other done huggs
                             </div>
-                            <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.totalRating == '.'" class="item-thumbnail-left">
+                            <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating == null" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                                 <p>
                                     <rating ng-model="item.reqRating" max="5" ng-click="rateReqHugg(item.huggID, item.reqRating, item.reqProfileID)"></rating>
                                 </p>
-                                <p>{{item.reqFirstName}} has rated this hug with {{item.answerRating}} <i class="icon ion-star"></i> {{item.totalRating}}</p>
+                                <p>{{item.reqFirstName}} has rated this hug with {{item.huggAnswerRating}} <i class="icon ion-star"></i> {{item.huggTotalRating}}</p>
                             </ion-item>
                         </ion-list>
                     </ion-content>
