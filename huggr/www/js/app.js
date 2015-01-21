@@ -43,6 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         url: "/app",
         abstract: true,
         templateUrl: "templates/menu.html",
+        controller: "menuCtrl"
     })
 
     .state('app.splash', {

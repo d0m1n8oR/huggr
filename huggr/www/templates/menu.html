@@ -36,14 +36,16 @@
     <ion-side-menu side="right">
         <header class="bar bar-header bar-positive ">
             <h1 class="title">Notifications</h1>
+            <button class="button" ng-click="deleteAllNotifications()">Delete all</button>
         </header>
         <ion-content class="has-header">
             <ion-list>
-                <ion-item ng-repeat="notificationItem in notificationData" item="item" menu-close class="item-avatar">
+                <ion-item ng-repeat="notificationItem in notificationData" item="item" class="item-avatar">
                     <img ng-src="{{notificationItem.picture}}">
                     <h2>{{notificationItem.firstName}}</h2>
                     <p>has {{notificationItem.type}}ed
                     </p>
+                    <button class="button" ng-click="removeNotification(notificationItem.huggID)">remove</button>
                     <p>Todo!!!</p>
                 </ion-item>
             </ion-list>
