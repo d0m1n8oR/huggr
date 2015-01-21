@@ -4,250 +4,205 @@ in ionic's _variables.scss file.
 
 For example, you might change some of the default colors:
 */
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #0facce !default;
-$calm:                            #316eef !default;
-$balanced:                        #B7CA34 !default;
-$energized:                       #f0b331 !default;
-$assertive:                       #c62f0e !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
 
-
-$button-facebook-bg:                  #3b5998 !default;
-$button-facebook-text:                #fff !default;
-$button-facebook-border:              #3b5998 !default;
-$button-facebook-active-bg:           #3b5998 !default;
-$button-facebook-active-border:       #000 !default;
-
-$button-gplus-bg:                  #dd4b39 !default;
-$button-gplus-text:                #fff !default;
-$button-gplus-border:              #dd4b39 !default;
-$button-gplus-active-bg:           #dd4b39 !default;
-$button-gplus-active-border:       #000 !default;
-
+$light: #fff !default;
+$stable: #f8f8f8 !default;
+$positive: #0facce !default;
+$calm: #316eef !default;
+$balanced: #B7CA34 !default;
+$energized: #f0b331 !default;
+$assertive: #c62f0e !default;
+$royal: #886aea !default;
+$dark: #444 !default;
+$button-facebook-bg: #3b5998 !default;
+$button-facebook-text: #fff !default;
+$button-facebook-border: #3b5998 !default;
+$button-facebook-active-bg: #3b5998 !default;
+$button-facebook-active-border: #000 !default;
+$button-gplus-bg: #dd4b39 !default;
+$button-gplus-text: #fff !default;
+$button-gplus-border: #dd4b39 !default;
+$button-gplus-active-bg: #dd4b39 !default;
+$button-gplus-active-border: #000 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
 @font-face {
     font-family: 'Gochi Hand';
     src: url('fonts/gochihand-regular.eot');
-    src: url('fonts/gochihand-regular.eot?#iefix') format('embedded-opentype'),
-         url('fonts/gochihand-regular.woff2') format('woff2'),
-         url('fonts/gochihand-regular.woff') format('woff'),
-         url('fonts/gochihand-regular.ttf') format('truetype'),
-         url('fonts/gochihand-regular.svg#gochi_handregular') format('svg');
+    src: url('fonts/gochihand-regular.eot?#iefix') format('embedded-opentype'), url('fonts/gochihand-regular.woff2') format('woff2'), url('fonts/gochihand-regular.woff') format('woff'), url('fonts/gochihand-regular.ttf') format('truetype'), url('fonts/gochihand-regular.svg#gochi_handregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
-
 @font-face {
-  font-family: 'icomoon';
-  src:url('fonts/icomoon.eot?ih97rn');
-  src:url('fonts/icomoon.eot?#iefixih97rn') format('embedded-opentype'),
-    url('fonts/icomoon.woff?ih97rn') format('woff'),
-    url('fonts/icomoon.ttf?ih97rn') format('truetype'),
-    url('fonts/icomoon.svg?ih97rn#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'icomoon';
+    src: url('fonts/icomoon.eot?ih97rn');
+    src: url('fonts/icomoon.eot?#iefixih97rn') format('embedded-opentype'), url('fonts/icomoon.woff?ih97rn') format('woff'), url('fonts/icomoon.ttf?ih97rn') format('truetype'), url('fonts/icomoon.svg?ih97rn#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 [class^="sp-"], [class*=" sp-"] {
-  font-family: 'icomoon';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-
-
 .sp-huggr:before {
-  content: "\e600";
+    content: "\e600";
 }
-
 .sp-history:before {
-  content: "\e94d";
+    content: "\e94d";
 }
-
 .sp-user:before {
-  content: "\e971";
+    content: "\e971";
 }
-
 .sp-user-plus:before {
-  content: "\e973";
+    content: "\e973";
 }
-
 .sp-user-minus:before {
-  content: "\e974";
+    content: "\e974";
 }
-
 .sp-user-check:before {
-  content: "\e975";
+    content: "\e975";
 }
-
 .sp-heart:before {
-  content: "\e9da";
+    content: "\e9da";
 }
-
 .sp-heart-broken:before {
-  content: "\e9db";
+    content: "\e9db";
 }
-
 .sp-man:before {
-  content: "\e9dc";
+    content: "\e9dc";
 }
-
 .sp-woman:before {
-  content: "\e9dd";
+    content: "\e9dd";
 }
-
 .sp-man-woman:before {
-  content: "\e9de";
+    content: "\e9de";
 }
-
 .sp-cancel-circle:before {
-  content: "\ea0d";
+    content: "\ea0d";
 }
-
 .sp-blocked:before {
-  content: "\ea0e";
+    content: "\ea0e";
 }
-
 .sp-huggr-colored {
-  color: #F05331 !important;
+    color: #F05331 !important;
 }
-.override-icon-position:before{
-  line-height: 2 !important;
-  font-size: 45px !important;
+.override-icon-position:before {
+    line-height: 2 !important;
+    font-size: 45px !important;
 }
 .override-sptabs {
-  line-height: inherit !important;
+    line-height: inherit !important;
 }
-
-
 .button-facebook {
     @include button-style($button-facebook-bg, $button-facebook-border, $button-facebook-active-bg, $button-facebook-active-border, $button-facebook-text);
     @include button-clear($button-facebook-bg);
     @include button-outline($button-facebook-bg);
-  }
-
- .button-gplus {
+}
+.button-gplus {
     @include button-style($button-gplus-bg, $button-gplus-border, $button-gplus-active-bg, $button-gplus-active-border, $button-gplus-text);
     @include button-clear($button-gplus-bg);
     @include button-outline($button-gplus-bg);
-  }
-
-  .splashLogo {
-  	left: 50%;
-  }
-
-  .tosGrey {
+}
+.splashLogo {
+    left: 50%;
+}
+.tosGrey {
     color: #ccc;
-  }
-  .splashLinks {
+}
+.splashLinks {
     text-decoration: underline;
     cursor: pointer;
-  }
-
-  .logoFont {
-  	font-family: 'Gochi Hand', cursive;
-  	font-size: 4em;
-  }
-
+}
+.logoFont {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 4em;
+}
 .bigMap {
-  width: 100%;
-  height: 100% !important;
+    width: 100%;
+    height: 100% !important;
 }
-
 .scroll, .mapWrap {
-  height: 100%;
+    height: 100%;
 }
-
 .img-circle {
-  border-radius: 50%; // set radius in percents
+    border-radius: 50%; // set radius in percents
 }
-
 .pointr {
-  cursor: pointer;
+    cursor: pointer;
 }
-
+.chatimg {
+    top: 16px;
+    left: 16px;
+    max-width: 29px;
+    max-height: 29px;
+    border-radius: 50%;
+}
 .item .icon .icon-badge {
-  position: absolute; 
-  top: 3px;
-  right: 0px;
-  font-size: 8px;
+    position: absolute;
+    top: 3px;
+    right: 0px;
+    font-size: 8px;
 }
-
 .huggr-thumbnail-right .item-content > a {
     position: absolute;
     top: 10px;
     right: 10px;
     max-width: 80px;
     max-height: 80px;
-    width: 100%; 
+    width: 100%;
 }
-
-.notification-padding{
-  padding-top: 25px;
+.notification-padding {
+    padding-top: 25px;
 }
-
 .ion-popover-view.fit {
-  height: auto !important;
+    height: auto !important;
 }
-
 .ion-popover-view.fit ion-content {
-  position: relative !important;
+    position: relative !important;
 }
-
 .messages {
-  margin:0;
-  padding:0;
-  list-style-type:none;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
-
 .messages li {
-  display:block;
-  clear:both;
-  max-width:50%;
-  margin:0 0 1rem 0;
-  padding:0;
+    display: block;
+    clear: both;
+    max-width: 50%;
+    margin: 0 0 1rem 0;
+    padding: 0;
 }
-
 .message-me {
-  float:right;
+    float: right;
 }
-
 .message-me img {
-  float:right;
+    float: right;
 }
-
 .messages p {
-  border-radius:.75rem;
-  background:#e6e5eb;
-  color:#383641;
-  padding:.6875rem;
-  margin:0;
-  font-size:.875rem;
+    border-radius: .75rem;
+    background: #e6e5eb;
+    color: #383641;
+    padding: .6875rem;
+    margin: 0;
+    font-size: .875rem;
 }
-
 .message-me p {
-  background:#158ffe;
-  color:#fff;
+    background: #158ffe;
+    color: #fff;
 }
-
 .messages img {
-  display:block;
-  max-width:65%;
-  border-radius:.75rem;
+    display: block;
+    max-width: 65%;
+    border-radius: .75rem;
 }

@@ -285,7 +285,4 @@
         $scope.modalPriv.show();
     };
 
-    $scope.goHome = function() {
-        $state.go('app.home');
-    }
 })
