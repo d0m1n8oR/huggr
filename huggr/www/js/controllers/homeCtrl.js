@@ -70,7 +70,9 @@
         $state.go('app.results', {
             male: male,
             female: female,
-            range: range
+            range: range,
+            clat: $scope.positions.lat,
+            clng: $scope.positions.lng
         }); // end go
     }; //end function
 

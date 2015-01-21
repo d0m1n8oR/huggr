@@ -84,7 +84,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
     })
 
     .state('app.results', {
-        url: "/results/:male/:female/:range",
+        url: "/results/:male/:female/:range/:clat/:clng",
         views: {
             'menuContent': {
                 templateUrl: "templates/results.html",
