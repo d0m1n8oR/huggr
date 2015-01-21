@@ -24,8 +24,10 @@
                         <img class="full-image rounded" ng-src="{{currentUser.picture}}">
                         <p>
                             <span ng-show="currentUser.hobby">{{currentUser.hobby}}</span>
-                            <span>Last seen: {{currentUser.lastSeenTime | date:'dd-MM HH:mm'}}</span>
                             <span ng-hide="currentUser.hobby">Please tell us something about yourself</span>
+
+                        </p>
+                        <p><span>Last seen {{currentUser.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
                         </p>
                         <p>
                             <span>Your current Rating:</span>
@@ -44,36 +46,29 @@
                     <ion-header-bar class="bar-positive"></ion-header-bar>
                     <ion-content class="has-header has-footer">
                         <ion-list>
-                            <div class="item item-divider padding-top">
-                                Answered huggs
-                            </div>
-
                             <ion-item ng-repeat="item in ownHuggData" item="item" ng-if="item.answered == '1' && item.accepted == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.answerPicture}}">
                                 <h2>{{item.answerFirstName}} has responded</h2>
-                                <p>{{item.answerFirstName}} is {{item.answerGender}}
+                                <div ng-if="item.answerGender == 'male'"><p><i class="ion-male"> </i> male, rating of {{item.answerRating}} <i class="icon ion-star"></i></p></div>
+                                <div ng-if="item.answerGender == 'female'"><p><i class="ion-female"> </i> female, rating of {{item.answerRating}} <i class="icon ion-star"></i></p></div>
                                 </p>
                                 <p>
-                                    <i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}
-
+                                    <i class="icon ion-clock"> </i>{{ item.answerTime | date:'dd.MM.yyyy - HH:mm'}}
                                 </p>
-
+                                <p><i class="icon ion-location"> </i>{{item.reqLocation}}</p>
                                 <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.answerProfileID)"></ion-option-button>
                                 <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="acceptHugg(item.huggID, item.answerProfileID)"></ion-option-button>
                             </ion-item>
-                            <div class="item item-divider">
-                                Unanswered huggs
-                            </div>
                             <ion-item ng-repeat="item in ownHuggData" item="item" ng-if="item.answered == 0" class="item-thumbnail-left">
                                 <img ng-src="{{currentUser.picture}}">
-                                <h2>You have requested this hug</h2>
+                                <h2>Nobody has answered yet</h2>
                                 <p>
-                                    <i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}
-
+                                    <div ng-if="item.reqGender == 'male'"><p><i class="ion-male"> </i> male, rating of {{item.reqRating}} <i class="icon ion-star"></i></p></div>
+                                <div ng-if="item.reqGender == 'female'"><p><i class="ion-female"> </i> female, rating of {{item.reqRating}} <i class="icon ion-star"></i></p></div>
                                 </p>
-                                <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
+                                <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
+                                <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                                 </p>
-
                                 <ion-option-button class="button-assertive icon ion-trash-b override-icon-position" ng-click="removeHugg(item.huggID)"></ion-option-button>
                             </ion-item>
                         </ion-list>
@@ -90,7 +85,7 @@
                             <ion-item ng-repeat="item in otherHuggData" ng-if="item.answered == '1' && item.accepted == '0'" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>You have replied to {{item.reqFirstName}}</h2>
-                                <p><i class="icon ion-clock"> at </i>{{ item.reqTime | date : 'HH:mm'}}</p>
+                                <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
                                 <p>
                                     {{item.reqFirstName}} is {{item.reqGender}} and has a rating of {{item.reqRating}} <i class="icon ion-star"></i>
                                 </p>
@@ -165,18 +160,20 @@
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>Your hugg with {{item.reqFirstName}}</h2>
                                 <p>
-                                    <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
+                                    <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                                     </p>
-                                    Rating for the hugg is {{item.huggTotalRating}} <i class="icon ion-star"></i> </p>
+                                    Rating for the hugg is {{item.huggTotalRating}} <i class="icon ion-star"></i> 
+                                </p>
                                 </p>
                             </ion-item>
                             <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating != null" item="item" class="item-thumbnail-left">
                                 <img ng-src="{{item.reqPicture}}">
                                 <h2>Your hugg with {{item.reqFirstName}}</h2>
                                 <p>
-                                    <p><i class="icon ion-location"> at </i>{{item.reqLocation}}
+                                    <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                                     </p>
-                                    Rating for the hugg is {{item.huggTotalRating}} <i class="icon ion-star"></i> </p>
+                                    Rating for the hugg is {{item.huggTotalRating}} <i class="icon ion-star"></i> 
+                                </p>
                                 </p>
                             </ion-item>
                         </ion-list>
