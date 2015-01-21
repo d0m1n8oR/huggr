@@ -1,4 +1,4 @@
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions, $state, $q) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions, $state) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
@@ -18,7 +18,7 @@
 
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
-
+    
     $scope.noBlockedUsers = true;
 
     var blockedUserObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked")).$asObject();
@@ -36,7 +36,9 @@
                     }
                 }
                 $scope.noBlockedUsers = true;
-            } else {
+            }
+            else
+            {
                 $scope.noBlockedUsers = false;
             }
         }
@@ -84,22 +86,7 @@
 
     $scope.rateAnswerHugg = function(huggID, rating, answerProfileID) {
 
-        //var deferred = $q.defer();
-        console.log(answerProfileID);
-        var total = huggActions.rateAnswerHugg(huggID, rating, answerProfileID);
-        console.log("total");
-        console.log(total);
-            $firebase(ref.child("hugg").child(huggID)).$update({
-                huggTotalRating: "1"
-            }); //end updae
-
-    }
-    
-    $scope.click = function(huggID)
-    {
-        $firebase(ref.child("hugg").child(huggID)).$update({
-                huggTotalRating: 1
-            }); //end updae
+        huggActions.rateAnswerHugg(huggID, rating, answerProfileID);
     }
 
     $scope.rateReqHugg = function(huggID, rating, reqProfileID) {

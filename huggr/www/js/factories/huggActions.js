@@ -1,6 +1,6 @@
-.factory('huggActions', ["$firebase", "toast", "$state", "$cordovaGeolocation", "$http", "$q",
+.factory('huggActions', ["$firebase", "toast", "$state", "$cordovaGeolocation", "$http",
 
-    function($firebase, toast, $state, $cordovaGeolocation, $http, $q) {
+    function($firebase, toast, $state, $cordovaGeolocation, $http) {
         var ref = new Firebase("https://huggr.firebaseio.com/"),
             huggRef = $firebase(ref.child("hugg")).$asArray();
 
@@ -250,32 +250,37 @@
                 huggRef.$loaded().then(function(huggData) {
                     var reqRating = huggData.$getRecord(huggID).huggReqRating;
                     if (reqRating != null) {
-                        var total = Math.round((reqRating + rating) / 2);
-                        /*$firebase(ref.child("hugg").child(huggID)).$update({
+                        var total = (reqRating + rating) / 2;
+                        $firebase(ref.child("hugg").child(huggID)).$update({
                             huggTotalRating: total
-                        }); //end updae*/
+                        }); //end updae
                     }
-                    //calculates the rating of the other user
-                    //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
-                    //then the rating for this hugg is added and the result is devided by the new number of huggs
-                    //the result is the new avarage rating for the user and is saved to the db
-                    var userRef = $firebase(ref.child("users").child("data")).$asArray();
-                    userRef.$loaded().then(function(userData) {
-                        console.log("data");
-console.log(userData.$getRecord(answerProfileID));
-                        var answerRating = Math.round((userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs));
+                    //add the rating of the user to the db
+                    $firebase(ref.child("hugg").child(huggID)).$update({
+                        huggAnswerRating: rating
+                    }).then(function(x) {
 
-                        $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
-                            rating: answerRating
-                        }).then(function(y) {
-                            toast.pop("Hugg rated");
-                            console.log(total);
-                            return total;
-                        }); //end update
+                        //calculates the rating of the other user
+                        //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
+                        //then the rating for this hugg is added and the result is devided by the new number of huggs
+                        //the result is the new avarage rating for the user and is saved to the db
+                        var userRef = $firebase(ref.child("users").child("data")).$asArray();
+                        userRef.$loaded().then(function(userData) {
 
-                    }); //end then
+                            var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs);
+
+                            $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
+                                rating: answerRating
+                            }).then(function(y) {
+                                toast.pop("Hugg rated");
+                                return 1;
+                            }); //end update
+
+                        }); //end then
+
+                    }); //end update
                 });
-                //return deferred.promise;
+
             }, //end function
 
             //the user that answered the hugg can rate the user that requested the hugg
@@ -288,29 +293,36 @@ console.log(userData.$getRecord(answerProfileID));
                     //in this case the total rating is calulated and added to the db
                     var answerRating = huggData.$getRecord(huggID).huggAnswerRating;
                     if (answerRating != null) {
-                        var total = Math.round((answerRating + rating) / 2);
+                        var total = (answerRating + rating) / 2;
                         $firebase(ref.child("hugg").child(huggID)).$update({
                             huggTotalRating: total
                         }); //end updae
                     }
 
-                    //calculates the rating of the other user
-                    //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
-                    //then the rating for this hugg is added and the result is devided by the new number of huggs
-                    //the result is the new avarage rating for the user and is saved to the db
-                    var userRef = $firebase(ref.child("users").child("data")).$asArray();
-                    userRef.$loaded().then(function(userData) {
+                    //add the rating of the user to the db
+                    $firebase(ref.child("hugg").child(huggID)).$update({
+                        huggReqRating: rating
+                    }).then(function(x) {
 
-                        var reqRating = Math.round((userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs));
+                        //calculates the rating of the other user
+                        //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
+                        //then the rating for this hugg is added and the result is devided by the new number of huggs
+                        //the result is the new avarage rating for the user and is saved to the db
+                        var userRef = $firebase(ref.child("users").child("data")).$asArray();
+                        userRef.$loaded().then(function(userData) {
 
-                        $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
-                            rating: reqRating
-                        }).then(function(y) {
-                            toast.pop("Hugg rated");
-                            return 1;
-                        }); //end update
+                            var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
 
-                    }); //end then
+                            $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
+                                rating: reqRating
+                            }).then(function(y) {
+                                toast.pop("Hugg rated");
+                                return 1;
+                            }); //end update
+
+                        }); //end then
+
+                    }); //end update
                 }); //end loaded()
 
             } //end function
