@@ -16,13 +16,19 @@
             </div>
             <div class="col">
                 <div class="item item-divider padding-top">
-                    Quick statistics
+                    Quick statistics             <i ng-click="getStats()" class="ion-loop">         </i>
                 </div>
                 <ion-item>
                     <h2>Number of huggs {{statistics.huggNumber}}</h2>
                </ion-item>
                 <ion-item>
                     <h2>Number of users {{statistics.userNumber}}</h2>
+               </ion-item>
+                 <ion-item>
+                    <h2>Number of chats {{statistics.chatNumber}}</h2>
+               </ion-item>
+                <ion-item>
+                    <h2>Number of chat messages {{statistics.chatMessages}}</h2>
                </ion-item>
             </div>
         </div>

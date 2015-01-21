@@ -17,7 +17,7 @@
                 password: $scope.login.password
             }).then(function(authData) {
                 console.log("Logged in as:", authData.uid);
-                $state.go("app.supportoverview");
+                $state.go("app.dashboard");
             }).catch(function(error) {
                  toast.pop("Authentification failed: "+error.code);
                 console.error("Authentication failed:", error);

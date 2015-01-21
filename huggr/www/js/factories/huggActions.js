@@ -248,16 +248,16 @@
                 //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
                 //in this case the total rating is calulated and added to the db
                 huggRef.$loaded().then(function(huggData) {
-                    var reqRating = huggData.$getRecord(huggID).reqRating;
-                    if (reqRating != ".") {
+                    var reqRating = huggData.$getRecord(huggID).huggReqRating;
+                    if (reqRating != null) {
                         var total = (reqRating + rating) / 2;
                         $firebase(ref.child("hugg").child(huggID)).$update({
-                            totalRating: total
+                            huggTotalRating: total
                         }); //end updae
                     }
                     //add the rating of the user to the db
                     $firebase(ref.child("hugg").child(huggID)).$update({
-                        answerRating: rating
+                        huggAnswerRating: rating
                     }).then(function(x) {
 
                         //calculates the rating of the other user
@@ -291,17 +291,17 @@
                     //get rating of other user
                     //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
                     //in this case the total rating is calulated and added to the db
-                    var answerRating = huggData.$getRecord(huggID).answerRating;
-                    if (answerRating != ".") {
+                    var answerRating = huggData.$getRecord(huggID).huggAnswerRating;
+                    if (answerRating != null) {
                         var total = (answerRating + rating) / 2;
                         $firebase(ref.child("hugg").child(huggID)).$update({
-                            totalRating: total
+                            huggTotalRating: total
                         }); //end updae
                     }
 
                     //add the rating of the user to the db
                     $firebase(ref.child("hugg").child(huggID)).$update({
-                        reqRating: rating
+                        huggReqRating: rating
                     }).then(function(x) {
 
                         //calculates the rating of the other user
