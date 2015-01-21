@@ -1,4 +1,4 @@
-.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions) {
+.controller('ProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $ionicPopover, notifications, toast, huggActions, $state) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
@@ -18,6 +18,8 @@
 
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
+    
+    $scope.noBlockedUsers = true;
 
     var blockedUserObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked")).$asObject();
     blockedUserObject.$bindTo($scope, "blockedUserData").then(function() {
@@ -29,25 +31,30 @@
                     if (obj.hasOwnProperty(prop)) {
                         UserInfo.getProfile(obj[prop]).then(function(value) {
                             $scope.returnedProfile = value;
-                            $scope.noBlockedUsers = false;
                             $scope.blockedUsers.push($scope.returnedProfile);
                         });
                     }
                 }
+                $scope.noBlockedUsers = true;
+            }
+            else
+            {
+                $scope.noBlockedUsers = false;
             }
         }
     }); // end bindTo
 
     $scope.unblockUser = function(unblockProfileID) {
-        $firebase(ref.child("users").child("data").child(currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
+        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
             var blockHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asArray();
             blockHuggRef.$loaded().then(function(data) {
                 var i = 0;
                 while (data.$keyAt(i) != null) {
-                    $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(blockProfileID)).$remove();
+                    $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(unblockProfileID)).$remove();
                     i++;
                 }
                 toast.pop("Unblocked user");
+                $state.go('app.profile')
                 return 1;
             });
         });
