@@ -35,9 +35,6 @@
                             AccessToken: authData.google.accessToken
                         });
                         $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                            displayName: authData.google.displayName,
-                            email: authData.google.email,
-                            picture: authData.google.cachedUserProfile.picture,
                             lastSeenTime: Firebase.ServerValue.TIMESTAMP
                         });
                         console.log("Logged in as:" + authData.uid);
@@ -82,9 +79,6 @@
                                 AccessToken: authData.facebook.accessToken
                             });
                             $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                                displayName: authData.facebook.displayName,
-                                email: authData.facebook.email,
-                                picture: FbProfilePicture,
                                 lastSeenTime: Firebase.ServerValue.TIMESTAMP
                             });
                             console.log("Logged in as:", authData.uid);
