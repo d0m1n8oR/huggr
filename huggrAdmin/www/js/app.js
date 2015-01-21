@@ -33,18 +33,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
-        .state('index', {
+    .state('index', {
         url: "/index",
         templateUrl: "templates/login.html",
         controller: "loginCtrl"
     })
-    
-        .state('app', {
+
+    .state('app', {
         url: "/app",
         abstract: true,
         templateUrl: "templates/menu.html",
     })
-    .state('app.adminlogin', {
+
+    .state('app.login', {
         url: "/login",
         views: {
             'menuContent': {
@@ -61,6 +62,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         }
     })
     
+    .state('app.dashboard', {
+        url: "/dashboard",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/dashboard.html",
+                controller: 'dashboardCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
+
     .state('app.supportoverview', {
         url: "/supportoverview",
         views: {
@@ -77,8 +95,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
-    
-     .state('app.supportitem', {
+
+    .state('app.supportitem', {
         url: "/supportitem/:supportID",
         views: {
             'menuContent': {
