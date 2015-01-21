@@ -139,7 +139,7 @@
                 }).then(function(x) {
 
                     $firebase(ref.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
-                        1: answerProfileID
+                        0: answerProfileID
                     }).then(function(y) {
                         //add notification for user that requested the hugg
                         $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({

@@ -34,6 +34,26 @@
         $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(blockProfileID)).$set({
             0: blockProfileID
         }).then(function(y) {
+            var blockHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asArray();
+            blockHuggRef.$loaded().then(function(data){
+                var i = 0;
+                while (data.$keyAt(i) != null) {
+                    console.log(data.$keyAt(i));
+                    $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(blockProfileID)).$set({
+                       0: blockProfileID 
+                    });
+                    var record = data.$getRecord(data.$keyAt(i));
+                    if(record.answerProfileID == blockProfileID)
+                    {
+                        //decline all huggs that the blocked user has with this user
+                        huggActions.declineHugg($scope.currentUser, record.huggID, blockProfileID);
+                    }
+                    i++;
+                }
+            });
+            
+            var block
+            console.log("Hallo");
             toast.pop("You have successfully blocked this user");
             return 1;
         }); //end set
