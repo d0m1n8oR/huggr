@@ -94,9 +94,7 @@
 
                             //calc distance
                             var radius = 6371;
-                            console.log(currentLat + ":" + currentLong);
                             var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                            console.log(record.reqLat + ":" + record.reqLong);
                             var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
                             var a =
                                 Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
@@ -104,7 +102,6 @@
                                 Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
                             var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                             var distance = radius * b;
-                            console.log(distance);
 
                             //check for distance within range and save to JSON
                             if (distance <= range) {
