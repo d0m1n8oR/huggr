@@ -43,8 +43,8 @@
                 <ion-item ng-repeat="notificationItem in notificationData" href="#/app/huggs" item="item" class="item-avatar item-icon-right">
                     <img ng-src="{{notificationItem.picture}}">
                     <h2>{{notificationItem.firstName}}</h2>
-                    <p ng-if="notificationItem.type != 'done'">has {{notificationItem.type}}ed your hug</p>
-                    <p ng-if="notificationItem.type == 'done'">you hug has marked {{notificationItem.type}}</p>
+                    <p>has {{notificationItem.type}}ed TODO!!!
+                    </p>
                     <a class="button button-icon button-light button-clear icon ion-close-circled notification-padding" ng-click="removeNotification(notificationItem.huggID)"></a>
                 </ion-item>
             </ion-list>
