@@ -1,4 +1,4 @@
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper, toast) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -24,7 +24,7 @@
 
                     var userSigninIdentifier = authData.google.id;
                     if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
-                        console.warn("new user, registering...");
+                        toast.pop("Welcome aboard :)");
                         $scope.showPopUp(authProvider, authData);
                         //$scope.register(authProvider, authData);
                     } else {
@@ -37,7 +37,7 @@
                         $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                             lastSeenTime: Firebase.ServerValue.TIMESTAMP
                         });
-                        console.log("Logged in as:" + authData.uid);
+                        toast.pop("Welcome back!");
                         var profileData = $scope.dataRef.$getRecord($scope.profileID);
                         //Store profile Data persistently in local storage for global usage
                         localstorage.setObject("userData", profileData);
@@ -64,7 +64,7 @@
                     //
 
                     if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
-                        console.warn("new user, registering...");
+                        toast.pop("Welcome aboard :)");
                         $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
@@ -81,11 +81,12 @@
                             $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                                 lastSeenTime: Firebase.ServerValue.TIMESTAMP
                             });
-                            console.log("Logged in as:", authData.uid);
+                            toast.pop("Welcome back!");
 
                             var profileData = $scope.dataRef.$getRecord($scope.profileID);
                             //Store profile Data persistently in local storage for global usage
                             localstorage.setObject("userData", profileData);
+
                             $state.go('app.home');
                         }); //end pictureData
                     }
@@ -105,7 +106,7 @@
     var popupAuthData;
 
     $scope.showPopUp = function(authProvider, authData) {
-        $scope.popover.show(angular.element(document.getElementById('fb')));
+        $scope.popover.show(angular.element(document.getElementById('huggrText')));
         popupAuthProvider = authProvider;
         popupAuthData = authData;
     }
@@ -187,6 +188,7 @@
                             var profileData = data.$getRecord(newProfileID);
                             //Store profile Data persistently in local storage for global usage
                             console.log("Successfully registered user!");
+                            toast.pop("Welcome to the huggr community!");
                             localstorage.setObject("userData", profileData);
                             $state.go('app.home');
                         }); //end loaded
@@ -238,6 +240,7 @@
                                 var profileData = data.$getRecord(newProfileID);
                                 //Store profile Data persistently in local storage for global usage
                                 console.log("Successfully registered");
+                                toast.pop("Welcome to the huggr community!");
                                 localstorage.setObject("userData", profileData);
                                 $state.go('app.home');
                             }); //end load data
