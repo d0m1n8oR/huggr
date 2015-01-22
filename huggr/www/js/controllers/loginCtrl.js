@@ -1,4 +1,4 @@
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicViewService, $ionicPopover, $http, helper, toast) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -11,7 +11,7 @@
     //create child for google
     $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
     $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
-    $ionicViewService.nextViewOptions({
+    $ionicHistory.nextViewOptions({
         disableBack: true
     });
 
