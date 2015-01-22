@@ -15,12 +15,22 @@
             <ion-item ng-repeat="item in resultList.hugg" item="item" href="#/app/profile/{{item.profileID}}/{{item.huggID}}" class="item-thumbnail-left">
                 <img ng-src="{{item.picture}}">
                 <h2>{{item.firstName}}</h2>
+                <div ng-if="item.gender == 'male'">
+                    <p><i class="ion-male"> </i> male, rating of {{item.reqRating | number : 0}} <i class="icon ion-star"></i>
+                    </p>
+                </div>
+                <div ng-if="item.gender == 'female'">
+                    <p><i class="ion-female"> </i> female, rating of {{item.reqRating| number : 0}} <i class="icon ion-star"></i>
+                    </p>
+                </div>
+                <p>
+                    <i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}
+                </p>
                 <p>
                     <a class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}}km</a>
                 </p>
                 <ion-option-button class="button-royal icon ion-map override-icon-position" ng-click="showPosition(item.lat, item.long)"></ion-option-button>
                 <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="answerHugg({{item.huggID}}, {{item.profileID}})"></ion-option-button>
-
             </ion-item>
 
         </ion-list>
