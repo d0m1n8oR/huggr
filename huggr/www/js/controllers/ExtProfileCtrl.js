@@ -17,16 +17,24 @@
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     var deferred = $q.defer();
-    UserInfo.getProfile($scope.profileID, deferred).then(function(value) {
+    UserInfo.getProfile($scope.profileID).then(function(value) {
+        console.log("value");
+        console.log(value);
         $scope.data = value;
+        console.log($scope.data);
 
-        var userObject = $firebase(ref.child("users").child("data").child($scope.data.profileID)).$asObject();
+
+    }); //end getProfile
+
+    /*var userObject = $firebase(ref.child("users").child("data").child($scope.profileID)).$asObject();
 
         //displays information
-        userObject.$bindTo($scope, "data").then(function() {
-            $scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
-        }); //end bindTo
-    }); //end getProfile
+        userObject.$bindTo($scope, "result").then(function() {
+            $scope.data = $scope.result;
+            console.log("hallo");
+            console.log($scope.data);
+            //$scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
+        }); //end bindTo*/
 
     //block a user from ever sending requests again
     $scope.blockUser = function blockUser(blockProfileID) {
@@ -90,8 +98,9 @@
                                 otherProfileID: $scope.currentUser.profileID,
                                 chatID: newChatID
                             }).then(function(y) {
-                                console.log("Successfully created chat with ID " + newChatID);
-                                return 1;
+                                $state.go('app.chat', {
+                                    chatID: newChatID
+                                });
                             });
                         })
                     })

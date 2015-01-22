@@ -8,15 +8,15 @@
             <div class="item item-avatar">
                 <img ng-src="{{data.picture}}">
                 <h2>{{data.displayName}}</h2>
-                <p><span ng-show="currentUser.age">{{data.age}} years old </span><span ng-show="currentUser.lastSeenTime">and was last seen at {{currentUser.lastSeenTime | date : 'HH:mm'}}</span>
+                <p><span>{{data.age}} years old </span><span>and was last seen at {{data.lastSeenTime | date : 'HH:mm'}}</span>
                 </p>
             </div>
 
             <div class="item item-body">
                 <img class="full-image rounded" ng-src="{{data.picture}}">
                 <p>
-                    <span ng-show="currentUser.hobby">{{data.hobby}}</span>
-                    <span ng-hide="currentUser.hobby">{{data.displayName}} has not provided any information about hobbys</span>
+                    <span>{{data.hobby}}</span>
+                    <span>{{data.displayName}} has not provided any information about hobbys</span>
                 </p>
                 <p>
                     <span>Rating:</span>
