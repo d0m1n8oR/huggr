@@ -5,20 +5,25 @@ in ionic's _variables.scss file.
 For example, you might change some of the default colors:
 */
 
-$light: #fff !default;
-$stable: #f8f8f8 !default;
-$positive: #0facce !default;
-$calm: #316eef !default;
-$balanced: #B7CA34 !default;
-$energized: #f0b331 !default;
-$assertive: #c62f0e !default;
-$royal: #886aea !default;
-$dark: #444 !default;
+$light:                     #fff !default;
+$stable:                    #f8f8f8 !default;
+$positive:                  #0facce !default;
+$calm:                      #316eef !default;
+$balanced:                  #B7CA34 !default;
+$energized:                 #f0b331 !default;
+$assertive:                 #f05332 !default;
+$royal:                     #886aea !default;
+$dark:                      #444 !default;
+$huggr:                     #f05332 !default;
+
+
 $button-facebook-bg: #3b5998 !default;
 $button-facebook-text: #fff !default;
 $button-facebook-border: #3b5998 !default;
 $button-facebook-active-bg: #3b5998 !default;
 $button-facebook-active-border: #000 !default;
+
+
 $button-gplus-bg: #dd4b39 !default;
 $button-gplus-text: #fff !default;
 $button-gplus-border: #dd4b39 !default;
@@ -128,6 +133,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     font-family: 'Gochi Hand', cursive;
     font-size: 4em;
 }
+
+.huggrFont .bar .title {
+    font-family: 'Gochi Hand', cursive;
+    font-size: 30px;
+    color: $huggr;
+}
+
 .bigMap {
     width: 100%;
     height: 100% !important;
@@ -198,7 +210,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     font-size: .875rem;
 }
 .message-me p {
-    background: #158ffe;
+    background: #B7CA34;
     color: #fff;
 }
 .messages img {
