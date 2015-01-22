@@ -123,15 +123,14 @@
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == null " class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
                         <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
-                        <p>
-                            <rating ng-model="item.huggAnswerRating" max="5" ng-click="rateAnswerHugg(item.huggID, item.huggAnswerRating, item.answerProfileID)"></rating>
-                            <button ng-click="click(item.huggID)">Click</button>
+                        <p> 
+                            <div class="star-rating" star-rating rating-value="item.huggAnswerRating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, item.huggAnswerRating, item.answerProfileID)"></div>
                         </p>
                         <div ng-if="item.huggReqRating != null">
                             <p>{{item.answerFirstName}} has rated this hug with {{item.huggReqRating| number : 0}} <i class="icon ion-star"></i>
                             </p>
                         </div>
-                        <div ng-if="item.huggReqRating == null">
+                        <div ng-if="item.huggReqRating == '-1'">
                             <p>{{item.answerFirstName}} hasn't rated this hugg yet</p>
                         </div>
                     </ion-item>
@@ -139,7 +138,8 @@
                         <img ng-src="{{item.reqPicture}}">
                         <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                         <p>
-                            <rating ng-model="item.huggReqRating" max="5" ng-click="rateReqHugg(item.huggID, item.huggReqRating, item.reqProfileID)"></rating>
+                            <div class="star-rating" star-rating rating-value="item.huggReqRating" data-max="5" on-rating-selected="rateReqHugg(item.huggID, item.huggReqRating, item.reqProfileID)"></div>
+
                         </p>
                         <p>{{item.reqFirstName}} has rated this hug with {{item.huggAnswerRating| number : 0}} <i class="icon ion-star"></i>
                         </p>
@@ -158,7 +158,7 @@
                         <p>
                             <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                             </p>
-                            Rating for the hugg is {{item.huggTotalRating| number : 0}} <i class="icon ion-star"></i> 
+                            Rating for the hugg is {{item.huggTotalRating| number : 0}} <i class="icon ion-star"></i>
                         </p>
                         </p>
                     </ion-item>
@@ -168,7 +168,7 @@
                         <p>
                             <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                             </p>
-                            Rating for the hugg is {{item.huggTotalRating| number : 0}} <i class="icon ion-star"></i> 
+                            Rating for the hugg is {{item.huggTotalRating| number : 0}} <i class="icon ion-star"></i>
                         </p>
                         </p>
                     </ion-item>

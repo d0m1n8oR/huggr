@@ -1,8 +1,8 @@
 .directive('starRating',
     function() {
         return {
-            restrict: 'E',
-            template: '<ul class="rating">' + ' <li ng-repeat="star in stars"  ng-class="star" ng-click="toggle($index)">'+'<i class="icon ion-star"></i>'+'</li>'+'</ul>',
+            restrict: 'A',
+            template: '<ul class="rating"><li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)"><i class="icon ion-star"></i></li></ul>',
             scope: {
                 ratingValue: '=',
                 max: '=',

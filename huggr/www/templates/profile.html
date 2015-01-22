@@ -32,7 +32,8 @@
                         </p>
                         <p>
                             <span>Your current Rating:</span>
-                            <rating ng-model="userRatingForView" max="5"></rating>
+                            <div ng-init="userRatingForView = star.rating - 1"></div>
+                            <div class="star-rating" star-rating rating-value="userRatingForView" data-max="5"></div>
                             <a href="" class="subdued">Number of huggs: {{currentUser.numberHuggs}}</a>
                         </p>
 

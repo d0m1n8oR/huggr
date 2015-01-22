@@ -20,22 +20,20 @@
                 </p>
                 <p>
                     <span>Rating:</span>
-                    <rating ng-model="data.rating" max="5"></rating>
+                    <div ng-init="data.rating = star.rating - 1"></div>
+                    <div class="star-rating" star-rating rating-value="data.rating" data-max="5"></div>
                     <a href="" class="subdued">Number of huggs: {{data.numberHuggs}}</a>
                 </p>
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
                 <a class="tab-item" href="" ng-click="answerHugg(huggID)">
-                    <i class="icon sp-huggr sp-huggr-colored"></i>
-                    Hugg {{data.firstname}}
+                    <i class="icon sp-huggr sp-huggr-colored"></i> Hugg {{data.firstname}}
                 </a>
                 <a class="tab-item" href="" ng-click="startChat(profileID)">
-                    <i class="icon ion-chatbox-working"></i>
-                    Chat with {{data.firstname}}
+                    <i class="icon ion-chatbox-working"></i> Chat with {{data.firstname}}
                 </a>
                 <a class="tab-item" href="" ng-click="blockUser(profileID)">
-                    <i class="icon ion-android-close"></i>
-                    Ban {{data.firstname}}
+                    <i class="icon ion-android-close"></i> Ban {{data.firstname}}
                 </a>
             </div>
 

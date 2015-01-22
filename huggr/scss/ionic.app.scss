@@ -218,3 +218,28 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     max-width: 65%;
     border-radius: .75rem;
 }
+.rating{
+  color: #a9a9a9;
+  margin: 0;
+  padding: 0;
+}
+
+ul.rating {
+  display: inline-block;
+}
+ul.rating i {
+  font-size: 30px;
+}
+
+.rating li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 1px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.rating .filled {
+  color: $huggr;
+}
