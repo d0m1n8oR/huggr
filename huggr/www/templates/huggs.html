@@ -9,7 +9,7 @@
     <ion-tabs class="tabs-striped tabs-background-balanced tabs-color-light">
         <ion-tab title="Unanswered" icon="ion-help">
             <ion-header-bar class="bar-positive"></ion-header-bar>
-            <ion-content class="has-header has-footer">
+            <ion-content class="has-header">
                 <ion-list>
                     <ion-item ng-repeat="item in ownHuggData" item="item" ng-if="item.answered == '1' && item.accepted == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
@@ -72,7 +72,7 @@
 
         <ion-tab title="Accepted" icon="ion-checkmark">
             <ion-header-bar class="bar-positive"></ion-header-bar>
-            <ion-content class="has-header has-footer">
+            <ion-content class="has-header">
                 <ion-list>
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
@@ -118,7 +118,7 @@
 
         <ion-tab title="Done" icon="ion-thumbsup">
             <ion-header-bar class="bar-positive"></ion-header-bar>
-            <ion-content class="has-header has-footer">
+            <ion-content class="has-header">
                 <ion-list>
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == '.' " class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
@@ -150,7 +150,7 @@
 
         <ion-tab title="History" icon="sp-history override-sptabs">
             <ion-header-bar class="bar-positive"></ion-header-bar>
-            <ion-content class="has-header has-footer">
+            <ion-content class="has-header">
                 <ion-list>
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating != null" item="item" class="item-thumbnail-left">
                         <img ng-src="{{item.reqPicture}}">
