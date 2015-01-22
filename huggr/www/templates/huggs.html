@@ -3,7 +3,7 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-if="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
         </button>
     </ion-nav-buttons>
     <ion-tabs class="tabs-striped tabs-background-balanced tabs-color-light">
@@ -120,7 +120,7 @@
             <ion-header-bar class="bar-positive"></ion-header-bar>
             <ion-content class="has-header">
                 <ion-list>
-                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == '.' " class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == null " class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
                         <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
                         <p>
@@ -135,7 +135,7 @@
                             <p>{{item.answerFirstName}} hasn't rated this hugg yet</p>
                         </div>
                     </ion-item>
-                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating == '.'" class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating == null" class="item-thumbnail-left">
                         <img ng-src="{{item.reqPicture}}">
                         <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                         <p>
