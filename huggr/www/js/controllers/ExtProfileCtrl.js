@@ -12,7 +12,7 @@
 
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
-    $scope.data;
+    $scope.data = {age: null};
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
@@ -20,7 +20,15 @@
     UserInfo.getProfile($scope.profileID).then(function(value) {
         console.log("value");
         console.log(value);
-        $scope.data = value;
+        $scope.data.age = value.age;
+        $scope.data.picture = value.picture;
+        $scope.data.lastSeenTime = value.lastSeenTime;
+        $scope.data.displayName = value.displayName;
+        $scope.data.hobby = value.hobby;
+        $scope.data.profileID = value.profileID;
+        $scope.data.numberHuggs = value.numberHuggs;
+        $scope.data.rating = value.rating;
+        $scope.data.firstName = value.firstName;
         console.log($scope.data);
 
 

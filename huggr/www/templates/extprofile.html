@@ -2,13 +2,17 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        </button>
+    </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="list card">
 
             <div class="item item-avatar">
                 <img ng-src="{{data.picture}}">
-                <h2>{{data.displayName}}</h2>
-                <p><span>{{data.age}} years old </span><span>and was last seen at {{data.lastSeenTime | date : 'HH:mm'}}</span>
+                <h2>{{data.firstName}}</h2>
+                <p><span>{{data.age}} years old </span><span>and was last seen at {{data.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
                 </p>
             </div>
 
@@ -16,7 +20,7 @@
                 <img class="full-image rounded" ng-src="{{data.picture}}">
                 <p>
                     <span>{{data.hobby}}</span>
-                    <span>{{data.displayName}} has not provided any information about hobbys</span>
+                    <span>{{data.firstName}} has not provided any information about hobbys</span>
                 </p>
                 <p>
                     <span>Rating:</span>
@@ -27,13 +31,13 @@
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">
                 <a class="tab-item" href="" ng-click="answerHugg(huggID)">
-                    <i class="icon sp-huggr sp-huggr-colored"></i> Hugg {{data.firstname}}
+                    <i class="icon sp-huggr sp-huggr-colored"></i> Hugg {{data.firstName}}
                 </a>
                 <a class="tab-item" href="" ng-click="startChat(profileID)">
-                    <i class="icon ion-chatbox-working"></i> Chat with {{data.firstname}}
+                    <i class="icon ion-chatbox-working"></i> Chat with {{data.firstName}}
                 </a>
                 <a class="tab-item" href="" ng-click="blockUser(profileID)">
-                    <i class="icon ion-android-close"></i> Ban {{data.firstname}}
+                    <i class="icon ion-android-close"></i> Ban {{data.firstName}}
                 </a>
             </div>
 

@@ -14,7 +14,7 @@
                     answerTime: Firebase.ServerValue.TIMESTAMP,
                     answerPicture: currentUser.picture,
                     answerGender: currentUser.gender,
-                    answerFirstName: currentUser.firstname,
+                    answerFirstName: currentUser.firstName,
                     answerRating: currentUser.rating
 
                 }).then(function(data) {
@@ -22,7 +22,7 @@
                     //add notification for user that requested the hugg
                     $firebase(ref.child("users").child("data").child(profileID).child("notifications").child(huggID)).$set({
                         huggID: huggID,
-                        firstName: currentUser.firstname,
+                        firstName: currentUser.firstName,
                         picture: currentUser.picture,
                         time: Firebase.ServerValue.TIMESTAMP,
                         profileID: currentUser.profileID,
@@ -71,7 +71,7 @@
                                     reqProfileID: currentUser.profileID,
                                     reqGender: currentUser.gender,
                                     reqTime: Firebase.ServerValue.TIMESTAMP,
-                                    reqFirstName: currentUser.firstname,
+                                    reqFirstName: currentUser.firstName,
                                     reqPicture: currentUser.picture,
                                     reqRating: currentUser.rating,
                                     blocked: currentUser.blocked,
@@ -109,7 +109,7 @@
                     //add notification for user that requested the hugg
                     $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
                         huggID: huggID,
-                        firstName: currentUser.firstname,
+                        firstName: currentUser.firstName,
                         picture: currentUser.picture,
                         time: Firebase.ServerValue.TIMESTAMP,
                         profileID: currentUser.profileID,
@@ -144,7 +144,7 @@
                         //add notification for user that requested the hugg
                         $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
                             huggID: huggID,
-                            firstName: currentUser.firstname,
+                            firstName: currentUser.firstName,
                             picture: currentUser.picture,
                             time: Firebase.ServerValue.TIMESTAMP,
                             profileID: currentUser.profileID,
@@ -176,7 +176,7 @@
                     //add notification for user that requested the hugg
                     $firebase(ref.child("users").child("data").child(reqProfileID).child("notifications").child(huggID)).$set({
                         huggID: huggID,
-                        firstName: currentUser.firstname,
+                        firstName: currentUser.firstName,
                         picture: currentUser.picture,
                         time: Firebase.ServerValue.TIMESTAMP,
                         profileID: currentUser.profileID,
@@ -226,7 +226,7 @@
                                 //add notification for user that requested the hugg
                                 $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
                                     huggID: huggID,
-                                    firstName: currentUser.firstname,
+                                    firstName: currentUser.firstName,
                                     picture: currentUser.picture,
                                     time: Firebase.ServerValue.TIMESTAMP,
                                     profileID: currentUser.profileID,

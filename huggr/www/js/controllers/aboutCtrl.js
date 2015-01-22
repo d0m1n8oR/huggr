@@ -33,7 +33,7 @@
 
                 $firebase(ref.child("admin").child("support").child(supportID)).$set({
                     displayName: $scope.currentUser.displayName,
-                    firstName: $scope.currentUser.firstname,
+                    firstName: $scope.currentUser.firstName,
                     email: $scope.currentUser.email,
                     time: today,
                     request: request,

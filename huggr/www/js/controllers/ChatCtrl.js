@@ -18,7 +18,7 @@
             user: $scope.currentUser.profileID,
             picture: $scope.currentUser.picture,
             time: Date.now(),
-            name: $scope.currentUser.firstname
+            name: $scope.currentUser.firstName
         }).then(function(sync) {
             var id = sync.key();
             toast.pop("Message sent!");
