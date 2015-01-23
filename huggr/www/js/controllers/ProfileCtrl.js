@@ -145,38 +145,4 @@
         });
     };
 
-    $scope.removeHugg = function(huggID) {
-        huggActions.removeHugg(huggID);
-    }
-
-    $scope.acceptHugg = function(huggID, answerProfileID) {
-        huggActions.acceptHugg($scope.currentUser, huggID, answerProfileID);
-    }
-
-    $scope.declineHugg = function(huggID, answerProfileID) {
-        huggActions.declineHugg($scope.currentUser, huggID, answerProfileID);
-    }
-
-
-    //revoke an answer to a hugg (the hugg is requested from somebody else, the user answered the hugg, the hugg is not yet accepted)
-    //the user doesn't want to participate in the offered hugg
-    $scope.revokeAnswer = function(huggID, reqProfileID) {
-        huggActions.revokeAnswer($scope.currentUser, huggID, reqProfileID);
-
-    }; //end function
-
-    $scope.markDone = function markDone(huggID) {
-        huggActions.markDone($scope.currentUser, huggID);
-    }
-
-    $scope.rateAnswerHugg = function(huggID, rating, answerProfileID) {
-
-        huggActions.rateAnswerHugg(huggID, rating, answerProfileID);
-    }
-
-    $scope.rateReqHugg = function(huggID, rating, reqProfileID) {
-
-        huggActions.rateReqHugg(huggID, rating, reqProfileID);
-    }
-
 }) //end ProfileCtrl
