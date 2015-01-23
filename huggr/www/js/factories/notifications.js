@@ -17,7 +17,7 @@
                                 toast.pop("New notification!");
                                 break;
                             case "child_changed":
-                                toast.pop("Notification has been updated!");
+                                toast.pop("New notification!");
                                 break;
                         }
 

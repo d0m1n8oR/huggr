@@ -49,7 +49,6 @@
                 var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long);
                 reverseGeocode.then(function(result) {
                     var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
-                    console.log(reqLocation);
 
                     //save data to firebase in new child with calculated huggID
                     $firebase(ref.child("hugg").child(huggID)).$set({
@@ -187,14 +186,14 @@
                     }
 
                     //define ref for users
-                    var userRefA = $firebase(ref.child("users").child("data").orderByKey(record.reqProfileID)).$asArray();
+                    var userRefA = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.reqProfileID.toString())).$asArray();
                     userRefA.$loaded().then(function(userDataA) {
                         //load current number of huggs for both users and add 1
                         var reqNumberHuggs = userDataA.$getRecord(record.reqProfileID).numberHuggs + 1;
                         
-                        var userRefB = $firebase(ref.child("users").child("data").orderByKey(record.answerProfileID)).$asArray();
+                        var userRefB = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.answerProfileID.toString())).$asArray();
                         userRefB.$loaded().then(function(userDataB) {
-                            var answerNumberHuggs = userDataN.$getRecord(record.answerProfileID).numberHuggs + 1;
+                            var answerNumberHuggs = userDataB.$getRecord(record.answerProfileID).numberHuggs + 1;
 
                             //update status in huggRef DB
                             $firebase(ref.child("hugg").child(huggID)).$update({
