@@ -1,6 +1,6 @@
-.factory('huggActions', ["$firebase", "toast", "$state", "$cordovaGeolocation", "$http",
+.factory('huggActions', ["$firebase", "toast", "$state", "$http",
 
-    function($firebase, toast, $state, $cordovaGeolocation, $http) {
+    function($firebase, toast, $state, $http) {
         var ref = new Firebase("https://huggr.firebaseio.com/"),
             huggRef = $firebase(ref.child("hugg")).$asArray();
 
@@ -31,7 +31,6 @@
                     }).then(function(x) {
                         toast.pop("Hugg answered");
                         $state.go("app.home");
-                        return 1;
                     });
 
                 }); //end then
@@ -42,54 +41,44 @@
                 //create random huggID
                 var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-                huggRef.$loaded().then(function(data) {
+                //check whether huggID already exists in db
+                while ($firebase(ref.child("huggID").orderByKey().equalTo(huggID.toString())).$asArray().$getRecord(huggID) != null) {
+                    huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+                } //end while
 
-                    //check whether huggID already exists in db
-                    while ($firebase(ref.child("huggID").orderByKey().equalTo(huggID.toString())).$asArray().$getRecord(huggID) != null) {
-                        huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-                    } //end while
+                var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long);
+                reverseGeocode.then(function(result) {
+                    var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
+                    console.log(reqLocation);
 
-                    //get GPS coordinates
-
-                            var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long);
-                            reverseGeocode.then(function(result) {
-                                var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
-                                console.log(reqLocation);
-
-                                //save data to firebase in new child with calculated huggID
-                                $firebase(ref.child("hugg").child(huggID)).$set({
-                                    huggID: huggID,
-                                    reqLat: lat,
-                                    reqLong: long,
-                                    FilterGender: gender,
-                                    done: 0,
-                                    answered: 0,
-                                    accepted: 0,
-                                    reqProfileID: currentUser.profileID,
-                                    reqGender: currentUser.gender,
-                                    reqTime: Firebase.ServerValue.TIMESTAMP,
-                                    reqFirstName: currentUser.firstName,
-                                    reqPicture: currentUser.picture,
-                                    reqRating: currentUser.rating,
-                                    blocked: currentUser.blocked,
-                                    reqLocation: reqLocation
-                                }).then(function(x) {
-
-                                    toast.pop("Hugg requested")
-                                    $state.go("app.home");
-                                    return 1;
-                                }); //end then (rating)
-                            }); //end reverseGeocode
-
-                }); // end then (Loaded)
-
+                    //save data to firebase in new child with calculated huggID
+                    $firebase(ref.child("hugg").child(huggID)).$set({
+                        huggID: huggID,
+                        reqLat: lat,
+                        reqLong: long,
+                        FilterGender: gender,
+                        done: 0,
+                        answered: 0,
+                        accepted: 0,
+                        reqProfileID: currentUser.profileID,
+                        reqGender: currentUser.gender,
+                        reqTime: Firebase.ServerValue.TIMESTAMP,
+                        reqFirstName: currentUser.firstName,
+                        reqPicture: currentUser.picture,
+                        reqRating: currentUser.rating,
+                        blocked: currentUser.blocked,
+                        reqLocation: reqLocation
+                    }).then(function(x) {
+                        toast.pop("Hugg requested")
+                        $state.go("app.home");
+                    }); //end then (rating)
+                }); //end reverseGeocode
             }, // end function   
 
             //remove huggs that nobody has answered yet from unanswered huggs list
             removeHugg: function(huggID) {
                 $firebase(ref.child("hugg")).$remove(huggID).then(function(data) {
                     toast.pop("Hugg removed");
-                    return 1;
                 }); //end then
             }, //end function
 
@@ -99,8 +88,6 @@
                     accepted: 1,
                     acceptTime: Firebase.ServerValue.TIMESTAMP
                 }).then(function(data) {
-                    var date = new Date();
-                    var today = date.getTime();
 
                     //add notification for user that requested the hugg
                     $firebase(ref.child("users").child("data").child(answerProfileID).child("notifications").child(huggID)).$set({
@@ -113,7 +100,6 @@
                         change: "add"
                     }).then(function(x) {
                         toast.pop("Hugg accepted");
-                        return 1;
                     })
 
                 }) //end then
@@ -133,7 +119,6 @@
                     answerFirstName: null,
                     answerRating: null
                 }).then(function(x) {
-
                     $firebase(ref.child("hugg").child(huggID).child("blocked").child(answerProfileID)).$set({
                         0: answerProfileID
                     }).then(function(y) {
@@ -148,8 +133,7 @@
                             change: "remove"
                         }).then(function(x) {
                             toast.pop("Hugg declined");
-                            return 1;
-                        })
+                        });
                     }); //end then
                 });
 
@@ -180,7 +164,6 @@
                         change: "remove"
                     }).then(function(x) {
                         toast.pop("Revoked answer");
-                        return 1;
                     });
                 }); //end then
             }, //end function
@@ -191,6 +174,7 @@
             //after this the hugg can be rated
             markDone: function(currentUser, huggID) {
 
+                var huggRef = $firebase(ref.child("hugg").orderByKey().equalTo(huggID.toString())).$asArray();
                 //define ref for huggs
                 huggRef.$loaded().then(function(huggData) {
                     //load infos for selected hugg
@@ -203,37 +187,45 @@
                     }
 
                     //define ref for users
-                    var userRef = $firebase(ref.child("users").child("data")).$asArray();
-                    userRef.$loaded().then(function(userData) {
-
+                    var userRefA = $firebase(ref.child("users").child("data").orderByKey(record.reqProfileID)).$asArray();
+                    userRefA.$loaded().then(function(userDataA) {
                         //load current number of huggs for both users and add 1
-                        var reqNumberHuggs = userData.$getRecord(record.reqProfileID).numberHuggs + 1;
-                        var answerNumberHuggs = userData.$getRecord(record.answerProfileID).numberHuggs + 1;
+                        var reqNumberHuggs = userDataA.$getRecord(record.reqProfileID).numberHuggs + 1;
+                        
+                        var userRefB = $firebase(ref.child("users").child("data").orderByKey(record.answerProfileID)).$asArray();
+                        userRefB.$loaded().then(function(userDataB) {
+                            var answerNumberHuggs = userDataN.$getRecord(record.answerProfileID).numberHuggs + 1;
 
-                        //update status in huggRef DB
-                        $firebase(ref.child("hugg").child(huggID)).$update({
-                            done: 1
-                        }).then(function(x) {
-                            //update info on number of huggs for answerer
-                            $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
-                                numberHuggs: answerNumberHuggs
-                            }).then(function(y) {
-                                //finalize
-                                //add notification for user that requested the hugg
-                                $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
-                                    huggID: huggID,
-                                    firstName: currentUser.firstName,
-                                    picture: currentUser.picture,
-                                    time: Firebase.ServerValue.TIMESTAMP,
-                                    profileID: currentUser.profileID,
-                                    type: "done",
-                                    change: "add"
-                                }).then(function(x) {
-                                    toast.pop("Hugg done");
-                                    return 1;
-                                })
-                            }); //end then (finalize)
-                        }); //end then (update answerer)
+                            //update status in huggRef DB
+                            $firebase(ref.child("hugg").child(huggID)).$update({
+                                done: 1
+                            }).then(function(x) {
+                                //update info on number of huggs for answerer
+                                 $firebase(ref.child("users").child("data").child(record.reqProfileID)).$update({
+                                    numberHuggs: reqNumberHuggs
+                                });
+                                
+                                $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
+                                    numberHuggs: answerNumberHuggs
+                                }).then(function(y) {
+                                      
+                                    //finalize
+                                    //add notification for user that requested the hugg
+                                    $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
+                                        huggID: huggID,
+                                        firstName: currentUser.firstName,
+                                        picture: currentUser.picture,
+                                        time: Firebase.ServerValue.TIMESTAMP,
+                                        profileID: currentUser.profileID,
+                                        type: "done",
+                                        change: "add"
+                                    }).then(function(x) {
+                                        toast.pop("Hugg done");
+                                        return 1;
+                                    })
+                                }); //end then (finalize)
+                            }); //end then (update answerer)
+                        });
                     }); //end then (load userRef)
                 });
             }, //end function
