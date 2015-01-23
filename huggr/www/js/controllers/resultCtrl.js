@@ -36,13 +36,28 @@
     });
 
     range = $stateParams.range;
+    
+     $scope.showPosition = function(lat, long) {
+        $scope.modalData.lat = lat;
+        $scope.modalData.long = long;
+        $scope.gmapsModal.show();
+        $cordovaGeolocation.getCurrentPosition().then(function(position) {
+            //wandle in google Maps format um
+            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            $scope.modalData.userlat = pos.k;
+            $scope.modalData.userlong = pos.D;
+        }, function(err) {
+            toast.pop("There was an error while we tried to locate you.");
+        });
+
+    };
 
     $scope.answerHugg = function(huggID, profileID) {
         huggActions.answerHugg(huggID, $scope.currentUser, profileID);
     }
 
-    $scope.requestHugg = function(huggID, profileID) {
-        huggActions.requestHugg($scope.currentUser, gender);
+    $scope.requestHugg = function() {
+        huggActions.requestHugg($scope.currentUser, gender, $scope.currentLat, $scope.currentLong);
     }
 
     //initialize JSON
@@ -51,8 +66,8 @@
     }
 
     //start values
-    var currentLat = $stateParams.clat;
-    var currentLong = $stateParams.clng;
+    $scope.currentLat = $stateParams.clat;
+    $scope.currentLong = $stateParams.clng;
 
     //wait for ref to load before continuing
     function getHuggs() {
@@ -79,11 +94,11 @@
 
                             //calc distance
                             var radius = 6371;
-                            var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                            var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
+                            var diffLat = ($scope.currentLat - record.reqLat) * (Math.PI / 180);
+                            var diffLon = ($scope.currentLong - record.reqLong) * (Math.PI / 180);
                             var a =
                                 Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                                Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
+                                Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.currentLat) * (Math.PI / 180)) *
                                 Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
                             var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                             var distance = radius * b;

@@ -38,54 +38,50 @@
 
             }, //end function
             //function to request a hugg in case the presented huggs are not suitable
-            requestHugg: function(currentUser, gender) {
+            requestHugg: function(currentUser, gender, lat, long) {
                 //create random huggID
                 var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-                huggRef.$loaded().then(function(data) {
+                //check whether huggID already exists in db
+                while ($firebase(ref.child("hugg").orderByKey().equalTo(huggID.toString())).$asArray().$getRecord(huggID) != null) {
+                    huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+                } //end while
 
-                    //check whether huggID already exists in db
-                    while (data.$getRecord(huggID) != null) {
-                        huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-                    } //end while
+                //get GPS coordinates
 
-                    //get GPS coordinates
-                    $cordovaGeolocation
-                        .getCurrentPosition()
-                        .then(function(position) {
+                var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long);
+                reverseGeocode.then(function(result) {
+                    var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
 
-                            var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
-                            reverseGeocode.then(function(result) {
-                                var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
-                                console.log(reqLocation);
+                    //save data to firebase in new child with calculated huggID
+                    $firebase(ref.child("hugg").child(huggID)).$set({
+                        filterInfo: {
+                            huggID: huggID,
+                            reqLat: lat,
+                            reqLong: long,
+                            FilterGender: gender,
+                            done: 0,
+                            answered: 0,
+                            accepted: 0,
+                            reqProfileID: currentUser.profileID,
+                            reqGender: currentUser.gender,
+                            blocked: currentUser.blocked
+                        },
+                        data: {
+                            reqTime: Firebase.ServerValue.TIMESTAMP,
+                            reqFirstName: currentUser.firstName,
+                            reqPicture: currentUser.picture,
+                            reqRating: currentUser.rating,
+                            blocked: currentUser.blocked,
+                            reqLocation: reqLocation
+                        }
+                    }).then(function(x) {
 
-                                //save data to firebase in new child with calculated huggID
-                                $firebase(ref.child("hugg").child(huggID)).$set({
-                                    huggID: huggID,
-                                    reqLat: position.coords.latitude,
-                                    reqLong: position.coords.longitude,
-                                    FilterGender: gender,
-                                    done: 0,
-                                    answered: 0,
-                                    accepted: 0,
-                                    reqProfileID: currentUser.profileID,
-                                    reqGender: currentUser.gender,
-                                    reqTime: Firebase.ServerValue.TIMESTAMP,
-                                    reqFirstName: currentUser.firstName,
-                                    reqPicture: currentUser.picture,
-                                    reqRating: currentUser.rating,
-                                    blocked: currentUser.blocked,
-                                    reqLocation: reqLocation
-                                }).then(function(x) {
-
-                                    toast.pop("Hugg requested")
-                                    $state.go("app.home");
-                                    return 1;
-                                }); //end then (rating)
-                            }); //end reverseGeocode
-                        }); // end then (GPS)
-
-                }); // end then (Loaded)
+                        toast.pop("Hugg requested")
+                        $state.go("app.home");
+                        return 1;
+                    }); //end then (rating)
+                }); //end reverseGeocode
 
             }, // end function   
 
