@@ -1,4 +1,4 @@
-.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast) {
+.controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast, $q) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     var sync = $firebase(ref).$asObject();
@@ -21,34 +21,60 @@
             ref.authWithOAuthPopup("google", function(err, authData) {
                 if (authData) {
 
-
                     var userSigninIdentifier = authData.google.id;
-                    if ($scope.googleRef.$getRecord(userSigninIdentifier) == null) {
-                        toast.pop("Welcome aboard :)");
-                        $scope.showPopUp(authProvider, authData);
-                        //$scope.register(authProvider, authData);
-                    } else {
-                        $scope.profileID = $scope.googleRef.$getRecord(userSigninIdentifier).profileID;
-                        $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
-                            token: authData.token,
-                            expires: authData.expires,
-                            AccessToken: authData.google.accessToken
-                        });
-                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
-                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
-                        });
-                        toast.pop("Welcome back!");
-                        var profileData = $scope.dataRef.$getRecord($scope.profileID);
-                        //Store profile Data persistently in local storage for global usage
-                        localstorage.setObject("userData", profileData);
-                        $state.go('app.home');
 
-                    }
-                }
+                    //function to handle asynchronous call to DB
+                    function load() {
+                        var def = $q.defer();
+                        def.resolve($scope.googleRef.$getRecord(userSigninIdentifier));
+                        return def.promise;
+                    }; //end function
+
+
+                    load().then(function(data) {
+                        //check whether user is already registered (if not, value is null as it is not present in DB)
+                        if (data == null) {
+                            //show popup to gather additional user info for registering
+                            $scope.showPopUp(authProvider, authData);
+                        } else {
+                            $scope.profileID = data.profileID;
+
+                            //update auth data in DB
+                            $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
+                                token: authData.token,
+                                expires: authData.expires,
+                                AccessToken: authData.google.accessToken
+                            });
+
+                            //update database with lastseen value
+                            $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                                lastSeenTime: Firebase.ServerValue.TIMESTAMP
+                            });
+
+                            //toast for user feedback
+                            toast.pop("Welcome back!");
+
+                            //function to handle asynchronous call to DB
+                            function load() {
+                                var def = $q.defer();
+                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                return def.promise;
+                            } //end function load
+
+                            //load user info
+                            load().then(function(profileData) {
+                                localstorage.setObject("userData", profileData);
+                                $state.go('app.home')
+                            }); //end load()
+                        } //end if
+                    }); //end load()
+
+                } //end if 
                 if (err) {
                     console.log("error");
                 }
             }, {
+                //define scope for access of user profile
                 scope: "email"
             });
 
@@ -59,65 +85,84 @@
 
                 if (authData) {
                     var userSigninIdentifier = authData.facebook.id;
-                    console.log("userSigninIdentifier:" + userSigninIdentifier);
+                    //function to handle asynchronous call to DB
+                    function load() {
+                        var def = $q.defer();
+                        def.resolve($scope.facebookRef.$getRecord(userSigninIdentifier));
+                        return def.promise;
+                    }; //end function
 
-                    //
-
-                    if ($scope.facebookRef.$getRecord(userSigninIdentifier) == null) {
-                        toast.pop("Welcome aboard :)");
-                        $scope.showPopUp(authProvider, authData);
-                    } else {
-                        $scope.profileID = $scope.facebookRef.$getRecord(userSigninIdentifier).profileID;
-
-                        var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
-                        var FbProfilePicture;
-                        pictureData.then(function(result) {
-                            FbProfilePicture = result.data.data.url;
+                    load().then(function(data) {
+                        //check whether user is already registered (if not, value is null as it is not present in DB)
+                        if (data == null) {
+                            //show popup to gather additional user info for registering
+                            $scope.showPopUp(authProvider, authData);
+                        } else {
+                            $scope.profileID = data.profileID;
+                            //update signin information
                             $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
                                 token: authData.token,
                                 expires: authData.expires,
                                 AccessToken: authData.facebook.accessToken
                             });
+
+                            //update last seen value
                             $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
                                 lastSeenTime: Firebase.ServerValue.TIMESTAMP
                             });
+                            //Uer feedback
                             toast.pop("Welcome back!");
 
-                            var profileData = $scope.dataRef.$getRecord($scope.profileID);
-                            //Store profile Data persistently in local storage for global usage
-                            localstorage.setObject("userData", profileData);
+                            //function to handle asynchronous call to DB
+                            function load() {
+                                var def = $q.defer();
+                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                return def.promise;
+                            } //end function load
 
-                            $state.go('app.home');
-                        }); //end pictureData
-                    }
-                }
+                            //loas user info
+                            load().then(function(profileData) {
+                                localstorage.setObject("userData", profileData);
+                                $state.go('app.home')
+                            }); //end load()
+                        } //end if
+                    }); //end load()
+                } //end if
                 if (err) {
                     console.log("error")
                 }
             }, {
+                //set scope
                 scope: "email"
-            });
+            }); //end auth
+        } //end if facebook
+    }; //end function
 
-        }
-    };
-
+    //intialize model for popup valus
     $scope.loginModel = {}
     var popupAuthProvider;
     var popupAuthData;
 
+    //shows popup where users can enter data
     $scope.showPopUp = function(authProvider, authData) {
+        //displays popup
         $scope.popover.show(angular.element(document.getElementById('huggrText')));
         popupAuthProvider = authProvider;
         popupAuthData = authData;
     }
 
+    //checks whether set values are not null
     $scope.toRegister = function() {
         if ($scope.loginModel.gender != null && $scope.loginModel.birthdate != null) {
             $scope.popover.hide();
             $scope.register(popupAuthProvider, popupAuthData);
+        } else {
+            //feedback
+            toast.pop("Please enter info");
         }
     }
 
+    //stuff for the popover
     $ionicPopover.fromTemplateUrl('templates/popovers/addUserInfo.html', {
         scope: $scope,
     }).then(function(popover) {
@@ -142,6 +187,7 @@
         // Execute action
     });
 
+    //function to register the user
     $scope.register = function(authProvider, authData) {
 
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
@@ -182,7 +228,8 @@
                     $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
                         0: 1000000000001
                     }).then(function(y) {
-                        $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                        var newProfileIDString = newProfileID.toString();
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
                         $scope.dataRef.$loaded().then(function(data) {
                             //load data into local storage
                             var profileData = data.$getRecord(newProfileID);
@@ -197,6 +244,8 @@
             }); //end set signinDB
         }
         if (authProvider == "facebook") {
+            //as facebook only returns a 100x100 picture in the auth object we need to get it from facebook's Graph API
+            //see https://developers.facebook.com/docs/graph-api/reference/user/picture
             var pictureData = $http.get("https://graph.facebook.com/" + authData.facebook.id + "/picture?type=large&redirect=0&width=400");
             var FbProfilePicture;
             pictureData.then(function(result) {
@@ -233,8 +282,8 @@
                             0: 1000000000001
                         }).then(function(y) {
 
-                            //initialize user object with blocked array
-                            $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+                            var newProfileIDString = newProfileID.toString();
+                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
                             $scope.dataRef.$loaded().then(function(data) {
                                 //load data into local storage
                                 var profileData = data.$getRecord(newProfileID);
