@@ -194,7 +194,7 @@
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
         //check whether profileID alreadyexists in DB
-        while ($firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileID.toString())).$asArray().$getRecord(newProfileID) != null) {
+        while ($scope.dataRef.$getRecord(newProfileID) != null) {
             newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
         }
 
