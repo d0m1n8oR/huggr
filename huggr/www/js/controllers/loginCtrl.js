@@ -224,27 +224,26 @@
                     numberHuggs: 0,
                     age: helper.calcAge($scope.loginModel.birthdate),
                     registerTime: Firebase.ServerValue.TIMESTAMP,
-                    lastSeenTime: Firebase.ServerValue.TIMESTAMP
-                }).then(function(data) {
+                    lastSeenTime: Firebase.ServerValue.TIMESTAMP,
+                    blocked: {
+                        1000000000001: {
+                            0: 1000000000001
+                        }
+                    }
+                }).then(function(y) {
 
-                    //initialize user object with blocked array
-                    $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
-                        0: 1000000000001
-                    }).then(function(y) {
-                        
-                        //load new generated profile
-                        var newProfileIDString = newProfileID.toString();
-                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
-                        $scope.dataRef.$loaded().then(function(data) {
-                            //load data into local storage
-                            var profileData = data.$getRecord(newProfileID);
-                            //Store profile Data persistently in local storage for global usage
-                            toast.pop("Welcome to the huggr community!");
-                            localstorage.setObject("userData", profileData);
-                            $state.go('app.home');
-                        }); //end loaded
-                    }); //end set
-                }); //end set userDB
+                    //load new generated profile
+                    var newProfileIDString = newProfileID.toString();
+                    $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
+                    $scope.dataRef.$loaded().then(function(data) {
+                        //load data into local storage
+                        var profileData = data.$getRecord(newProfileID);
+                        //Store profile Data persistently in local storage for global usage
+                        toast.pop("Welcome to the huggr community!");
+                        localstorage.setObject("userData", profileData);
+                        $state.go('app.home');
+                    }); //end loaded
+                }); //end set
             }); //end set signinDB
         }
         if (authProvider == "facebook") {
@@ -280,28 +279,27 @@
                         numberHuggs: 0,
                         age: helper.calcAge($scope.loginModel.birthdate),
                         registerTime: Firebase.ServerValue.TIMESTAMP,
-                        lastSeenTime: Firebase.ServerValue.TIMESTAMP
-                    }).then(function(data) {
+                        lastSeenTime: Firebase.ServerValue.TIMESTAMP,
+                        blocked: {
+                            1000000000001: {
+                                0: 1000000000001
+                            }
+                        }
+                    }).then(function(y) {
 
-                        //initialize blocked data
-                        $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
-                            0: 1000000000001
-                        }).then(function(y) {
-
-                            //Load newly created profile
-                            var newProfileIDString = newProfileID.toString();
-                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
-                            $scope.dataRef.$loaded().then(function(data) {
-                                //load data into local storage
-                                var profileData = data.$getRecord(newProfileID);
-                                //Store profile Data persistently in local storage for global usage
-                                console.log("Successfully registered");
-                                toast.pop("Welcome to the huggr community!");
-                                localstorage.setObject("userData", profileData);
-                                $state.go('app.home');
-                            }); //end load data
-                        }); //end set blocked
-                    }); //end set usersData
+                        //Load newly created profile
+                        var newProfileIDString = newProfileID.toString();
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
+                        $scope.dataRef.$loaded().then(function(data) {
+                            //load data into local storage
+                            var profileData = data.$getRecord(newProfileID);
+                            //Store profile Data persistently in local storage for global usage
+                            console.log("Successfully registered");
+                            toast.pop("Welcome to the huggr community!");
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home');
+                        }); //end load data
+                    }); //end set blocked
                 }); //end set signinData
             });
 
@@ -311,7 +309,7 @@
 
     }; //function register(authProvider)
 
-//load modals to show TOS ans Privacy
+    //load modals to show TOS ans Privacy
     $ionicModal.fromTemplateUrl('templates/modals/tos.html', {
         scope: $scope
     }).then(function(modalTos) {

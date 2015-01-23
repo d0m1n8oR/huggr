@@ -35,21 +35,6 @@
         $scope.map = map;
     });
 
-    $scope.showPosition = function(lat, long) {
-        $scope.modalData.lat = lat;
-        $scope.modalData.long = long;
-        $scope.gmapsModal.show();
-        $cordovaGeolocation.getCurrentPosition().then(function(position) {
-            //wandle in google Maps format um
-            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            $scope.modalData.userlat = pos.k;
-            $scope.modalData.userlong = pos.D;
-        }, function(err) {
-            toast.pop("There was an error while we tried to locate you.");
-        });
-
-    }
-
     range = $stateParams.range;
 
     $scope.answerHugg = function(huggID, profileID) {
