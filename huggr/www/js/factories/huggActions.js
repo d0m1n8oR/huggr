@@ -38,23 +38,20 @@
 
             }, //end function
             //function to request a hugg in case the presented huggs are not suitable
-            requestHugg: function(currentUser, gender) {
+            requestHugg: function(currentUser, gender, lat, long) {
                 //create random huggID
                 var huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
                 huggRef.$loaded().then(function(data) {
 
                     //check whether huggID already exists in db
-                    while (data.$getRecord(huggID) != null) {
+                    while ($firebase(ref.child("huggID").orderByKey().equalTo(huggID.toString())).$asArray().$getRecord(huggID) != null) {
                         huggID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
                     } //end while
 
                     //get GPS coordinates
-                    $cordovaGeolocation
-                        .getCurrentPosition()
-                        .then(function(position) {
 
-                            var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + position.coords.latitude + "," + position.coords.longitude);
+                            var reverseGeocode = $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long);
                             reverseGeocode.then(function(result) {
                                 var reqLocation = result.data.results[0].address_components[1].long_name + ", " + result.data.results[0].address_components[2].long_name;
                                 console.log(reqLocation);
@@ -62,8 +59,8 @@
                                 //save data to firebase in new child with calculated huggID
                                 $firebase(ref.child("hugg").child(huggID)).$set({
                                     huggID: huggID,
-                                    reqLat: position.coords.latitude,
-                                    reqLong: position.coords.longitude,
+                                    reqLat: lat,
+                                    reqLong: long,
                                     FilterGender: gender,
                                     done: 0,
                                     answered: 0,
@@ -83,7 +80,6 @@
                                     return 1;
                                 }); //end then (rating)
                             }); //end reverseGeocode
-                        }); // end then (GPS)
 
                 }); // end then (Loaded)
 

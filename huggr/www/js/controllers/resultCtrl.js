@@ -37,12 +37,31 @@
 
     range = $stateParams.range;
 
+    $scope.showPosition = function(lat, long) {
+        $scope.modalData.lat = lat;
+        $scope.modalData.long = long;
+        $scope.gmapsModal.show();
+        $cordovaGeolocation.getCurrentPosition().then(function(position) {
+            //wandle in google Maps format um
+            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            $scope.modalData.userlat = pos.k;
+            $scope.modalData.userlong = pos.D;
+        }, function(err) {
+            toast.pop("There was an error while we tried to locate you.");
+        });
+
+    };
+
     $scope.answerHugg = function(huggID, profileID) {
         huggActions.answerHugg(huggID, $scope.currentUser, profileID);
     }
+    
+        //start values
+    var currentLat = $stateParams.clat;
+    var currentLong = $stateParams.clng;
 
-    $scope.requestHugg = function(huggID, profileID) {
-        huggActions.requestHugg($scope.currentUser, gender);
+    $scope.requestHugg = function() {
+        huggActions.requestHugg($scope.currentUser, gender, currentLat, currentLong);
     }
 
     //initialize JSON
@@ -50,9 +69,7 @@
         hugg: []
     }
 
-    //start values
-    var currentLat = $stateParams.clat;
-    var currentLong = $stateParams.clng;
+
 
     //wait for ref to load before continuing
     function getHuggs() {
@@ -75,7 +92,7 @@
                     if (((gender == "both") || (gender != "both" && record.reqGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
 
                         //check whether user is blocked in results                            
-                        if ( (record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
+                        if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
 
                             //calc distance
                             var radius = 6371;
