@@ -190,8 +190,10 @@
     //function to register the user
     $scope.register = function(authProvider, authData) {
 
+        //create new random profileID
         var newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
+        //check whether profileID alreadyexists in DB
         while ($scope.dataRef.$getRecord(newProfileID) != null) {
             newProfileID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
         }
@@ -207,6 +209,7 @@
                 AccessToken: authData.google.accessToken,
                 profileID: newProfileID
             }).then(function(x) {
+                //write user info data to database
                 $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                     profileID: newProfileID,
                     googleID: authData.google.id,
@@ -228,13 +231,14 @@
                     $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
                         0: 1000000000001
                     }).then(function(y) {
+                        
+                        //load new generated profile
                         var newProfileIDString = newProfileID.toString();
                         $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
                         $scope.dataRef.$loaded().then(function(data) {
                             //load data into local storage
                             var profileData = data.$getRecord(newProfileID);
                             //Store profile Data persistently in local storage for global usage
-                            console.log("Successfully registered user!");
                             toast.pop("Welcome to the huggr community!");
                             localstorage.setObject("userData", profileData);
                             $state.go('app.home');
@@ -260,6 +264,7 @@
                     AccessToken: authData.facebook.accessToken,
                     profileID: newProfileID
                 }).then(function(y) {
+                    //write user info data to database
                     $firebase(ref.child("users").child("data").child(newProfileID)).$set({
                         profileID: newProfileID,
                         googleID: null,
@@ -278,10 +283,12 @@
                         lastSeenTime: Firebase.ServerValue.TIMESTAMP
                     }).then(function(data) {
 
+                        //initialize blocked data
                         $firebase(ref.child("users").child("data").child(newProfileID).child("blocked").child(1000000000001)).$set({
                             0: 1000000000001
                         }).then(function(y) {
 
+                            //Load newly created profile
                             var newProfileIDString = newProfileID.toString();
                             $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(newProfileIDString)).$asArray();
                             $scope.dataRef.$loaded().then(function(data) {
@@ -304,7 +311,7 @@
 
     }; //function register(authProvider)
 
-
+//load modals to show TOS ans Privacy
     $ionicModal.fromTemplateUrl('templates/modals/tos.html', {
         scope: $scope
     }).then(function(modalTos) {

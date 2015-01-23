@@ -76,7 +76,6 @@
         }); // end go
     }; //end function
 
-    var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.currentUser = localstorage.getObject('userData');
     notifications.sync($scope.currentUser.profileID);
 
