@@ -179,74 +179,82 @@
                 var huggRef = $firebase(ref.child("hugg").orderByKey().equalTo(huggID.toString())).$asArray();
                 //define ref for huggs
                 huggRef.$loaded().then(function(huggData) {
-                    //load infos for selected hugg
-                    var record = huggData.$getRecord(huggID);
-                    var otherProfileID
-                    if (record.reqProfileID == currentUser.profileID) {
-                        otherProfileID = record.answerProfileID;
-                    } else {
-                        otherProfileID = record.reqProfileID;
-                    }
 
-                    //define ref for users
-                    var userRefA = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.reqProfileID.toString())).$asArray();
-                    userRefA.$loaded().then(function(userDataA) {
+                    function loadHugg() {
+                        var def = $q.defer();
+                        def.resolve(huggData.$getRecord(huggID));
+                        return def.promise;
+                    } //end function load
 
-                        function loadA() {
-                            var def = $q.defer();
-                            def.resolve(userDataA.$getRecord(record.reqProfileID));
-                            return def.promise;
-                        } //end function load
+                    loadHugg().then(function(record) {
+                        //load infos for selected hugg
+                        var otherProfileID;
+                        if (record.reqProfileID == currentUser.profileID) {
+                            otherProfileID = record.answerProfileID;
+                        } else {
+                            otherProfileID = record.reqProfileID;
+                        }
 
-                        loadA().then(function(userDataA) {
+                        //define ref for users
+                        var userRefA = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.reqProfileID.toString())).$asArray();
+                        userRefA.$loaded().then(function(userDataA) {
 
-                            //load current number of huggs for both users and add 1
-                            var reqNumberHuggs = userDataA.numberHuggs + 1;
+                            function loadA() {
+                                var def = $q.defer();
+                                def.resolve(userDataA.$getRecord(record.reqProfileID));
+                                return def.promise;
+                            } //end function load
 
-                            var userRefB = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.answerProfileID.toString())).$asArray();
-                            userRefB.$loaded().then(function(userDataB) {
+                            loadA().then(function(userDataA) {
 
-                                function loadB() {
-                                    var def = $q.defer();
-                                    def.resolve(userDataB.$getRecord(record.answerProfileID));
-                                    return def.promise;
-                                } //end function load
+                                //load current number of huggs for both users and add 1
+                                var reqNumberHuggs = userDataA.numberHuggs + 1;
 
-                                loadB().then(function(userDataB) {
+                                var userRefB = $firebase(ref.child("users").child("data").orderByKey().equalTo(record.answerProfileID.toString())).$asArray();
+                                userRefB.$loaded().then(function(userDataB) {
 
-                                    var answerNumberHuggs = userDataB.numberHuggs + 1;
+                                    function loadB() {
+                                        var def = $q.defer();
+                                        def.resolve(userDataB.$getRecord(record.answerProfileID));
+                                        return def.promise;
+                                    } //end function load
 
-                                    //update status in huggRef DB
-                                    $firebase(ref.child("hugg").child(huggID)).$update({
-                                        done: 1
-                                    }).then(function(x) {
-                                        //update info on number of huggs for answerer
-                                        $firebase(ref.child("users").child("data").child(record.reqProfileID)).$update({
-                                            numberHuggs: reqNumberHuggs
-                                        });
+                                    loadB().then(function(userDataB) {
 
-                                        $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
-                                            numberHuggs: answerNumberHuggs
-                                        }).then(function(y) {
+                                        var answerNumberHuggs = userDataB.numberHuggs + 1;
 
-                                            //finalize
-                                            //add notification for user that requested the hugg
-                                            $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
-                                                huggID: huggID,
-                                                firstName: currentUser.firstName,
-                                                picture: currentUser.picture,
-                                                time: Firebase.ServerValue.TIMESTAMP,
-                                                profileID: currentUser.profileID,
-                                                type: "done",
-                                                change: "add"
-                                            }).then(function(x) {
-                                                return 1;
-                                            })
-                                        }); //end then (finalize)
-                                    }); //end then (update answerer)
+                                        //update status in huggRef DB
+                                        $firebase(ref.child("hugg").child(huggID)).$update({
+                                            done: 1
+                                        }).then(function(x) {
+                                            //update info on number of huggs for answerer
+                                            $firebase(ref.child("users").child("data").child(record.reqProfileID)).$update({
+                                                numberHuggs: reqNumberHuggs
+                                            });
+
+                                            $firebase(ref.child("users").child("data").child(record.answerProfileID)).$update({
+                                                numberHuggs: answerNumberHuggs
+                                            }).then(function(y) {
+
+                                                //finalize
+                                                //add notification for user that requested the hugg
+                                                $firebase(ref.child("users").child("data").child(otherProfileID).child("notifications").child(huggID)).$set({
+                                                    huggID: huggID,
+                                                    firstName: currentUser.firstName,
+                                                    picture: currentUser.picture,
+                                                    time: Firebase.ServerValue.TIMESTAMP,
+                                                    profileID: currentUser.profileID,
+                                                    type: "done",
+                                                    change: "add"
+                                                }).then(function(x) {
+                                                    return 1;
+                                                })
+                                            }); //end then (finalize)
+                                        }); //end then (update answerer)
+                                    });
                                 });
-                            });
-                        }); //end then (load userRef)
+                            }); //end then (load userRef)
+                        });
                     });
                 });
             }, //end function

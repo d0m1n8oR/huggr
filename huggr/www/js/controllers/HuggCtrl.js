@@ -1,4 +1,4 @@
-.controller('HuggCtrl', function($scope, $firebase, localstorage, notifications, huggActions, $q) {
+.controller('HuggCtrl', function($scope, $firebase, localstorage, notifications, huggActions, $q, toast) {
 
     //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
