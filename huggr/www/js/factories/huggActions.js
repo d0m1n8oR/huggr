@@ -236,7 +236,7 @@
                 //in this case the total rating is calulated and added to the db
                 huggRef.$loaded().then(function(huggData) {
                     var reqRating = huggData.$getRecord(huggID).huggReqRating;
-                    if (reqRating != null) {
+                    if (reqRating != "-1") {
                         var total = (reqRating + rating) / 2;
                         $firebase(ref.child("hugg").child(huggID)).$update({
                             huggTotalRating: total
@@ -279,7 +279,7 @@
                     //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
                     //in this case the total rating is calulated and added to the db
                     var answerRating = huggData.$getRecord(huggID).huggAnswerRating;
-                    if (answerRating != null) {
+                    if (answerRating != "-1") {
                         var total = (answerRating + rating) / 2;
                         $firebase(ref.child("hugg").child(huggID)).$update({
                             huggTotalRating: total

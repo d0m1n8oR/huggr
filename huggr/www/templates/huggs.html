@@ -123,7 +123,8 @@
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == null " class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
                         <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
-                        <p> 
+                        <p>
+                            <div ng-init="item.huggAnswerRating = star.rating -1"></div>
                             <div class="star-rating" star-rating rating-value="item.huggAnswerRating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, item.huggAnswerRating, item.answerProfileID)"></div>
                         </p>
                         <div ng-if="item.huggReqRating != null">
@@ -138,11 +139,17 @@
                         <img ng-src="{{item.reqPicture}}">
                         <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                         <p>
+                            <div ng-init="item.huggReqRating = star.rating -1"></div>
                             <div class="star-rating" star-rating rating-value="item.huggReqRating" data-max="5" on-rating-selected="rateReqHugg(item.huggID, item.huggReqRating, item.reqProfileID)"></div>
 
                         </p>
-                        <p>{{item.reqFirstName}} has rated this hug with {{item.huggAnswerRating| number : 0}} <i class="icon ion-star"></i>
-                        </p>
+                        <div ng-if="item.huggAnswerRating != null">
+                            <p>{{item.reqFirstName}} has rated this hug with {{item.huggAnswerRating| number : 0}} <i class="icon ion-star"></i>
+                            </p>
+                        </div>
+                        <div ng-if="item.huggAnswerRating == '-1'">
+                            <p>{{item.reqFirstName}} hasn't rated this hugg yet</p>
+                        </div>
                     </ion-item>
                 </ion-list>
             </ion-content>
