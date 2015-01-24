@@ -40,26 +40,24 @@
     }
 
     $scope.rateAnswerHugg = function(huggID, rating, answerProfileID, reqHuggRating) {
-        console.log("rateAnswer");
-        console.log(rating + " " + reqHuggRating);
         huggActions.rateAnswerHugg(huggID, rating, answerProfileID, reqHuggRating).then(function(total) {
             $scope.totalRating(huggID, total)
         });
     }
 
     $scope.rateReqHugg = function(huggID, rating, reqProfileID, answerHuggRating) {
-        console.log(rating);
-        console.log(rating + " " + answerHuggRating);
         huggActions.rateReqHugg(huggID, rating, reqProfileID, answerHuggRating).then(function(total) {
             $scope.totalRating(huggID, total)
         });
     }
 
     $scope.totalRating = function(huggID, total) {
-        console.log(huggID + " " + total);
         $firebase(ref.child("hugg").child(huggID)).$update({
             huggTotalRating: total
+        }).then(function(y) {
+            toast.pop("Hugg done");
         });
+
     }
 
 })

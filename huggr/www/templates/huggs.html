@@ -127,7 +127,7 @@
                             <button ng-click="totalRating(item.huggID)">Test</button>
                             <div ng-if="item.huggAnswerRating == '-1'">
                                 <div ng-init="rating = -1"></div>
-                                <div class="star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, rating, item.reqProfileID, item.huggReqRating)"></div>
+                                <div class="star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, rating, item.answerProfileID, item.huggReqRating)"></div>
                             </div>
                             <div ng-if="item.huggAnswerRating != '-1'">
                                 <p>You already rated this hugg with {{item.huggAnswerRating}}<i class="icon ion-star"></i>

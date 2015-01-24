@@ -222,7 +222,6 @@
                                         type: "done",
                                         change: "add"
                                     }).then(function(x) {
-                                        toast.pop("Hugg done");
                                         return 1;
                                     })
                                 }); //end then (finalize)
@@ -234,7 +233,6 @@
 
             //the user that requested the hugg can rate the user that answered
             rateAnswerHugg: function(huggID, rating, answerProfileID, reqHuggRating) {
-                console.log(reqHuggRating);
                 var total;
                 var deferred = $q.defer();
 
@@ -247,25 +245,31 @@
                     //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                     //then the rating for this hugg is added and the result is devided by the new number of huggs
                     //the result is the new avarage rating for the user and is saved to the db
-                    var userRef = $firebase(ref.child("users").child("data")).$asArray();
+                    var userRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(answerProfileID.toString())).$asArray();
                     userRef.$loaded().then(function(userData) {
 
-                        var answerRating = (userData.$getRecord(answerProfileID).rating * (userData.$getRecord(answerProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(answerProfileID).numberHuggs);
+                        function load() {
+                            var def = $q.defer();
+                            def.resolve(userRef.$getRecord(answerProfileID));
+                            return def.promise;
+                        } //end function load
 
-                        $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
-                            rating: answerRating
-                        }).then(function(y) {
-                            toast.pop("Hugg rated");
-                            if (reqHuggRating != "-1") {
-                                console.log(reqHuggRating + " " + rating)
-                                total = (reqHuggRating + rating) / 2;
-                                deferred.resolve(total);
-                            } else {
-                                total = -1;
-                                deferred.resolve(total);
-                            }
+                        load().then(function(userData) {
+                            var answerRating = (userData.rating * (userData.numberHuggs - 1) + rating) / (userData.numberHuggs);
 
-                        }); //end update
+                            $firebase(ref.child("users").child("data").child(answerProfileID)).$update({
+                                rating: answerRating
+                            }).then(function(y) {
+                                if (reqHuggRating != "-1") {
+                                    total = (reqHuggRating + rating) / 2;
+                                    deferred.resolve(total);
+                                } else {
+                                    total = -1;
+                                    deferred.resolve(total);
+                                }
+
+                            }); //end update
+                        });
 
                     }); //end then
 
@@ -283,8 +287,6 @@
                 //if the rating is "." the other user has not yet set the rating, if it's a number the user has set a rating
                 //in this case the total rating is calulated and added to the db
 
-                console.log("Rating in method"+rating);
-
                 //add the rating of the user to the db
                 $firebase(ref.child("hugg").child(huggID)).$update({
                     huggReqRating: rating
@@ -294,24 +296,30 @@
                     //the data of the other user is loaded and then then his avarage rating is mulitplied with the number of Huggs
                     //then the rating for this hugg is added and the result is devided by the new number of huggs
                     //the result is the new avarage rating for the user and is saved to the db
-                    var userRef = $firebase(ref.child("users").child("data")).$asArray();
+                    var userRef = $firebase(ref.child("users").child("data").orderByKey().equalTo(reqProfileID.toString())).$asArray();
                     userRef.$loaded().then(function(userData) {
+                        function load() {
+                            var def = $q.defer();
+                            def.resolve(userRef.$getRecord(reqProfileID));
+                            return def.promise;
+                        } //end function load
 
-                        var reqRating = (userData.$getRecord(reqProfileID).rating * (userData.$getRecord(reqProfileID).numberHuggs - 1) + rating) / (userData.$getRecord(reqProfileID).numberHuggs);
+                        load().then(function(userData) {
+                            var reqRating = (userData.rating * (userData.numberHuggs - 1) + rating) / (userData.numberHuggs);
 
-                        $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
-                            rating: reqRating
-                        }).then(function(y) {
-                            if (answerHuggRating != "-1") {
-                                console.log(answerHuggRating + " " + rating)
-                                total = (answerHuggRating + rating) / 2;
-                                deferred.resolve(total);
-                            } else {
-                                total = -1;
-                                deferred.resolve(total);
-                            }
-                            toast.pop("Hugg rated");
-                        }); //end update
+                            $firebase(ref.child("users").child("data").child(reqProfileID)).$update({
+                                rating: reqRating
+                            }).then(function(y) {
+                                if (answerHuggRating != "-1") {
+                                    total = (answerHuggRating + rating) / 2;
+                                    deferred.resolve(total);
+                                } else {
+                                    total = -1;
+                                    deferred.resolve(total);
+                                }
+                                toast.pop("Hugg rated");
+                            }); //end update  
+                        });
 
                     }); //end then
 
