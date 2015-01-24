@@ -1,6 +1,6 @@
 <ion-modal-view>
-    <ion-header-bar class="bar bar-header bar-dark">
-        <h1 class="title">Your Position</h1>
+    <ion-header-bar class="bar bar-header bar-light">
+        <h1 class=" huggrFont title">Your Positions</h1>
         <button class="button button-clear button-primary" ng-click="gmapsModal.hide()">Close</button>
     </ion-header-bar>
 
@@ -8,20 +8,8 @@
         <div class="mapWrap" data-tap-disabled="true">
             <map class="bigMap" center="[{{modalData.userlat}}, {{modalData.userlong}}]" zoom="15" pan-control="false" zoom-control="false" scale-control="true">
                 <marker position="{{modalData.userlat}}, {{modalData.userlong}}" title="You are here"></marker>
-                <marker position="{{modalData.lat}},{{modalData.long}}" id="other" title="Hug Partner" on-click="showInfoWindow(event, 'bar')"></marker>
-                <info-window id="bar" visible-on-marker="other">
-                    <div ng-non-bindable="">
-                        <div id="bodyContent">
-                            <p>Navigate to {{modalData.lat}},{{modalData.long}}</p>
-                            <p>Opens in default Maps App</p>
-                        </div>
-                    </div>
-                </info-window>
+                <marker position="{{modalData.lat}},{{modalData.long}}" id="other" title="Hug Partner" icon="//developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"></marker>
             </map>
         </div>
     </ion-content>
-    <!--
- {{modalData.lat}},{{modalData.long}}
-
--->
 </ion-modal-view>
