@@ -171,7 +171,7 @@
             <ion-header-bar class="bar-positive"></ion-header-bar>
             <ion-content class="has-header">
                 <ion-list>
-                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating != null" item="item" class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating != '-1'" item="item" class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
                         <h2>Your hugg with {{item.answerFirstName}}</h2>
                         <p>
@@ -181,7 +181,7 @@
                             </p>
                         </p>
                     </ion-item>
-                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating != null" item="item" class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating != '-1'" item="item" class="item-thumbnail-left">
                         <img ng-src="{{item.reqPicture}}">
                         <h2>Your hugg with {{item.reqFirstName}}</h2>
                         <p>
