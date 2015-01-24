@@ -120,14 +120,21 @@
             <ion-header-bar class="bar-positive"></ion-header-bar>
             <ion-content class="has-header">
                 <ion-list>
-                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == null " class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating == '-1' " class="item-thumbnail-left">
                         <img ng-src="{{item.answerPicture}}">
                         <h2>Please rate your hugg with {{item.answerFirstName}}</h2>
                         <p>
-                            <div ng-init="item.huggAnswerRating = star.rating -1"></div>
-                            <div class="star-rating" star-rating rating-value="item.huggAnswerRating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, item.huggAnswerRating, item.answerProfileID)"></div>
+                            <button ng-click="totalRating(item.huggID)">Test</button>
+                            <div ng-if="item.huggAnswerRating == '-1'">
+                                <div ng-init="rating = -1"></div>
+                                <div class="star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateAnswerHugg(item.huggID, rating, item.reqProfileID, item.huggReqRating)"></div>
+                            </div>
+                            <div ng-if="item.huggAnswerRating != '-1'">
+                                <p>You already rated this hugg with {{item.huggAnswerRating}}<i class="icon ion-star"></i>
+                                </p>
+                            </div>
                         </p>
-                        <div ng-if="item.huggReqRating != null">
+                        <div ng-if="item.huggReqRating != '-1'">
                             <p>{{item.answerFirstName}} has rated this hug with {{item.huggReqRating| number : 0}} <i class="icon ion-star"></i>
                             </p>
                         </div>
@@ -135,15 +142,22 @@
                             <p>{{item.answerFirstName}} hasn't rated this hugg yet</p>
                         </div>
                     </ion-item>
-                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating == null" class="item-thumbnail-left">
+                    <ion-item ng-repeat="item in otherHuggData" ng-if="item.done == '1' && item.huggTotalRating == '-1'" class="item-thumbnail-left">
                         <img ng-src="{{item.reqPicture}}">
                         <h2>Please rate your hugg with {{item.reqFirstName}}</h2>
                         <p>
-                            <div ng-init="item.huggReqRating = star.rating -1"></div>
-                            <div class="star-rating" star-rating rating-value="item.huggReqRating" data-max="5" on-rating-selected="rateReqHugg(item.huggID, item.huggReqRating, item.reqProfileID)"></div>
+                            <button ng-click="totalRating(item.huggID)">Test</button>
+                            <div ng-if="item.huggReqRating == '-1'">
+                                <div ng-init="rating = -1"></div>
+                                <div class="star-rating" star-rating rating-value="rating" data-max="5" on-rating-selected="rateReqHugg(item.huggID, rating, item.reqProfileID, item.huggAnswerRating)"></div>
+                            </div>
+                            <div ng-if="item.huggReqRating != '-1'">
+                                <p>You already rated this hugg with {{item.huggReqRating}}<i class="icon ion-star"></i>
+                                </p>
+                            </div>
 
                         </p>
-                        <div ng-if="item.huggAnswerRating != null">
+                        <div ng-if="item.huggAnswerRating != '-1'">
                             <p>{{item.reqFirstName}} has rated this hug with {{item.huggAnswerRating| number : 0}} <i class="icon ion-star"></i>
                             </p>
                         </div>

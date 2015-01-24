@@ -1,6 +1,6 @@
-.controller('HuggCtrl', function($scope, $firebase, localstorage, notifications, huggActions) {
+.controller('HuggCtrl', function($scope, $firebase, localstorage, notifications, huggActions, $q) {
 
-	//initialize stuff
+    //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
     notifications.sync($scope.currentUser.profileID);
@@ -14,6 +14,10 @@
     $scope.removeHugg = function(huggID) {
         huggActions.removeHugg(huggID);
     }
+
+    $scope.test = {
+        huggTotalRating: null
+    };
 
     $scope.acceptHugg = function(huggID, answerProfileID) {
         huggActions.acceptHugg($scope.currentUser, huggID, answerProfileID);
@@ -35,14 +39,27 @@
         huggActions.markDone($scope.currentUser, huggID);
     }
 
-    $scope.rateAnswerHugg = function(huggID, rating, answerProfileID) {
-
-        huggActions.rateAnswerHugg(huggID, rating, answerProfileID);
+    $scope.rateAnswerHugg = function(huggID, rating, answerProfileID, reqHuggRating) {
+        console.log("rateAnswer");
+        console.log(rating + " " + reqHuggRating);
+        huggActions.rateAnswerHugg(huggID, rating, answerProfileID, reqHuggRating).then(function(total) {
+            $scope.totalRating(huggID, total)
+        });
     }
 
-    $scope.rateReqHugg = function(huggID, rating, reqProfileID) {
+    $scope.rateReqHugg = function(huggID, rating, reqProfileID, answerHuggRating) {
+        console.log(rating);
+        console.log(rating + " " + answerHuggRating);
+        huggActions.rateReqHugg(huggID, rating, reqProfileID, answerHuggRating).then(function(total) {
+            $scope.totalRating(huggID, total)
+        });
+    }
 
-        huggActions.rateReqHugg(huggID, rating, reqProfileID);
+    $scope.totalRating = function(huggID, total) {
+        console.log(huggID + " " + total);
+        $firebase(ref.child("hugg").child(huggID)).$update({
+            huggTotalRating: total
+        });
     }
 
 })
