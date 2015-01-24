@@ -11,7 +11,7 @@
                 $scope.googleRef = $firebase(ref.child("users").child("signin").child("google").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
 
                 //function to handle asynchronous call to DB
-                function load() {
+                function loadGoogleRefCheck() {
                     var def = $q.defer();
                     $scope.googleRef.$loaded().then(function(data) {
                         def.resolve(data.$getRecord(userSigninIdentifier));
@@ -19,7 +19,7 @@
                     return def.promise;
                 }; //end function
 
-                load().then(function(data) {
+                loadGoogleRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
                         //show popup to gather additional user info for registering
@@ -42,7 +42,7 @@
                         $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
 
                         //function to handle asynchronous call to DB
-                        function load() {
+                        function loadDataCheckA() {
                             var def = $q.defer();
                             $scope.dataRef.$loaded().then(function(data) {
                                 def.resolve(data.$getRecord($scope.profileID));
@@ -51,21 +51,20 @@
                         } //end function load
 
                         //load user info
-                        load().then(function(profileData) {
+                        loadDataCheckA().then(function(profileData) {
                             localstorage.setObject("userData", profileData);
                             $state.go('app.home')
                         }); //end load()
                     } //end if
                 }); //end load()     
             }
-            if (authData.provider == 'facebook') {
-                
+            if (authData.provider ==="facebook") {
                 var userSigninIdentifier = authData.facebook.id;
                 //create child for google
                 $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
 
                 //function to handle asynchronous call to DB
-                function load() {
+                function loadFacebookRefCheck() {
                     var def = $q.defer();
                     $scope.facebookRef.$loaded().then(function(data) {
                         def.resolve(data.$getRecord(userSigninIdentifier));
@@ -73,7 +72,7 @@
                     return def.promise;
                 }; //end function
 
-                load().then(function(data) {
+                loadFacebookRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
                         //show popup to gather additional user info for registering
@@ -93,7 +92,7 @@
                         });
                         $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
                         //function to handle asynchronous call to DB
-                        function load() {
+                        function loadDataCheckB() {
                             var def = $q.defer();
                             $scope.dataRef.$loaded().then(function(data) {
                                 def.resolve(data.$getRecord($scope.profileID));
@@ -102,7 +101,7 @@
                         } //end function load
 
                         //loas user info
-                        load().then(function(profileData) {
+                        loadDataCheckB().then(function(profileData) {
                             localstorage.setObject("userData", profileData);
                             $state.go('app.home')
                         }); //end load()
