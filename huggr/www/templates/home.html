@@ -3,8 +3,9 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-   <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span></button>
-   </ion-nav-buttons>
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        </button>
+    </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="card">
             <div class="item item-text-wrap">
@@ -13,6 +14,40 @@
                 </button>
             </div>
         </div>
+        <ion-list>
+            <ion-item ng-repeat="item in ownHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                <img ng-src="{{item.answerPicture}}">
+                <h2>Your upcoming hugg with {{item.answerFirstName}}</h2>
+                <p>
+                    <div ng-if="item.answerGender == 'male'">
+                        <p><i class="ion-male"> </i> male, rating of {{item.answerRating| number : 0}} <i class="icon ion-star"></i>
+                        </p>
+                    </div>
+                    <div ng-if="item.answerGender == 'female'">
+                        <p><i class="ion-female"> </i> female, rating of {{item.answerRating| number : 0}} <i class="icon ion-star"></i>
+                        </p>
+                    </div>
+                </p>
+                <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
+                <p><i class="icon ion-location"> </i>{{item.reqLocation}}</p>
+            </ion-item>
+            <ion-item ng-repeat="item in otherHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
+                <img ng-src="{{item.reqPicture}}">
+                <h2>Your upcoming hugg with {{item.reqFirstName}}?</h2>
+                <p>
+                    <div ng-if="item.reqGender == 'male'">
+                        <p><i class="ion-male"> </i> male, rating of {{item.reqRating| number : 0}} <i class="icon ion-star"></i>
+                        </p>
+                    </div>
+                    <div ng-if="item.reqGender == 'female'">
+                        <p><i class="ion-female"> </i> female, rating of {{item.reqRating| number : 0}} <i class="icon ion-star"></i>
+                        </p>
+                    </div>
+                </p>
+                <p><i class="icon ion-clock"> </i>{{ item.answerTime | date:'dd.MM.yyyy - HH:mm'}}</p>
+                <p><i class="icon ion-location"> </i>{{item.reqLocation}}</p>
+            </ion-item>
+        </ion-list>
         <div class="card">
             <div class="item item-text-wrap">
                 <map class="ui-map" zoom="14" center="[{{positions.lat}}, {{positions.lng}}]" scrollwheel="false" draggable="false">

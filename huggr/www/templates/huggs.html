@@ -172,10 +172,10 @@
             <ion-content class="has-header">
                 <ion-list>
                     <ion-item ng-repeat="item in ownHuggData" ng-if="item.done == '1' && item.huggTotalRating != null" item="item" class="item-thumbnail-left">
-                        <img ng-src="{{item.reqPicture}}">
-                        <h2>Your hugg with {{item.reqFirstName}}</h2>
+                        <img ng-src="{{item.answerPicture}}">
+                        <h2>Your hugg with {{item.answerFirstName}}</h2>
                         <p>
-                            <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
+                            <p><i class="icon ion-clock"> </i>{{ item.answerTime | date:'dd.MM.yyyy - HH:mm'}}</p>
                             <p><i class="icon ion-location"> </i>{{item.reqLocation}}</p>
                             <p>Rating for the hugg is {{item.huggTotalRating| number : 0}} <i class="icon ion-star"></i>
                             </p>
