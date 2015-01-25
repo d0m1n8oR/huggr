@@ -19,6 +19,8 @@
         connected: null
     }
 
+
+
     $scope.getStats = function() {
 
         $scope.statistics.chatMessages = null;
@@ -53,7 +55,7 @@
         connectedRef.on("value", function(snap) {
             if (snap.val() === true) {
                 $scope.statistics.connected = true;
-                
+
             } else {
                 $scope.statistics.connected = false;
             }

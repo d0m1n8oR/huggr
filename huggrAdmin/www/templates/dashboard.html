@@ -4,7 +4,7 @@
     </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="row">
-             <div class="col">
+            <div class="col">
                 <div class="item item-divider padding-top">
                     Open support requests
                 </div>
@@ -16,24 +16,47 @@
             </div>
             <div class="col">
                 <div class="item item-divider padding-top">
-                    <p>Quick statistics             <button class="button button-clear" ng-click="getStats()"><i class="ion-loop"></i> Refresh</button></p> 
+                    <p>Quick statistics
+                        <button class="button button-clear" ng-click="getStats()"><i class="ion-loop"></i> Refresh</button>
+                    </p>
                 </div>
                 <ion-item>
-                    <div ng-if="statistics.connected == true"><h2><i class="ion-checkmark"> </i>Connected to Firebase</h2></div>
-                    <div ng-if="statistics.connected == false"><h2><i class="ion-close"> </i> No connection to Firebase</h2></div>
+                    <div ng-if="statistics.connected == true">
+                        <h2><i class="ion-checkmark"> </i>Connected to Firebase</h2>
+                    </div>
+                    <div ng-if="statistics.connected == false">
+                        <h2><i class="ion-close"> </i> No connection to Firebase</h2>
+                    </div>
                 </ion-item>
                 <ion-item>
                     <h2>Number of huggs {{statistics.huggNumber}}</h2>
-               </ion-item>
+                </ion-item>
                 <ion-item>
                     <h2>Number of users {{statistics.userNumber}}</h2>
-               </ion-item>
-                 <ion-item>
+                </ion-item>
+                <ion-item>
                     <h2>Number of chats {{statistics.chatNumber}}</h2>
-               </ion-item>
+                </ion-item>
                 <ion-item>
                     <h2>Number of chat messages {{statistics.chatMessages}}</h2>
-               </ion-item>
+                </ion-item>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a class="twitter-timeline" href="https://twitter.com/hashtag/huggr" data-widget-id="559435539796205568">#huggr Tweets</a>
+                <script>
+                    ! function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0],
+                            p = /^http:/.test(d.location) ? 'http' : 'https';
+                        if (!d.getElementById(id)) {
+                            js = d.createElement(s);
+                            js.id = id;
+                            js.src = p + "://platform.twitter.com/widgets.js";
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }
+                    }(document, "script", "twitter-wjs");
+                </script>
             </div>
         </div>
     </ion-content>
