@@ -42,8 +42,26 @@
             <ion-list>
                 <ion-item ng-repeat="notificationItem in notificationData" href="#/app/huggs" item="item" class="item-avatar item-icon-right">
                     <img ng-src="{{notificationItem.picture}}">
-                    <h2>{{notificationItem.firstName}}</h2>
-                    <p>has {{notificationItem.type}}ed TODO!!!
+                    <div ng-if="notificationItem.type == 'answer' && notificationItem.change == 'add'">
+                        <h2>{{notificationItem.firstName}}</h2>
+                        <p>answered your hugg</p>
+                    </div>
+                    <div ng-if="notificationItem.type == 'answer' && notificationItem.change == 'remove'">
+                        <h2>{{notificationItem.firstName}}</h2>
+                        <p>revoked the answer</p>
+                    </div>
+                    <div ng-if="notificationItem.type == 'accept' && notificationItem.change == 'add'">
+                        <h2>{{notificationItem.firstName}}</h2>
+                        <p>accepted your hugg</p>
+                    </div>
+                    <div ng-if="notificationItem.type == 'accept' && notificationItem.change == 'remove'">
+                        <h2>{{notificationItem.firstName}}</h2>
+                        <p>declined your hugg</p>
+                    </div>
+                    <div ng-if="notificationItem.type == 'done'">
+                        <h2>{{notificationItem.firstName}}</h2>
+                        <p>set your hugg done</p>
+                    </div>
                     </p>
                     <a class="button button-icon button-light button-clear icon ion-close-circled notification-padding" ng-click="removeNotification(notificationItem.huggID)"></a>
                 </ion-item>

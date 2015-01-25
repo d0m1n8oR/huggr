@@ -90,7 +90,7 @@
                         <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
                         <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                         </p>
-                        <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
+                        <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.answerProfileID)"></ion-option-button>
                         <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
                     </ion-item>
                     <ion-item ng-repeat="item in otherHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.reqProfileID}}" class="item-thumbnail-left">
@@ -109,7 +109,7 @@
                         <p><i class="icon ion-clock"> </i>{{ item.answerTime | date:'dd.MM.yyyy - HH:mm'}}</p>
                         <p><i class="icon ion-location"> </i>{{item.reqLocation}}
                         </p>
-                        <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="revokeAnswer(item.huggID)"></ion-option-button>
+                        <ion-option-button class="button-assertive icon sp-huggr override-icon-position" ng-click="declineHugg(item.huggID, item.reqProfileID)"></ion-option-button>
                         <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="markDone(item.huggID)"></ion-option-button>
                     </ion-item>
                 </ion-list>
