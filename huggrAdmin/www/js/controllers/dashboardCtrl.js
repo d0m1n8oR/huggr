@@ -39,7 +39,7 @@
             var i = 0;
 
             for (var key in obj) {
-                if (obj.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority") {
+                if (obj.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && obj[key].message != null) {
                     $scope.statistics.chatMessages = $scope.statistics.chatMessages + Object.keys(obj[key].message).length;
                 }
             }
