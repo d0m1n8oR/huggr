@@ -9,19 +9,19 @@ Getting Started
 
 At first you have to clone this repository. Afterwards you will have to install some tools.
 
-#install node.js
+###install node.js
 ...text...
 
-#install npm
+###install npm
 ...text...
 
-#install gulp
+###install gulp
 ...text...
 
-#Umgebungsvariable setzen
+###Umgebungsvariable setzen
 ...text...
 
-#Projektressourcen installieren
+###Projektressourcen installieren
 ...text...
 
 Documentation
