@@ -1,5 +1,7 @@
 .controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $q) {
 
+    $scope.currentUser = localstorage.getObject('userData');
+
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
         lat: 49.4677562,
@@ -76,16 +78,15 @@
         }); // end go
     }; //end function
 
-    $scope.currentUser = localstorage.getObject('userData');
     notifications.sync($scope.currentUser.profileID);
-    
+
     var huggArray = {
-            hugg: []
-        }
-    
-        var ref = new Firebase("https://huggr.firebaseio.com/");
+        hugg: []
+    }
+
+    var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
-    
+
     var ownHuggObject = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     ownHuggObject.$bindTo($scope, "ownHuggData").then(function() {}); // end bindTo
 
