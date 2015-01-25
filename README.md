@@ -2,7 +2,7 @@ huggr
 =====
 
 This project is a webbased social application.
-With this app users can request hugs or search for requestet hugs nearby. There are some additional features for example a chat and the hug rating afterwards.
+With this app users can request huggs or search for requested huggs nearby. There are some additional features for example a chat and the hugg rating afterwards.
 
 Getting Started
 -----
