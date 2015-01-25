@@ -150,6 +150,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
+    
+    .state('app.profileView', {
+        url: "/profile/:profileID",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/profileview.html",
+                controller: 'ExtProfileCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
 
     .state('app.chatOverview', {
         url: "/chat",

@@ -31,7 +31,7 @@
                 <p><i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}</p>
                 <p><i class="icon ion-location"> </i>{{item.reqLocation}}</p>
             </ion-item>
-            <ion-item ng-repeat="item in otherHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.reqProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
+            <ion-item ng-repeat="item in otherHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.reqProfileID}}" class="item-thumbnail-left">
                 <img ng-src="{{item.reqPicture}}">
                 <h2>Your upcoming hugg with {{item.reqFirstName}}?</h2>
                 <p>
