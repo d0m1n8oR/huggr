@@ -11,6 +11,7 @@
         for (var i = 0; i < ($scope.chatList).length; i++) {
             $scope.bla.push($scope.chatList[i].chatID)
         };
+        //
 
 
         for (var i = 0; i < ($scope.chatList).length; i++) {

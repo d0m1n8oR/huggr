@@ -13,16 +13,26 @@ At first you have to clone this repository. Afterwards you will have to install 
 You have to install [Node.js](http://nodejs.org/). After downloading it, just follow the shown steps.
 
 ###install npm
-...text...
+
+npm describes a package manager of NodeJS (npm - NodeJS package manager). You can use it to install node programs. For installing just enter 'npm install' to your command line directed to your app's main location folder. npm brings a lot of documentation with it. With the help of a command called 'npm help' you can get some additional information about all of npm's commands.
 
 ###install gulp
-...text...
+
+Gulp is a build system, which is built on Node.js. Gulp helps you automating some common tasks during time of development. You can simply install globally it by entering 'npm install -g gulp'.
 
 ###Umgebungsvariable setzen
+
+// not sure about that
 ...text...
 
 ###Projektressourcen installieren
-...text...
+
+The following part descirbes some additional project resources:
+
+- GitHub: GitHub helps you developing your project within a team by offering a common platform for sharing your code with your team members. You can download it by clicking the following link:
+
+[WINDOWS] https://windows.github.com/
+[MAC OSX] https://mac.github.com/
 
 Documentation
 -----

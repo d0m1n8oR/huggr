@@ -24,6 +24,7 @@
             gender = "both";
         }
 
+    //
         $ionicModal.fromTemplateUrl('templates/modals/googleMaps.html', {
             scope: $scope
         }).then(function(modal) {
