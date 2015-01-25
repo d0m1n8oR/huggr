@@ -10,7 +10,7 @@ Getting Started
 At first you have to clone this repository. Afterwards you will have to install some tools.
 
 ###install node.js
-...text...
+You have to install [Node.js](http://nodejs.org/). After downloading it, just follow the shown steps.
 
 ###install npm
 ...text...
