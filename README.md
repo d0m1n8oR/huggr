@@ -18,7 +18,7 @@ npm describes a package manager of NodeJS (npm - NodeJS package manager). You ca
 
 ###install gulp
 
-Gulp is a build system, which is built on Node.js. Gulp helps you automating some common tasks during time of development. You can simply install globally it by entering 'npm install -g gulp'.
+Gulp is a build system, which is built on Node.js. Gulp helps you automating some common tasks during time of development. You can simply install globally it by entering 'npm install -g gulp' to your command line.
 
 ###Umgebungsvariable setzen
 
