@@ -51,4 +51,4 @@ See the file called [LICENCE](https://github.com/a3rosol/huggr/blob/master/LICEN
 Presentation
 -----
 
-To look at our ptesentaion with some additional information, you have to have to open this [html file](https://github.com/a3rosol/huggr/blob/master/assets/Pr%C3%A4sentation%2C%20Policy%2C%20Prozess%20usw/slides-huggr.html) in your browser.
+To look at our presentaion with some additional information, you have to open this [html file](https://github.com/a3rosol/huggr/blob/master/assets/Pr%C3%A4sentation%2C%20Policy%2C%20Prozess%20usw/slides-huggr.html) in your browser.
