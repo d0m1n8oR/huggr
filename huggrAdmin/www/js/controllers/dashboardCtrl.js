@@ -1,4 +1,4 @@
-.controller('dashboardCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+.controller('dashboardCtrl', function($scope, $firebase) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     $scope.request = {

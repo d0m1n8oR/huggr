@@ -1,4 +1,4 @@
-.controller('supportoverviewCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+.controller('supportoverviewCtrl', function($scope, $firebase) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     $scope.request = {

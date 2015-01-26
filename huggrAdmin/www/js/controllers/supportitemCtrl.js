@@ -1,5 +1,4 @@
-.controller('supportitemCtrl', function($scope, $state, localstorage, $firebase, toast, notifications, $stateParams, UserInfo, $q) {
-    $scope.currentUser = localstorage.getObject('userData');
+.controller('supportitemCtrl', function($scope, $firebase, $stateParams, UserInfo, $q, toast) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.supportRef = $firebase(ref.child("admin").child("support")).$asArray();
     $scope.data;

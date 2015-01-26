@@ -1,5 +1,4 @@
-.controller('loginCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $firebaseAuth) {
-    $scope.currentUser = localstorage.getObject('userData');
+.controller('loginCtrl', function($scope,  $state, $firebase, toast, $firebaseAuth) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     $scope.login = {

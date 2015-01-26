@@ -1,64 +1,65 @@
-<ion-view title="Statistics">
+<ion-view title="Search">
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <ion-content class="has-header">
-        <div class="row">
-        </div>
-        <div class="row">
-            <div class="col">
-                <ion-item>
-                    <label class="item">
-                        <span class="input-label">Start Date</span>
-                        <label class="item">
-                            <input type="date" ng-model="date.end">
-                        </label>End Date {{date.start}}
+    <ion-tabs class="tabs-striped tabs-color-assertive">
+
+        <ion-tab title="Open" icon="ion-person">
+            <ion-content class="has-header">
+                <!-- Please do not remove this -->
+                <div class="padding-top padding-bottom">Open</div>
+                <div class="padding-top">
+                    Search for users
+                </div>
+                <div class="bar item-input-inset padding-top">
+                    <label class="item-input-wrapper">
+                        <i class="icon ion-ios7-search placeholder-icon"></i>
+                        <input type="search" placeholder="Search" ng-model="search.user">
                     </label>
-                    <label class="item item-input item-select" ng-model="date.dimension">
-                        <div class="input-label" ng-model="date.dimension">
-                            Dimension
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Criteria
                         </div>
-                        <select ng-model="date.dimension">
-                            <option selected>Day</option>
-                            <option>Week</option>
-                            <option>Month</option>
+                        <select ng-model="search.criteria">
+                            <option selected >profileID</option>
+                            <option>displayName</option>
+                            <option>firstName</option>
+                            <option>lastName</option>
+                            <option>gender</option>
+                            <option>rating</option>
+                            <option>numberHuggs</option>
+                            <option>age</option>
+                            <option>email</option>
                         </select>
                     </label>
-                    <button class="button" ng-click="setToNow()">Now</button>
-                    <button class="button" ng-click="callStats()">Get statistics</button>
+                    <button class="button button-clear" ng-click="searchUser()">
+                        Search
+                    </button>
+                </div>
+                <ion-item ng-repeat="item in userData" item="item" class="item-thumbnail-left">
+                        <img ng-src="{{item.picture}}">
+                        <h2>{{item.firstName}} {{item.lastname}}     #{{item.profileID}}</h2>
+                    {{item.gender}}  {{item.rating}}  {{item.numberHuggs}}
+                    {{item.reqTime | date:'dd.MM.yyyy HH:mm'}} {{item.age}} {{item.lastSeenTime | date:'dd.MM.yyyy HH:mm'}} {{item.email}}
                 </ion-item>
-            </div>
-            <div class="col">
-                <ion-item>
+                </div>
+            </ion-content>
+        </ion-tab>
+        <ion-tab title="Closed" icon="ion-heart">
+            <ion-content class="has-header">
+                <!-- Please do not remove this -->
+                <div class="padding-top padding-bottom">Closed</div>
+                <div class="card">
                     <div class="item item-divider padding-top">
-                        Huggs and new registered users
+                        Closed support requests:
                     </div>
-                    <label id="analysisLabel"></label>
-                    <canvas id="analysis" width="500" height="300"></canvas>
-                </ion-item>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <ion-item>
-                    <div class="item item-divider padding-top">
-                        Status of huggs
-                    </div>
-                    <label id="statusLabel"></label>
-                    <canvas id="status" width="500" height="300"></canvas>
-            </div>
-            </ion-item>
-            <div class="col">
-                <ion-item>
-                    <div class="item item-divider padding-top">
-                        Gender of user
-                    </div>
-                    <label id="genderLabel"></label>
-                    <canvas id="gender" width="500" height="300"></canvas>
-                </ion-item>
-            </div>
-        </div>
-
-    </ion-content>
-
+                    <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '1'" href="#/app/supportitem/{{item.supportID}}">
+                        <h2>Subject {{item.subject}}</h2>
+                        <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}, #{{item.supportID}}</p>
+                        <p><i class="ion-person"> </i>{{item.profileID}}</p>
+                    </ion-item>
+                </div>
+            </ion-content>
+        </ion-tab>
+    </ion-tabs>
 </ion-view>

@@ -1,4 +1,4 @@
-.controller('statisticsCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $q) {
+.controller('statisticsCtrl', function($scope, $firebase, $q) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
     $scope.statistics = {
