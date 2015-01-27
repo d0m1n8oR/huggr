@@ -1,6 +1,6 @@
-.service('notifications', ["$rootScope", "$firebase", "$timeout", "toast",
+.service('notifications', ["$rootScope", "$firebase", "$timeout", "toast", "$cordovaVibration",
 
-    function($rootScope, $firebase, $timeout, toast) {
+    function($rootScope, $firebase, $timeout, toast, $cordovaVibration) {
 
         var ref = new Firebase("https://huggr.firebaseio.com/")
         return {
@@ -12,12 +12,15 @@
                         switch (event.event) {
                             case "child_removed":
                                 toast.pop("Notification deleted!");
+                                  $cordovaVibration.vibrate(100);
                                 break;
                             case "child_added":
                                 toast.pop("New notification!");
+                                  $cordovaVibration.vibrate(100);
                                 break;
                             case "child_changed":
                                 toast.pop("New notification!");
+                                  $cordovaVibration.vibrate(100);
                                 break;
                         }
 

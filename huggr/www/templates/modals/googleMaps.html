@@ -8,7 +8,7 @@
         <div class="mapWrap" data-tap-disabled="true">
             <map class="bigMap" center="[{{modalData.centerLat}}, {{modalData.centerLng}}]" zoom="15" pan-control="false" zoom-control="false" scale-control="true">
                 <marker position="{{modalData.userlat}}, {{modalData.userlong}}" title="You are here"></marker>
-                <marker position="{{modalData.lat}},{{modalData.long}}" id="other" title="Hug Partner" icon="//developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"></marker>
+                <marker position="{{modalData.lat}},{{modalData.long}}" id="other" ng-click='window.open("geo:{{modalData.lat}},{{modalData.long}}", "_system");'itle="Hug Partner" icon="//developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"></marker>
             </map>
         </div>
     </ion-content>
