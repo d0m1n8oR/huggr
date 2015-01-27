@@ -68,7 +68,6 @@
 
     //check why this is not working
     $scope.$watch('$scope.date', function() {
-        console.log("hallo: " + $scope.date.start);
     }, true);
 
     $scope.setToNow = function() {
@@ -121,7 +120,6 @@
 
             $scope.statRef = $firebase(ref.child("hugg").orderByChild('reqTime').startAt(array.value[6].start).endAt(array.value[0].end)).$asObject();
             $scope.statRef.$loaded().then(function(data) {
-                //console.log(data);
                 for (var key in data) {
                     if (data.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && key != "$value") {
                         if (data[key].reqTime < array.value[6].end) {
@@ -144,7 +142,6 @@
 
                 $scope.statRef = $firebase(ref.child("users").child("data").orderByChild('registerTime').startAt(array.value[6].start).endAt(array.value[0].end)).$asObject();
                 $scope.statRef.$loaded().then(function(data) {
-                    //console.log(data);
                     for (var key in data) {
                         if (data.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && key != "$value") {
                             if (data[key].reqTime < array.value[6].end) {
@@ -176,7 +173,6 @@
             return deferred.promise;
         }
         load().then(function(data) {
-            console.log(data);
 
             var lineData = {
                 labels: label,
@@ -205,6 +201,7 @@
             var ctx = document.getElementById("analysis").getContext("2d");
             var analysisChart = new Chart(ctx).Line(lineData);
             $scope.legend.analysis = analysisChart.generateLegend();
+            console.log("Label Data");
             console.log($scope.legend.analysis);
             document.getElementById('analysisLabel').innerHTML = $scope.legend.analysis;
         })
@@ -219,7 +216,6 @@
 
             $scope.statRef = $firebase(ref.child("users").child("data").orderByChild('gender')).$asObject();
             $scope.statRef.$loaded().then(function(data) {
-                //console.log(data);
                 for (var key in data) {
                     if (data.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && key != "$value") {
                         if (data[key].gender == "male") {
@@ -236,7 +232,6 @@
 
 
         load().then(function(data) {
-            console.log(data);
 
             var dData = [{
                 value: data[0],
@@ -253,6 +248,7 @@
             var ctx = document.getElementById("gender").getContext("2d");
             var genderChart = new Chart(ctx).Doughnut(dData);
             $scope.legend.gender = genderChart.generateLegend();
+            console.log("Legend Data");
             console.log($scope.legend.gender);
             document.getElementById('genderLabel').innerHTML = $scope.legend.gender;
         })
@@ -267,7 +263,6 @@
 
             $scope.statRef = $firebase(ref.child("hugg")).$asObject();
             $scope.statRef.$loaded().then(function(data) {
-                //console.log(data);
                 for (var key in data) {
                     if (data.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && key != "$value") {
                         if (data[key].answered == "0") {
@@ -288,7 +283,6 @@
 
 
         load().then(function(data) {
-            console.log(data);
 
             var dData = [{
                 value: data[0],
@@ -315,11 +309,44 @@
             var ctx = document.getElementById("status").getContext("2d");
             var statusChart = new Chart(ctx).Doughnut(dData);
             $scope.legend.status = statusChart.generateLegend();
+            console.log("Legend Data");
             console.log($scope.legend.status);
             document.getElementById('statusLabel').innerHTML = $scope.legend.status;
         })
     }
 
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+
+    var geoDats = {
+        data: []
+    };
+
+
+
+    $scope.getHuggs = function() {
+        var deferred = $q.defer();
+
+        $scope.huggRef.$loaded().then(function(data) {
+            var i = 0;
+            //parse all elements of returning array
+            while (data.$keyAt(i) != null) {
+
+                var record = data.$getRecord(data.$keyAt(i));
+
+                geoDats.data.push({
+                    lat: record.reqLat,
+                    long: record.reqLong
+                });
+                i++;
+            }
+            deferred.resolve(geoDats);
+        });
+        return deferred.promise;
+    };
+
+    $scope.getHuggs().then(function(data){
+    });
 
     $scope.initGraph = function() {
         var date = Date.now();
