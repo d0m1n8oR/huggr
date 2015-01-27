@@ -1,4 +1,4 @@
-.factory('UserInfo', ["$firebase", "$q", function($firebase, $q) {
+.factory('UserInfo', ["$firebase", "$q", function($firebase) {
     var ref = new Firebase("https://huggr.firebaseio.com/users/data"),
         dataRef = $firebase(ref).$asArray();
     return {
@@ -7,7 +7,7 @@
                 return angular.extend({}, data.$getRecord(ID));//much shorter than transcribing properties manually
             }).catch(function(error) {
                 console.error("Error getting UserInfo: ", error.message);
-                return $q.reject(error);
+                return error;
             });
         }
     };
