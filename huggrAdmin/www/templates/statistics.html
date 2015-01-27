@@ -56,7 +56,7 @@
             </div>
             <label id="statusLabel"></label>
             <canvas id="status"></canvas>
-            </div>
+        </div>
         </div>
 
         <div class="card">
@@ -64,21 +64,17 @@
                 Gender of users
             </div>
             <label id="genderLabel"></label>
-            <canvas id="gender" ></canvas>
+            <canvas id="gender"></canvas>
         </div>
-
-    <div class="card">
+{{geoDats | json}} <br>
+{{heatmapData | json}}
+        <div class="card">
             <div class="item item-text-wrap">
-                <map class="ui-map" zoom="14" scrollwheel="false" draggable="false">
+                <map class="ui-map" zoom="14">
+                    <heatmap-layer id="huggr" data="geoDats">
+                    </heatmap-layer>
                 </map>
             </div>
-        </div>
-
-        <div id="panel">
-            <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-            <button onclick="changeGradient()">Change gradient</button>
-            <button onclick="changeRadius()">Change radius</button>
-            <button onclick="changeOpacity()">Change opacity</button>
         </div>
 
     </ion-content>

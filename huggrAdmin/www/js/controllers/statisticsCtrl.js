@@ -67,8 +67,7 @@
     };
 
     //check why this is not working
-    $scope.$watch('$scope.date', function() {
-    }, true);
+    $scope.$watch('$scope.date', function() {}, true);
 
     $scope.setToNow = function() {
         $scope.date.end = new Date(Date.now());
@@ -91,7 +90,7 @@
             }
             $scope.calcStats(end, dimension);
         } else {
-            console.log("error");
+            //console.log("error");
         }
     }
 
@@ -201,8 +200,8 @@
             var ctx = document.getElementById("analysis").getContext("2d");
             var analysisChart = new Chart(ctx).Line(lineData);
             $scope.legend.analysis = analysisChart.generateLegend();
-            console.log("Label Data");
-            console.log($scope.legend.analysis);
+            //console.log("Label Data");
+            //console.log($scope.legend.analysis);
             document.getElementById('analysisLabel').innerHTML = $scope.legend.analysis;
         })
     }
@@ -248,8 +247,8 @@
             var ctx = document.getElementById("gender").getContext("2d");
             var genderChart = new Chart(ctx).Doughnut(dData);
             $scope.legend.gender = genderChart.generateLegend();
-            console.log("Legend Data");
-            console.log($scope.legend.gender);
+            //console.log("Legend Data");
+            //console.log($scope.legend.gender);
             document.getElementById('genderLabel').innerHTML = $scope.legend.gender;
         })
     }
@@ -309,8 +308,8 @@
             var ctx = document.getElementById("status").getContext("2d");
             var statusChart = new Chart(ctx).Doughnut(dData);
             $scope.legend.status = statusChart.generateLegend();
-            console.log("Legend Data");
-            console.log($scope.legend.status);
+            //console.log("Legend Data");
+            //console.log($scope.legend.status);
             document.getElementById('statusLabel').innerHTML = $scope.legend.status;
         })
     }
@@ -318,11 +317,7 @@
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
-    var geoDats = {
-        data: []
-    };
-
-
+    $scope.geoDats = [];
 
     $scope.getHuggs = function() {
         var deferred = $q.defer();
@@ -334,19 +329,35 @@
 
                 var record = data.$getRecord(data.$keyAt(i));
 
-                geoDats.data.push({
-                    lat: record.reqLat,
-                    long: record.reqLong
-                });
+                $scope.geoDats.push(
+                    new google.maps.LatLng(record.reqLat, record.reqLong)
+                );
                 i++;
             }
-            deferred.resolve(geoDats);
+            deferred.resolve($scope.geoDats);
+            console.log($scope.geoDats);
         });
         return deferred.promise;
     };
 
-    $scope.getHuggs().then(function(data){
-    });
+$scope.heatmapData = [
+  new google.maps.LatLng(37.782, -122.447),
+  new google.maps.LatLng(37.782, -122.445),
+  new google.maps.LatLng(37.782, -122.443),
+  new google.maps.LatLng(37.782, -122.441),
+  new google.maps.LatLng(37.782, -122.439),
+  new google.maps.LatLng(37.782, -122.437),
+  new google.maps.LatLng(37.782, -122.435),
+  new google.maps.LatLng(37.785, -122.447),
+  new google.maps.LatLng(37.785, -122.445),
+  new google.maps.LatLng(37.785, -122.443),
+  new google.maps.LatLng(37.785, -122.441),
+  new google.maps.LatLng(37.785, -122.439),
+  new google.maps.LatLng(37.785, -122.437),
+  new google.maps.LatLng(37.785, -122.435)
+];
+
+
 
     $scope.initGraph = function() {
         var date = Date.now();
@@ -358,77 +369,12 @@
 
     $scope.initGraph();
 
-
-      $scope.$on('mapInitialized', function(event, map) {
-        $scope.map = map;
-    });
-/*
-    var map, pointarray, heatmap;
-
-    var taxiData = [
-        new google.maps.LatLng(37.782551, -122.445368),
-        new google.maps.LatLng(37.782745, -122.444586),
-        new google.maps.LatLng(37.782842, -122.443688),
-        new google.maps.LatLng(37.782919, -122.442815),
-        new google.maps.LatLng(37.782992, -122.442112),
-        new google.maps.LatLng(37.783100, -122.441461),
-        new google.maps.LatLng(37.783206, -122.440829),
-        new google.maps.LatLng(37.783273, -122.440324),
-        new google.maps.LatLng(37.783316, -122.440023)
-    ];
-
-
-
-    function initialize() {
-        var mapOptions = {
-            zoom: 13,
-            center: new google.maps.LatLng(37.774546, -122.433523),
-            mapTypeId: google.maps.MapTypeId.SATELLITE
-        };
-
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-
-        var pointArray = new google.maps.MVCArray(taxiData);
-
-        heatmap = new google.maps.visualization.HeatmapLayer({
-            data: pointArray
+    var heatmap;
+    $scope.getHuggs().then(function(data) {
+        $scope.$on('mapInitialized', function(map) {
+            heatmap = map.heatmapLayers.huggr;
+            console.log("init");
         });
+    });
 
-        heatmap.setMap(map);
-    }
-
-    function toggleHeatmap() {
-        heatmap.setMap(heatmap.getMap() ? null : map);
-    }
-
-    function changeGradient() {
-        var gradient = [
-            'rgba(0, 255, 255, 0)',
-            'rgba(0, 255, 255, 1)',
-            'rgba(0, 191, 255, 1)',
-            'rgba(0, 127, 255, 1)',
-            'rgba(0, 63, 255, 1)',
-            'rgba(0, 0, 255, 1)',
-            'rgba(0, 0, 223, 1)',
-            'rgba(0, 0, 191, 1)',
-            'rgba(0, 0, 159, 1)',
-            'rgba(0, 0, 127, 1)',
-            'rgba(63, 0, 91, 1)',
-            'rgba(127, 0, 63, 1)',
-            'rgba(191, 0, 31, 1)',
-            'rgba(255, 0, 0, 1)'
-        ]
-        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-    }
-
-    function changeRadius() {
-        heatmap.set('radius', heatmap.get('radius') ? null : 20);
-    }
-
-    function changeOpacity() {
-        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
-    }
-
-*/
 })
