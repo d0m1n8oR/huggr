@@ -1,4 +1,4 @@
-.factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading) {
+.factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading, $cordovaVibration) {
     return {
         show: function(message, duration, position) {
             message = message || "There was a problem...";
@@ -17,6 +17,8 @@
                 scope: $rootScope,
                 buttons: []
             });
+            $cordovaVibration.vibrate(100);
+
 
             $timeout(function() {
                 myPopup.close();
@@ -29,6 +31,8 @@
                 noBackdrop: true,
                 duration: 1000
             });
+            $cordovaVibration.vibrate(100);
+
         }
     }
 })
