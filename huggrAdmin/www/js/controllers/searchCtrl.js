@@ -3,7 +3,8 @@
 
     $scope.search = {
         user: null,
-        criteria: null
+        criteria: null,
+        hugg: null
     }
 
     $scope.searchUser = function() {
@@ -59,6 +60,43 @@
             var userObject = $firebase(ref.child("users").child("data").orderByChild(searchCriteria).equalTo(searchValue)).$asObject();
             userObject.$bindTo($scope, "userData").then(function() {
                 console.log($scope.userData);
+            }); // end bindTo
+        }
+    }
+    
+    $scope.searchHugg = function() {
+        var searchCriteria = $scope.search.criteria;
+        var searchValue = $scope.search.hugg;
+        
+        if(searchCriteria == "huggID")
+        {
+            searchValue = Number(searchValue);
+        }
+        
+        if(searchCriteria == "huggID")
+        {
+            searchCriteria = 'huggID';
+        }
+        if(searchCriteria == "answerProfileID")
+        {
+            searchCriteria = 'answerProfileID'
+        }
+        if(searchCriteria == "reqProfileID")
+        {
+            searchCriteria = 'reqProfileID';
+        }
+        if(searchCriteria == "FilterGender")
+        {
+            searchCriteria = 'FilterGender';
+        }
+        
+        if (searchCriteria == null || searchValue == null) {
+            toast.pop("Enter values!");
+        } else {
+            console.log(searchCriteria+searchValue )
+            var userObject = $firebase(ref.child("hugg").orderByChild(searchCriteria).equalTo(searchValue)).$asObject();
+            userObject.$bindTo($scope, "huggData").then(function() {
+                console.log($scope.huggData);
             }); // end bindTo
         }
     }
