@@ -5,20 +5,27 @@
     <ion-tabs class="tabs-striped tabs-color-assertive">
 
         <ion-tab title="Open" icon="ion-person">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
+
             <ion-content class="has-header">
-                <!-- Please do not remove this -->
-                <div class="padding-top padding-bottom">Open</div>
-                <div class="padding-top">
-                    Search for users
-                </div>
                 <div class="bar item-input-inset padding-top">
                     <label class="item-input-wrapper">
                         <i class="icon ion-ios7-search placeholder-icon"></i>
                         <input type="search" placeholder="Search" ng-model="search.user">
                     </label>
+
+                    <button class="button button-clear" ng-click="searchUser()">
+                        Search
+                    </button>
+
+
+                </div>
+
+                <div class="list">
+
                     <label class="item item-input item-select">
                         <div class="input-label">
-                            Criteria
+                            Search Criteria
                         </div>
                         <select ng-model="search.criteria">
                             <option selected>profileID</option>
@@ -32,45 +39,43 @@
                             <option>email</option>
                         </select>
                     </label>
-                    <button class="button button-clear" ng-click="searchUser()">
-                        Search
-                    </button>
+
                 </div>
+
                 <ion-item ng-repeat="item in userData" item="item" class="item-thumbnail-left">
                     <img ng-src="{{item.picture}}">
                     <h2>{{item.firstName}} {{item.lastname}}     #{{item.profileID}}</h2>
-                    <p>{{item.gender}} {{item.rating}}<i class="icon ion-star"></i></p><p> {{item.numberHuggs}} {{item.reqTime | date:'dd.MM.yyyy HH:mm'}} {{item.age}}</p> <p>{{item.lastSeenTime | date:'dd.MM.yyyy HH:mm'}} {{item.email}}</p>
+                    <p>{{item.gender}} {{item.rating}}<i class="icon ion-star"></i>
+                    </p>
+                    <p> {{item.numberHuggs}} {{item.reqTime | date:'dd.MM.yyyy HH:mm'}} {{item.age}}</p>
+                    <p>{{item.lastSeenTime | date:'dd.MM.yyyy HH:mm'}} {{item.email}}</p>
                 </ion-item>
                 </div>
             </ion-content>
         </ion-tab>
-        <ion-tab title="Closed" icon="ion-heart">
+        <ion-tab title="Closed" icon="sp-huggr override-sptabs">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
             <ion-content class="has-header">
-                <!-- Please do not remove this -->
-                <div class="padding-top padding-bottom">Open</div>
-                <div class="padding-top">
-                    Search for users
-                </div>
                 <div class="bar item-input-inset padding-top">
                     <label class="item-input-wrapper">
                         <i class="icon ion-ios7-search placeholder-icon"></i>
                         <input type="search" placeholder="Search" ng-model="search.hugg">
                     </label>
-                    <label class="item item-input item-select">
-                        <div class="input-label">
-                            Criteria
-                        </div>
-                        <select ng-model="search.criteria">
-                            <option selected>huggID</option>
-                            <option>answerProfileID</option>
-                            <option>reqProfileID</option>
-                            <option>FilterGender</option>
-                        </select>
-                    </label>
                     <button class="button button-clear" ng-click="searchHugg()">
                         Search
                     </button>
                 </div>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Criteria
+                    </div>
+                    <select ng-model="search.criteria">
+                        <option selected>huggID</option>
+                        <option>answerProfileID</option>
+                        <option>reqProfileID</option>
+                        <option>FilterGender</option>
+                    </select>
+                </label>
                 <ion-item ng-repeat="item in huggData" item="item">
                     <div class="item-thumbnail-right">
                         <img ng-src="{{item.reqPicture}}">
@@ -80,7 +85,9 @@
                     </div>
                     <h2>#{{item.huggID}} between {{item.reqFirstname}} and {{item.answerFirstName}}</h2>
                     <p>{{item.reqGender}} {{item.reqRating}}<i class="icon ion-star"></i> #{{item.reqProfileID}}</p>
-                    <p>{{item.answerGender}} {{item.answerRating}}<i class="icon ion-star"></i> #{{item.answerProfileID}}</p><p> <i class="icon ion-clock"> </i>{{item.reqTime | date:'dd.MM.yyyy HH:mm'}} <i class="icon ion-clock"> </i>{{item.answerTime | date:'dd.MM.yyyy HH:mm'}} </p><p> <i class="button icon-left ion-location button-clear button-dark"> </i> {{item.reqLocation}} </p>
+                    <p>{{item.answerGender}} {{item.answerRating}}<i class="icon ion-star"></i> #{{item.answerProfileID}}</p>
+                    <p> <i class="icon ion-clock"> </i>{{item.reqTime | date:'dd.MM.yyyy HH:mm'}} <i class="icon ion-clock"> </i>{{item.answerTime | date:'dd.MM.yyyy HH:mm'}} </p>
+                    <p> <i class="button icon-left ion-location button-clear button-dark"> </i> {{item.reqLocation}} </p>
                 </ion-item>
                 </div>
             </ion-content>

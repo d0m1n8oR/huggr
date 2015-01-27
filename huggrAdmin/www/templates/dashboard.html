@@ -4,8 +4,8 @@
     </ion-nav-buttons>
     <ion-content class="has-header">
         <div class="row">
-            <div class="col">
-                <div class="item item-divider padding-top">
+            <div class="col card">
+                <div class="item item-divider">
                     Open support requests
                 </div>
                 <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/supportitem/{{item.supportID}}">
@@ -14,10 +14,9 @@
                     <p><i class="ion-person"> </i>{{item.profileID}}</p>
                 </ion-item>
             </div>
-            <div class="col">
-                <div class="item item-divider padding-top">
-                    <p>Quick statistics
-                        <button class="button button-clear" ng-click="getStats()"><i class="ion-loop"></i> Refresh</button>
+            <div class="col card">
+                <div class="item item-divider">
+                    <p> <a class="icon ion-loop pull-right" ng-click="getStats()">Quick statistics</a>
                     </p>
                 </div>
                 <ion-item>
@@ -29,34 +28,22 @@
                     </div>
                 </ion-item>
                 <ion-item>
-                    <h2>Number of huggs {{statistics.huggNumber}}</h2>
+                    <h2><i class="sp-huggr"> </i>Number of huggs {{statistics.huggNumber}}</h2>
                 </ion-item>
                 <ion-item>
-                    <h2>Number of users {{statistics.userNumber}}</h2>
+                    <h2><i class="ion-person-stalker"> </i>Number of users {{statistics.userNumber}}</h2>
                 </ion-item>
                 <ion-item>
-                    <h2>Number of chats {{statistics.chatNumber}}</h2>
+                    <h2><i class="ion-ios7-chatbubble"> </i>Number of chats {{statistics.chatNumber}}</h2>
                 </ion-item>
                 <ion-item>
-                    <h2>Number of chat messages {{statistics.chatMessages}}</h2>
+                    <h2><i class="ion-chatbubble-working"> </i>Number of chat messages {{statistics.chatMessages}}</h2>
                 </ion-item>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <a class="twitter-timeline" href="https://twitter.com/hashtag/huggr" data-widget-id="559435539796205568">#huggr Tweets</a>
-                <script>
-                    ! function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0],
-                            p = /^http:/.test(d.location) ? 'http' : 'https';
-                        if (!d.getElementById(id)) {
-                            js = d.createElement(s);
-                            js.id = id;
-                            js.src = p + "://platform.twitter.com/widgets.js";
-                            fjs.parentNode.insertBefore(js, fjs);
-                        }
-                    }(document, "script", "twitter-wjs");
-                </script>
             </div>
         </div>
     </ion-content>
