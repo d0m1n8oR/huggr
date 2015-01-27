@@ -14,6 +14,7 @@ angular.module('starter.controllers', [])
                 var ref = new Firebase("https://huggr.firebaseio.com/users/data");
                 dataRef = $firebase(ref.orderByKey().equalTo(ID.toString())).$asArray();
                 return dataRef.$loaded().then(function(data) {
+                    console.log(data.$getRecord(ID));
                     return angular.extend({}, data.$getRecord(ID)); //much shorter than transcribing properties manually
                 }).catch(function(error) {
                     console.error("Error getting UserInfo: ", error.message);
@@ -454,7 +455,7 @@ angular.module('starter.controllers', [])
         };
     }
 ])
-.factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading) {
+.factory('toast', function($rootScope, $timeout, $ionicPopup, $ionicLoading, $cordovaVibration) {
     return {
         show: function(message, duration, position) {
             message = message || "There was a problem...";
@@ -473,6 +474,8 @@ angular.module('starter.controllers', [])
                 scope: $rootScope,
                 buttons: []
             });
+            $cordovaVibration.vibrate(100);
+
 
             $timeout(function() {
                 myPopup.close();
@@ -485,9 +488,12 @@ angular.module('starter.controllers', [])
                 noBackdrop: true,
                 duration: 1000
             });
+            $cordovaVibration.vibrate(100);
+
         }
     }
 })
+
 .directive('input', function($timeout) {
     return {
         restrict: 'E',
@@ -597,6 +603,7 @@ angular.module('starter.controllers', [])
         for (var i = 0; i < ($scope.chatList).length; i++) {
             $scope.bla.push($scope.chatList[i].chatID)
         };
+        //
 
 
         for (var i = 0; i < ($scope.chatList).length; i++) {
@@ -634,10 +641,7 @@ angular.module('starter.controllers', [])
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
-    $scope.$on("$ionicView.enter", function(scopes, states) {
-        console.log("enter");
-        console.log($scope);
-    });
+    $scope.$on("$ionicView.enter", function(scopes, states) {    });
 
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
@@ -647,8 +651,6 @@ angular.module('starter.controllers', [])
 
     var deferred = $q.defer();
     UserInfo.getProfile($scope.profileID).then(function(value) {
-        console.log("value");
-        console.log(value);
         $scope.data.age = value.age;
         $scope.data.picture = value.picture;
         $scope.data.lastSeenTime = value.lastSeenTime;
@@ -658,20 +660,7 @@ angular.module('starter.controllers', [])
         $scope.data.numberHuggs = value.numberHuggs;
         $scope.data.rating = value.rating;
         $scope.data.firstName = value.firstName;
-        console.log($scope.data);
-
-
     }); //end getProfile
-
-    /*var userObject = $firebase(ref.child("users").child("data").child($scope.profileID)).$asObject();
-
-        //displays information
-        userObject.$bindTo($scope, "result").then(function() {
-            $scope.data = $scope.result;
-            console.log("hallo");
-            console.log($scope.data);
-            //$scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
-        }); //end bindTo*/
 
     //block a user from ever sending requests again
     $scope.blockUser = function blockUser(blockProfileID) {
@@ -1073,7 +1062,9 @@ angular.module('starter.controllers', [])
 
 
 })
-.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $q) {
+
+    $scope.currentUser = localstorage.getObject('userData');
 
     //Setze Koordinaten für Initialisierung von Maps
     $scope.positions = {
@@ -1151,8 +1142,158 @@ angular.module('starter.controllers', [])
         }); // end go
     }; //end function
 
-    $scope.currentUser = localstorage.getObject('userData');
     notifications.sync($scope.currentUser.profileID);
+
+    var huggArray = {
+        hugg: []
+    }
+
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
+
+    var ownHuggObject = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    ownHuggObject.$bindTo($scope, "ownHuggData").then(function() {}); // end bindTo
+
+    var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
+
+    //wait for ref to load before continuing
+    function getHuggs() {
+        var deferred = $q.defer();
+
+        $scope.orderHuggRef.$loaded().then(function(data) {
+            var i = 0;
+            //parse all elements of returning array
+            while (data.$keyAt(i) != null) {
+
+                function load() {
+                    var def = $q.defer();
+                    def.resolve(data.$getRecord(data.$keyAt(i)));
+                    return def.promise
+                }; //end function
+                //check whether filter gender of searching person and gender of requestor match
+                //check whether gender of searching person and filter of requestor match
+                //check whether current user's profile ID is among the blocked profile IDs
+                load().then(function(record) {
+                    if (record.reqProfileID != $scope.currentUser.profileID) {
+
+                        //check whether user is blocked in results                            
+                        if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
+
+                            //calc distance
+                            var radius = 6371;
+                            var diffLat = ($scope.positions.lat - record.reqLat) * (Math.PI / 180);
+                            var diffLon = ($scope.positions.lng - record.reqLong) * (Math.PI / 180);
+                            var a =
+                                Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                                Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.positions.lat) * (Math.PI / 180)) *
+                                Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                            var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            var distance = radius * b;
+
+                            //check for distance within range and save to JSON
+                            if (distance <= 10) {
+                                huggArray.hugg.push({
+                                    "lat": record.reqLat,
+                                    "long": record.reqLong
+                                }); //end push
+                            } // end if
+
+                        } //end if
+                    } // end if
+                }); //end then
+                i++;
+            } //end while
+            deferred.resolve(huggArray);
+
+            //This is the return value
+        }); //end load huggRef
+        return deferred.promise;
+    } //end function
+
+    getHuggs().then(function(array) {
+        //this is the array to display the coordinates
+        console.log(array);
+        $scope.resultList = array;
+    });
+
+})
+.controller('inviteCtrl', function($scope, $cordovaContacts, $cordovaSocialSharing, toast) {
+    $scope.getContactList = function() {
+        $cordovaContacts.find({
+            filter: '',
+            multiple: true
+        }).then(function(result) {
+            $scope.contacts = result;
+        }, function(error) {
+            console.log("ERROR: " + error);
+        });
+    };
+
+    var message = "Hey! I am in dire need of a hug! I am using this cool new app huggr and it would be great to have you here to hug me :)";
+    var subject = "Hug me on huggr!";
+    var file = "file";
+    var link = "https://github.com/a3rosol/huggr";
+    var image = "https://github.com/a3rosol/huggr/blob/master/huggr/www/img/icon.png"
+
+    $scope.share = function() {
+        $cordovaSocialSharing.share(message, subject, file, link) // Share via native share sheet
+            .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+            }, function(err) {
+                console.log(err);
+            });
+
+    }
+
+    $scope.tweet = function() {
+        $cordovaSocialSharing
+            .shareViaTwitter(message, image, link)
+            .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+            }, function(err) {
+                console.log(err);
+            });
+    }
+    $scope.wapp = function() {
+        $cordovaSocialSharing
+            .shareViaWhatsApp(message, image, link)
+            .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+            }, function(err) {
+                console.log(err);
+            });
+    }
+    $scope.fb = function() {
+      $cordovaSocialSharing
+           .shareViaFacebook(message, image, link)
+           .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+           }, function(err) {
+             console.log(err);
+           });
+
+    }
+    $scope.sms = function() {
+  // access multiple numbers in a string like: '0612345678,0687654321'
+         $cordovaSocialSharing
+           .shareViaSMS(message)
+           .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+           }, function(err) {
+             console.log(err);
+           });
+    }
+    $scope.mail = function() {
+         // TO, CC, BCC must be an array, Files can be either null, string or array
+         $cordovaSocialSharing
+           .shareViaEmail(message, subject)
+           .then(function(result) {
+                toast.pop("Thanks for spreading the word!");
+           }, function(err) {
+             console.log(err);
+           });
+    }
 
 
 })
@@ -1160,16 +1301,125 @@ angular.module('starter.controllers', [])
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast, $q) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
-    var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
+
+    function authDataCallback(authData) {
+        if (authData) {
+            if (authData.provider == 'google') {
+                var userSigninIdentifier = authData.google.id;
+                //create child for google
+                $scope.googleRef = $firebase(ref.child("users").child("signin").child("google").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
+                //function to handle asynchronous call to DB
+                function loadGoogleRefCheck() {
+                    var def = $q.defer();
+                    $scope.googleRef.$loaded().then(function(data) {
+                        def.resolve(data.$getRecord(userSigninIdentifier));
+                    })
+                    return def.promise;
+                }; //end function
+
+                loadGoogleRefCheck().then(function(data) {
+                    //check whether user is already registered (if not, value is null as it is not present in DB)
+                    if (data == null) {
+                        //show popup to gather additional user info for registering
+                        $scope.showPopUp(authProvider, authData);
+                    } else {
+                        $scope.profileID = data.profileID;
+
+                        //update auth data in DB
+                        $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.google.accessToken
+                        });
+
+                        //update database with lastseen value
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
+                        });
+
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+
+                        //function to handle asynchronous call to DB
+                        function loadDataCheckA() {
+                            var def = $q.defer();
+                            $scope.dataRef.$loaded().then(function(data) {
+                                def.resolve(data.$getRecord($scope.profileID));
+                            });
+                            return def.promise;
+                        } //end function load
+
+                        //load user info
+                        loadDataCheckA().then(function(profileData) {
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home')
+                        }); //end load()
+                    } //end if
+                }); //end load()     
+            }
+            if (authData.provider ==="facebook") {
+                var userSigninIdentifier = authData.facebook.id;
+                //create child for google
+                $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
+                //function to handle asynchronous call to DB
+                function loadFacebookRefCheck() {
+                    var def = $q.defer();
+                    $scope.facebookRef.$loaded().then(function(data) {
+                        def.resolve(data.$getRecord(userSigninIdentifier));
+                    });
+                    return def.promise;
+                }; //end function
+
+                loadFacebookRefCheck().then(function(data) {
+                    //check whether user is already registered (if not, value is null as it is not present in DB)
+                    if (data == null) {
+                        //show popup to gather additional user info for registering
+                        $scope.showPopUp(authProvider, authData);
+                    } else {
+                        $scope.profileID = data.profileID;
+                        //update signin information
+                        $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.facebook.accessToken
+                        });
+
+                        //update last seen value
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
+                        });
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+                        //function to handle asynchronous call to DB
+                        function loadDataCheckB() {
+                            var def = $q.defer();
+                            $scope.dataRef.$loaded().then(function(data) {
+                                def.resolve(data.$getRecord($scope.profileID));
+                            })
+                            return def.promise;
+                        } //end function load
+
+                        //loas user info
+                        loadDataCheckB().then(function(profileData) {
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home')
+                        }); //end load()
+                    } //end if
+                }); //end load()
+            }
+        } else {}
+    }
+    // Register the callback to be fired every time auth state changes
+    ref.onAuth(authDataCallback);
 
 
     //create child for data
-    $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+    $scope.dataRef; // = $firebase(ref.child("users").child("data")).$asArray();
 
     //create child for google
-    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
-    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
+    $scope.googleRef; // = $firebase(ref.child("users").child("signin").child("google")).$asArray();
+    $scope.facebookRef; // = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
     $ionicHistory.nextViewOptions({
         disableBack: true
     });
@@ -1182,10 +1432,19 @@ angular.module('starter.controllers', [])
 
                     var userSigninIdentifier = authData.google.id;
 
+                    //create child for data
+
+
+                    //create child for google
+                    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
                     //function to handle asynchronous call to DB
                     function load() {
                         var def = $q.defer();
-                        def.resolve($scope.googleRef.$getRecord(userSigninIdentifier));
+                        $scope.googleRef.$loaded().then(function(data) {
+                            def.resolve(data.$getRecord(userSigninIdentifier));
+                        })
+
                         return def.promise;
                     }; //end function
 
@@ -1213,10 +1472,14 @@ angular.module('starter.controllers', [])
                             //toast for user feedback
                             toast.pop("Welcome back!");
 
+                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+
                             //function to handle asynchronous call to DB
                             function load() {
                                 var def = $q.defer();
-                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                $scope.dataRef.$loaded().then(function(data) {
+                                    def.resolve(data.$getRecord($scope.profileID));
+                                });
                                 return def.promise;
                             } //end function load
 
@@ -1244,10 +1507,17 @@ angular.module('starter.controllers', [])
 
                 if (authData) {
                     var userSigninIdentifier = authData.facebook.id;
+                    //create child for data
+
+                    //create child for google
+                    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
                     //function to handle asynchronous call to DB
                     function load() {
                         var def = $q.defer();
-                        def.resolve($scope.facebookRef.$getRecord(userSigninIdentifier));
+                        $scope.facebookRef.$loaded().then(function(data) {
+                            def.resolve(data.$getRecord(userSigninIdentifier));
+                        });
                         return def.promise;
                     }; //end function
 
@@ -1272,10 +1542,13 @@ angular.module('starter.controllers', [])
                             //Uer feedback
                             toast.pop("Welcome back!");
 
+                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
                             //function to handle asynchronous call to DB
                             function load() {
                                 var def = $q.defer();
-                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                $scope.dataRef.$loaded().then(function(data) {
+                                    def.resolve(data.$getRecord($scope.profileID));
+                                })
                                 return def.promise;
                             } //end function load
 
@@ -1501,10 +1774,13 @@ angular.module('starter.controllers', [])
         $scope.modalPriv.show();
     };
 
+
+
 })
 .controller('menuCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $stateParams) {
     
     $scope.currentUser = localstorage.getObject('userData');
+    
     $scope.deleteAllNotifications = function()
     {
         notifications.deleteAllNotifications($scope.currentUser);
@@ -1542,6 +1818,7 @@ angular.module('starter.controllers', [])
             gender = "both";
         }
 
+    //
         $ionicModal.fromTemplateUrl('templates/modals/googleMaps.html', {
             scope: $scope
         }).then(function(modal) {
@@ -1569,6 +1846,9 @@ angular.module('starter.controllers', [])
                 for (var i = 0; i < $scope.zoom.length; i++) {
                     latlngbounds.extend($scope.zoom[i]);
                 }
+                var center = latlngbounds.getCenter()
+                $scope.modalData.centerLat = center.k;
+                $scope.modalData.centerLng = center.D;
                 $scope.map.fitBounds(latlngbounds); //show correctly fitted map
                 $scope.modalData.userlat = pos.k;
                 $scope.modalData.userlong = pos.D;

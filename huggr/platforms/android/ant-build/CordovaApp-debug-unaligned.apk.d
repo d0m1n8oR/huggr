@@ -1,4 +1,4 @@
-/Users/emse/Documents/huggr/huggr/platforms/android/ant-build/CordovaApp-debug-unaligned.apk : \
-/Users/emse/Documents/huggr/huggr/platforms/android/ant-build/CordovaApp.ap_ \
-/Users/emse/Documents/huggr/huggr/platforms/android/ant-build/classes.dex \
-/Users/emse/Documents/huggr/huggr/platforms/android/CordovaLib/ant-build/classes.jar \
+C:\Users\Christian\Documents\GitHub\huggr\huggr\platforms\android\ant-build\CordovaApp-debug-unaligned.apk : \
+C:\Users\Christian\Documents\GitHub\huggr\huggr\platforms\android\ant-build\CordovaApp.ap_ \
+C:\Users\Christian\Documents\GitHub\huggr\huggr\platforms\android\ant-build\classes.dex \
+C:\Users\Christian\Documents\GitHub\huggr\huggr\platforms\android\CordovaLib\ant-build\classes.jar \

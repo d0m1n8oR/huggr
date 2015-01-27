@@ -1,16 +1,125 @@
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast, $q) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
-    var sync = $firebase(ref).$asObject();
     $scope.auth = Auth;
+
+    function authDataCallback(authData) {
+        if (authData) {
+            if (authData.provider == 'google') {
+                var userSigninIdentifier = authData.google.id;
+                //create child for google
+                $scope.googleRef = $firebase(ref.child("users").child("signin").child("google").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
+                //function to handle asynchronous call to DB
+                function loadGoogleRefCheck() {
+                    var def = $q.defer();
+                    $scope.googleRef.$loaded().then(function(data) {
+                        def.resolve(data.$getRecord(userSigninIdentifier));
+                    })
+                    return def.promise;
+                }; //end function
+
+                loadGoogleRefCheck().then(function(data) {
+                    //check whether user is already registered (if not, value is null as it is not present in DB)
+                    if (data == null) {
+                        //show popup to gather additional user info for registering
+                        $scope.showPopUp(authProvider, authData);
+                    } else {
+                        $scope.profileID = data.profileID;
+
+                        //update auth data in DB
+                        $firebase(ref.child("users").child("signin").child("google").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.google.accessToken
+                        });
+
+                        //update database with lastseen value
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
+                        });
+
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+
+                        //function to handle asynchronous call to DB
+                        function loadDataCheckA() {
+                            var def = $q.defer();
+                            $scope.dataRef.$loaded().then(function(data) {
+                                def.resolve(data.$getRecord($scope.profileID));
+                            });
+                            return def.promise;
+                        } //end function load
+
+                        //load user info
+                        loadDataCheckA().then(function(profileData) {
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home')
+                        }); //end load()
+                    } //end if
+                }); //end load()     
+            }
+            if (authData.provider ==="facebook") {
+                var userSigninIdentifier = authData.facebook.id;
+                //create child for google
+                $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
+                //function to handle asynchronous call to DB
+                function loadFacebookRefCheck() {
+                    var def = $q.defer();
+                    $scope.facebookRef.$loaded().then(function(data) {
+                        def.resolve(data.$getRecord(userSigninIdentifier));
+                    });
+                    return def.promise;
+                }; //end function
+
+                loadFacebookRefCheck().then(function(data) {
+                    //check whether user is already registered (if not, value is null as it is not present in DB)
+                    if (data == null) {
+                        //show popup to gather additional user info for registering
+                        $scope.showPopUp(authProvider, authData);
+                    } else {
+                        $scope.profileID = data.profileID;
+                        //update signin information
+                        $firebase(ref.child("users").child("signin").child("facebook").child(userSigninIdentifier)).$update({
+                            token: authData.token,
+                            expires: authData.expires,
+                            AccessToken: authData.facebook.accessToken
+                        });
+
+                        //update last seen value
+                        $firebase(ref.child("users").child("data").child($scope.profileID)).$update({
+                            lastSeenTime: Firebase.ServerValue.TIMESTAMP
+                        });
+                        $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+                        //function to handle asynchronous call to DB
+                        function loadDataCheckB() {
+                            var def = $q.defer();
+                            $scope.dataRef.$loaded().then(function(data) {
+                                def.resolve(data.$getRecord($scope.profileID));
+                            })
+                            return def.promise;
+                        } //end function load
+
+                        //loas user info
+                        loadDataCheckB().then(function(profileData) {
+                            localstorage.setObject("userData", profileData);
+                            $state.go('app.home')
+                        }); //end load()
+                    } //end if
+                }); //end load()
+            }
+        } else {}
+    }
+    // Register the callback to be fired every time auth state changes
+    ref.onAuth(authDataCallback);
 
 
     //create child for data
-    $scope.dataRef = $firebase(ref.child("users").child("data")).$asArray();
+    $scope.dataRef; // = $firebase(ref.child("users").child("data")).$asArray();
 
     //create child for google
-    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google")).$asArray();
-    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
+    $scope.googleRef; // = $firebase(ref.child("users").child("signin").child("google")).$asArray();
+    $scope.facebookRef; // = $firebase(ref.child("users").child("signin").child("facebook")).$asArray();
     $ionicHistory.nextViewOptions({
         disableBack: true
     });
@@ -23,10 +132,19 @@
 
                     var userSigninIdentifier = authData.google.id;
 
+                    //create child for data
+
+
+                    //create child for google
+                    $scope.googleRef = $firebase(ref.child("users").child("signin").child("google").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
                     //function to handle asynchronous call to DB
                     function load() {
                         var def = $q.defer();
-                        def.resolve($scope.googleRef.$getRecord(userSigninIdentifier));
+                        $scope.googleRef.$loaded().then(function(data) {
+                            def.resolve(data.$getRecord(userSigninIdentifier));
+                        })
+
                         return def.promise;
                     }; //end function
 
@@ -54,10 +172,14 @@
                             //toast for user feedback
                             toast.pop("Welcome back!");
 
+                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
+
                             //function to handle asynchronous call to DB
                             function load() {
                                 var def = $q.defer();
-                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                $scope.dataRef.$loaded().then(function(data) {
+                                    def.resolve(data.$getRecord($scope.profileID));
+                                });
                                 return def.promise;
                             } //end function load
 
@@ -85,10 +207,17 @@
 
                 if (authData) {
                     var userSigninIdentifier = authData.facebook.id;
+                    //create child for data
+
+                    //create child for google
+                    $scope.facebookRef = $firebase(ref.child("users").child("signin").child("facebook").orderByKey().equalTo(userSigninIdentifier.toString())).$asArray();
+
                     //function to handle asynchronous call to DB
                     function load() {
                         var def = $q.defer();
-                        def.resolve($scope.facebookRef.$getRecord(userSigninIdentifier));
+                        $scope.facebookRef.$loaded().then(function(data) {
+                            def.resolve(data.$getRecord(userSigninIdentifier));
+                        });
                         return def.promise;
                     }; //end function
 
@@ -113,10 +242,13 @@
                             //Uer feedback
                             toast.pop("Welcome back!");
 
+                            $scope.dataRef = $firebase(ref.child("users").child("data").orderByKey().equalTo($scope.profileID.toString())).$asArray();
                             //function to handle asynchronous call to DB
                             function load() {
                                 var def = $q.defer();
-                                def.resolve($scope.dataRef.$getRecord($scope.profileID));
+                                $scope.dataRef.$loaded().then(function(data) {
+                                    def.resolve(data.$getRecord($scope.profileID));
+                                })
                                 return def.promise;
                             } //end function load
 
@@ -341,5 +473,7 @@
     $scope.privacy = function() {
         $scope.modalPriv.show();
     };
+
+
 
 })

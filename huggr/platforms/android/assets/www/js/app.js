@@ -150,6 +150,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             }
         }
     })
+    
+    .state('app.profileView', {
+        url: "/profile/:profileID",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/profileview.html",
+                controller: 'ExtProfileCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
 
     .state('app.chatOverview', {
         url: "/chat",
@@ -219,6 +236,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
         }
     })
 
+    .state('app.invite', {
+        url: "/invite",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/invite.html",
+                controller: 'inviteCtrl',
+                resolve: {
+                    "currentAuth": ["Auth",
+                        function(Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    ]
+                }
+            }
+        }
+    })
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/index');
 });
