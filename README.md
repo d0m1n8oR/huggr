@@ -29,10 +29,15 @@ Gulp is a build system, which is built on Node.js. Gulp helps you automating som
 The following part descirbes some additional project resources:
 
 * GitHub: GitHub helps you developing your project within a team by offering a common platform for sharing your code with your team members. You can download it by clicking the following link:
-[WINDOWS] https://windows.github.com/
-[MAC OSX] https://mac.github.com/
+[WINDOWS] `https://windows.github.com/`
+[MAC OSX] `https://mac.github.com/`
 
 Documentation
+
+* Firebase: Firebase demonstrates our database, API and authentication solution. With the help of Firebase you get a realtime NoSQL database which stores your data JSON-shaped in the cloud. Firebase also provides you a login service but also a multitude of built-in authentication. So you can simply autheticate by using third party providers such as Twitter, Facebook, Google(+) or GitHub. Of course you are free to integrate your own login system by implementing custom login option. Our Huggr app concentrates on using third party providers Facebook and Google(+) for authentication.
+
+You can access our firebase database by clicking the following link: `https://huggr.firebaseio.com/`
+
 -----
 
 You can find our documentation in the [Wiki](https://github.com/a3rosol/huggr/wiki/Documentation)
