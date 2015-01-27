@@ -3,69 +3,82 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-content class="has-header">
-        <div class="row">
+
+        <div class="card">
+
+            <div class="list">
+
+                <label class="item item-input">
+                    <div class="input-label">
+                        Start Date
+                    </div>
+                    {{date.start}}
+
+                </label>
+                <label class="item item-input">
+                    <div class="input-label">
+                        End Date
+                    </div>
+                    <input type="date" ng-model="date.end">
+
+                </label>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Dimension
+                    </div>
+                    <select ng-model="date.dimension">
+                        <option selected>Day</option>
+                        <option>Week</option>
+                        <option>Month</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <div class="button-bar">
+                        <a class="button button-calm" ng-click="setToNow()">Now</a>
+                        <a class="button button-balanced" ng-click="callStats()">Get statistics</a>
+                    </div>
+                </label>
+            </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <ion-item>
-                    <label class="item">
-                        <span class="input-label">Start Date</span>
-                        <label class="item">
-                            <input type="date" ng-model="date.end">
-                        </label>End Date {{date.start}}
-                    </label>
-                    <label class="item item-input item-select" ng-model="date.dimension">
-                        <div class="input-label" ng-model="date.dimension">
-                            Dimension
-                        </div>
-                        <select ng-model="date.dimension">
-                            <option selected>Day</option>
-                            <option>Week</option>
-                            <option>Month</option>
-                        </select>
-                    </label>
-                    <button class="button" ng-click="setToNow()">Now</button>
-                    <button class="button" ng-click="callStats()">Get statistics</button>
-                </ion-item>
+
+        <div class="card">
+            <div class="item item-divider padding-top">
+                Huggs and new registered users
             </div>
-            <div class="col">
-                <ion-item>
-                    <div class="item item-divider padding-top">
-                        Huggs and new registered users
-                    </div>
-                    <label id="analysisLabel"></label>
-                    <canvas id="analysis" width="500" height="300"></canvas>
-                </ion-item>
+            <label id="analysisLabel"></label>
+            <canvas id="analysis"></canvas>
+        </div>
+
+
+        <div class="card">
+            <div class="item item-divider padding-top">
+                Status of huggs
+            </div>
+            <label id="statusLabel"></label>
+            <canvas id="status"></canvas>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <ion-item>
-                    <div class="item item-divider padding-top">
-                        Status of huggs
-                    </div>
-                    <label id="statusLabel"></label>
-                    <canvas id="status" width="500" height="300"></canvas>
+
+        <div class="card">
+            <div class="item item-divider padding-top">
+                Gender of users
             </div>
-            </ion-item>
-            <div class="col">
-                <ion-item>
-                    <div class="item item-divider padding-top">
-                        Gender of user
-                    </div>
-                    <label id="genderLabel"></label>
-                    <canvas id="gender" width="500" height="300"></canvas>
-                </ion-item>
+            <label id="genderLabel"></label>
+            <canvas id="gender" ></canvas>
+        </div>
+
+    <div class="card">
+            <div class="item item-text-wrap">
+                <map class="ui-map" zoom="14" scrollwheel="false" draggable="false">
+                </map>
             </div>
-            <div class="col">
-                <div id="panel">
-                    <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-                    <button onclick="changeGradient()">Change gradient</button>
-                    <button onclick="changeRadius()">Change radius</button>
-                    <button onclick="changeOpacity()">Change opacity</button>
-                </div>
-                <div id="map-canvas"></div>
-            </div>
+        </div>
+
+        <div id="panel">
+            <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+            <button onclick="changeGradient()">Change gradient</button>
+            <button onclick="changeRadius()">Change radius</button>
+            <button onclick="changeOpacity()">Change opacity</button>
         </div>
 
     </ion-content>

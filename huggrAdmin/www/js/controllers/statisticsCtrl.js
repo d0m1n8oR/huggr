@@ -358,6 +358,11 @@
 
     $scope.initGraph();
 
+
+      $scope.$on('mapInitialized', function(event, map) {
+        $scope.map = map;
+    });
+/*
     var map, pointarray, heatmap;
 
     var taxiData = [
@@ -425,8 +430,5 @@
         heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
-
-    initialize();
-
+*/
 })
