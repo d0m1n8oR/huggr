@@ -5,10 +5,7 @@
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
-    $scope.$on("$ionicView.enter", function(scopes, states) {
-        console.log("enter");
-        console.log($scope);
-    });
+    $scope.$on("$ionicView.enter", function(scopes, states) {    });
 
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
@@ -18,8 +15,6 @@
 
     var deferred = $q.defer();
     UserInfo.getProfile($scope.profileID).then(function(value) {
-        console.log("value");
-        console.log(value);
         $scope.data.age = value.age;
         $scope.data.picture = value.picture;
         $scope.data.lastSeenTime = value.lastSeenTime;
@@ -29,20 +24,7 @@
         $scope.data.numberHuggs = value.numberHuggs;
         $scope.data.rating = value.rating;
         $scope.data.firstName = value.firstName;
-        console.log($scope.data);
-
-
     }); //end getProfile
-
-    /*var userObject = $firebase(ref.child("users").child("data").child($scope.profileID)).$asObject();
-
-        //displays information
-        userObject.$bindTo($scope, "result").then(function() {
-            $scope.data = $scope.result;
-            console.log("hallo");
-            console.log($scope.data);
-            //$scope.data.age = helper.calcAge(new Date($scope.data.birthdate));
-        }); //end bindTo*/
 
     //block a user from ever sending requests again
     $scope.blockUser = function blockUser(blockProfileID) {

@@ -17,7 +17,7 @@
         <ion-list>
             <ion-item ng-repeat="item in ownHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.answerProfileID}}/{{item.huggID}}" class="item-thumbnail-left">
                 <img ng-src="{{item.answerPicture}}">
-                <h2>Your upcoming hugg with {{item.answerFirstName}}</h2>
+                <h2>Hugg with {{item.answerFirstName}}</h2>
                 <p>
                     <div ng-if="item.answerGender == 'male'">
                         <p><i class="ion-male"> </i> male, rating of {{item.answerRating| number : 0}} <i class="icon ion-star"></i>
@@ -33,7 +33,7 @@
             </ion-item>
             <ion-item ng-repeat="item in otherHuggData" ng-if="item.accepted == '1' && item.done == '0'" href="#/app/profile/{{item.reqProfileID}}" class="item-thumbnail-left">
                 <img ng-src="{{item.reqPicture}}">
-                <h2>Your upcoming hugg with {{item.reqFirstName}}</h2>
+                <h2>Hugg with {{item.reqFirstName}}</h2>
                 <p>
                     <div ng-if="item.reqGender == 'male'">
                         <p><i class="ion-male"> </i> male, rating of {{item.reqRating| number : 0}} <i class="icon ion-star"></i>

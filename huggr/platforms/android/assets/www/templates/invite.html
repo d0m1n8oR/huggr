@@ -1,0 +1,38 @@
+<ion-view title="Invite Friends">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header padding">
+
+
+        <button class="button button-block button-twitter icon ion-social-twitter" ng-click="tweet()">
+            Tweet it!
+        </button>
+        <button class="button button-block button-whatsapp icon sp-social-whatsapp override-lh" ng-click="wapp()">
+            Share on WhatsApp
+        </button>
+        <button class="button button-block button-facebook icon ion-social-facebook" ng-click="fb()">
+            Share on Facebook
+        </button>
+        <button class="button button-block button-sms icon ion-chatbubble-working" ng-click="sms()">
+            Send a Text
+        </button>
+        <button class="button button-block button-calm icon ion-ios7-email" ng-click="mail()">
+            Send an Email
+        </button>
+        <button class="button button-block button-huggr icon ion-share" ng-click="share()">
+            Share
+        </button>
+
+<!--
+        <button ng-click="getContactList()">Get</button>
+
+
+        <ion-list>
+            <ion-item ng-repeat="contact in contacts" class="item-avatar">
+                <h2> {{contact.name.formatted}}</h2> {{contact.phoneNumbers[0].value}}
+            </ion-item>
+        </ion-list>
+-->
+    </ion-content>
+</ion-view>
