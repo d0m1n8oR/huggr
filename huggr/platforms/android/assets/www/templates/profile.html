@@ -1,0 +1,101 @@
+<ion-view title="Profile">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        </button>
+    </ion-nav-buttons>
+    <ion-tabs class="tabs-striped tabs-background-balanced tabs-color-light">
+
+        <ion-tab title="You" icon="sp-user override-sptabs">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
+            <ion-content class="has-header">
+                <div class="list card">
+
+                    <div class="item item-avatar">
+                        <img ng-src="{{currentUser.picture}}">
+                        <h2>{{currentUser.displayName}}</h2>
+                        <p><span ng-show="currentUser.age">{{currentUser.age}} years old</span><span ng-hide="currentUser.age">You haven't set your birthday yet</span>
+                        </p>
+                    </div>
+
+                    <div class="item item-body">
+                        <img class="full-image rounded" ng-src="{{currentUser.picture}}">
+                        <p>
+                            <span ng-show="currentUser.hobby">{{currentUser.hobby}}</span>
+
+                            <span ng-hide="currentUser.hobby">Please tell us something about yourself</span>
+
+                        </p>
+                        <p><span>Last seen {{currentUser.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
+                        </p>
+                        <p>
+                            <span>Your current Rating:</span>
+                            <div ng-init="userRatingForView = star.rating - 1"></div>
+                            <div class="star-rating" star-rating rating-value="userRatingForView" data-max="5"></div>
+                            <a href="" class="subdued">Number of huggs: {{currentUser.numberHuggs}}</a>
+                        </p>
+
+                    </div>
+                </div>
+            </ion-content>
+        </ion-tab>
+
+        <ion-tab title="Settings" icon="ion-gear-a">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
+            <ion-content class="has-header">
+
+                <div class="card list">
+                    <label class="item item-input item-stacked-label">
+                        <i class="icon ion-person placeholder-icon"></i>
+                        <span class="input-label">Your Name</span>
+                        <input type="text" ng-model="currentUser.displayName" required placeholder="{{currentUser.displayName}}">
+                    </label>
+                    <label class="item item-input item-stacked-label">
+                        <i class="icon ion-email placeholder-icon"></i>
+                        <span class="input-label">Email Address</span>
+                        <input type="email" ng-model="currentUser.email" placeholder="{{currentUser.email}}">
+                    </label>
+                    <label class="item item-input item-stacked-label">
+                        <i class="icon ion-happy placeholder-icon"></i>
+                        <span class="input-label">Tell us something about yourself</span>
+                        <input type="text" ng-model="currentUser.hobby" placeholder="{{currentUser.hobby}}">
+                    </label>
+                </div>
+                <div class="card list">
+                    <div class="item item-image">
+                        <img ng-src="{{currentUser.picture}}">
+                    </div>
+
+                    <a class="item item-icon-left assertive" ng-click="takeNewPicture()">
+                        <i class="icon ion-camera"></i> Take a new picture
+                    </a>
+                </div>
+                <button ng-hide="currentUser.facebookID" ng-click="connect('toFacebook')" class="button button-block button-facebook icon-left ion-social-facebook">Conncect account with Facebook</button>
+                <button ng-hide="currentUser.googleID" ng-click="connect('toGoogle')" class="button button-block button-gplus icon-left ion-social-googleplus">Conncect account with Google</button>
+
+            </ion-content>
+        </ion-tab>
+
+        <ion-tab title="Blocked users" icon="sp-blocked override-sptabs">
+            <ion-header-bar class="bar-positive"></ion-header-bar>
+            <ion-content class="has-header has-footer">
+
+                <ion-list>
+                    <ion-item ng-repeat="user in blockedUsers" item="item" class="item-thumbnail-left">
+                        <img ng-src="{{user.picture}}">
+                        <h2>{{user.displayName}}</h2>
+                        <ion-option-button class="button-balanced icon ion-checkmark override-icon-position" ng-click="unblockUser(user.profileID)"></ion-option-button>
+                    </ion-item>
+                </ion-list>
+                <div class="card" ng-hide="noBlockedUsers">
+                    <div class="item item-text-wrap">
+                        Sorry, no blocked users...
+                    </div>
+                </div>
+            </ion-content>
+        </ion-tab>
+
+    </ion-tabs>
+</ion-view>

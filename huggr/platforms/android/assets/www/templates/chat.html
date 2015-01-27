@@ -1,0 +1,27 @@
+<ion-view title="{{ctitle}}">
+    <ion-nav-buttons side="left">
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        </button>
+    </ion-nav-buttons>
+    <ion-content class="padding has-header has-footer" start-y="120">
+        <ol class="messages">
+            <li ng-repeat="message in chatData" ng-class="{ 'message-me': message.user == currentUser.profileID}">
+
+                <label> {{message.time | date : 'EEE HH:mm'}}</label>
+
+                <p>{{message.message}}</p><img class="chatimg" ng-src="{{message.picture}}">
+            </li>
+        </ol>
+
+    </ion-content>
+    <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+    <label class="item-input-wrapper">
+        <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="messageInput" on-focus="inputUp()" on-blur="inputDown()" />
+      </label>
+      <button class="button button-clear button-positive" ng-click="sendMessage()">
+        Send!
+      </button>
+    </ion-footer-bar>
+</ion-view>

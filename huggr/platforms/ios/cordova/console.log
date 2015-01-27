@@ -1,0 +1,26 @@
+2015-01-20 17:36:31.379 huggr[83449:11713829] Apache Cordova native platform version 3.7.0 is starting.
+2015-01-20 17:36:31.386 huggr[83449:11713829] Multi-tasking -> Device: YES, App: YES
+2015-01-20 17:36:31.408 huggr[83449:11713829] Unlimited access to network resources
+2015-01-20 17:36:32.030 huggr[83449:11713829] [CDVTimer][keyboard] 0.744998ms
+2015-01-20 17:36:32.030 huggr[83449:11713829] [CDVTimer][TotalPluginStartup] 1.071990ms
+2015-01-20 17:36:32.403 huggr[83449:11713829] Resetting plugins due to page load.
+2015-01-20 17:36:33.489 huggr[83449:11713829] Finished load of: file:///Users/emse/Library/Developer/CoreSimulator/Devices/5C01A42C-5F0A-424B-A07C-E638C556A5A9/data/Containers/Bundle/Application/A017EB55-3900-4EE8-93F7-CB612844D705/huggr.app/www/index.html#/index
+2015-01-20 17:36:33.709 huggr[83449:11713829] WARN: $ionicViewService is deprecated, please use $ionicHistory instead: http://ionicframework.com/docs/nightly/api/service/$ionicHistory/
+2015-01-20 17:36:33.710 huggr[83449:11713829] WARN: $ionicViewService.nextViewOptions is deprecated, please use $ionicHistory.nextViewOptions instead: http://ionicframework.com/docs/nightly/api/service/$ionicHistory/
+2015-01-20 17:36:38.411 huggr[83449:11713829] Setting the WebView's frame to {{0, 0}, {375, 623}}
+2015-01-20 17:36:38.429 huggr[83449:11713829] THREAD WARNING: ['InAppBrowser'] took '259.645020' ms. Plugin should use a background thread.
+2015-01-20 17:36:40.748 huggr[83449:11713829] userSigninIdentifier:10204679695488808
+2015-01-20 17:36:41.002 huggr[83449:11713829] Logged in as: facebook:10204679695488808
+2015-01-20 17:36:41.025 huggr[83449:11713829] locationManager::didFailWithError (null)
+2015-01-20 17:36:45.435 huggr[83449:11713829] data changed!
+2015-01-20 17:37:08.090 huggr[83802:11714990] Apache Cordova native platform version 3.7.0 is starting.
+2015-01-20 17:37:08.092 huggr[83802:11714990] Multi-tasking -> Device: YES, App: YES
+2015-01-20 17:37:08.094 huggr[83802:11714990] Unlimited access to network resources
+2015-01-20 17:37:08.307 huggr[83802:11714990] [CDVTimer][keyboard] 0.065982ms
+2015-01-20 17:37:08.307 huggr[83802:11714990] [CDVTimer][TotalPluginStartup] 0.257015ms
+2015-01-20 17:37:08.435 huggr[83802:11714990] Resetting plugins due to page load.
+2015-01-20 17:37:08.828 huggr[83802:11714990] Finished load of: file:///Users/emse/Library/Developer/CoreSimulator/Devices/5C01A42C-5F0A-424B-A07C-E638C556A5A9/data/Containers/Bundle/Application/21CC4832-1F12-4E4F-A797-7EBBEA8E6CB2/huggr.app/www/index.html#/index
+2015-01-20 17:37:08.876 huggr[83802:11714990] WARN: $ionicViewService is deprecated, please use $ionicHistory instead: http://ionicframework.com/docs/nightly/api/service/$ionicHistory/
+2015-01-20 17:37:08.893 huggr[83802:11714990] WARN: $ionicViewService.nextViewOptions is deprecated, please use $ionicHistory.nextViewOptions instead: http://ionicframework.com/docs/nightly/api/service/$ionicHistory/
+2015-01-20 17:37:11.591 huggr[83802:11714990] locationManager::didFailWithError (null)
+2015-01-20 17:37:13.751 huggr[83802:11714990] data changed!

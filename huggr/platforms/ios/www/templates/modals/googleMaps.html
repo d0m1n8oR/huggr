@@ -1,0 +1,15 @@
+<ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-light">
+        <h1 class=" huggrFont title">Your Positions</h1>
+        <button class="button button-clear button-primary" ng-click="gmapsModal.hide()">Close</button>
+    </ion-header-bar>
+
+    <ion-content scroll="false">
+        <div class="mapWrap" data-tap-disabled="true">
+            <map class="bigMap" center="[{{modalData.centerLat}}, {{modalData.centerLng}}]" zoom="15" pan-control="false" zoom-control="false" scale-control="true">
+                <marker position="{{modalData.userlat}}, {{modalData.userlong}}" title="You are here"></marker>
+                <marker position="{{modalData.lat}},{{modalData.long}}" id="other" ng-click='window.open("geo:{{modalData.lat}},{{modalData.long}}", "_system");'itle="Hug Partner" icon="//developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"></marker>
+            </map>
+        </div>
+    </ion-content>
+</ion-modal-view>

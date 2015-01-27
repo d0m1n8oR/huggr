@@ -1,0 +1,35 @@
+<ion-popover-view style="height: 345px; width: 75%">
+    <ion-header-bar class="bar-balanced">
+        <h1 class="title">Give us some details</h1>
+    </ion-header-bar>
+    <ion-content>
+
+        <div class="list">
+            <div class="item range range-positive">
+                <i class="icon ion-ios7-location-outline"></i>
+                <input type="range" min="5" max="100" step="5" value="20" ng-model="huggRequest.range">
+                <i class="icon ion-ios7-location"></i>
+            </div>
+                            <span class="item text-center">Huggs within {{huggRequest.range}}km</span>
+
+        
+        <ul class="list">
+            <li class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.male">
+                </label>
+                Male
+            </li>
+            <li class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="huggRequest.female">
+                </label>
+                Female
+            </li>
+        </ul>
+</div>
+        <button class="button button-energized button-block" ng-click="displayResults()">
+            Search
+        </button>
+    </ion-content>
+</ion-popover-view>

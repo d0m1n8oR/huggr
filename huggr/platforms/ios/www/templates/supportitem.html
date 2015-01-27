@@ -1,0 +1,32 @@
+<ion-view title="About huggr">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div class="list card">
+            <div class="item">
+                <h2>Subject: {{supportData.subject}}</h2>
+                <p><i class="icon ion-calendar"> </i>{{supportData.time | date:'dd.MM.yyyy HH:mm'}}, #{{supportData.supportID}}</p>
+                </p>
+            </div>
+
+            <div class="item item-body">
+                <h2>Your message:</h2>
+                <p>{{supportData.request}}</p>
+            </div>
+
+            <div class="item item-body" ng-if="supportData.done == '1'">
+                <h2>Answer from our support:</h2>
+                <p>{{supportData.answer}}</p>
+            </div>
+            <div class="item item-body" ng-if="supportData.done == '0'">
+                <h2><i class="ion-alert"> </i>Our support is curently working to resolve your request</h2>
+            </div>
+
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,53 @@
+<ion-side-menus>
+
+    <ion-side-menu-content>
+        <ion-nav-bar class="huggrFont bar-light nav-title-slide-ios7">
+            <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+    </ion-side-menu-content>
+    <ion-side-menu side="left">
+        <header class="bar bar-header bar-energized ">
+            <h1 class="title">Menu</h1>
+        </header>
+        <ion-content class="has-header">
+            <ion-list>
+                <ion-item nav-clear menu-close href="#/app/home">
+                    Home
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/huggs">
+                    Huggs
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/profile">
+                    Profile
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/chat">
+                    Chat
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/about">
+                    About Huggr
+                </ion-item>
+                <ion-item nav-clear menu-close href="#/app/logout">
+                    Logout
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+    <ion-side-menu side="right">
+        <header class="bar bar-header bar-balanced ">
+            <h1 class="title">Notifications</h1>
+            <button class="button" ng-click="deleteAllNotifications()">Delete all</button>
+        </header>
+        <ion-content class="has-header">
+            <ion-list>
+                <ion-item ng-repeat="notificationItem in notificationData" href="#/app/huggs" item="item" class="item-avatar item-icon-right">
+                    <img ng-src="{{notificationItem.picture}}">
+                    <h2>{{notificationItem.firstName}}</h2>
+                    <p ng-if="notificationItem.type != 'done'">has {{notificationItem.type}}ed your hug</p>
+                    <p ng-if="notificationItem.type == 'done'">you hug has marked {{notificationItem.type}}</p>
+                    <a class="button button-icon button-light button-clear icon ion-close-circled notification-padding" ng-click="removeNotification(notificationItem.huggID)"></a>
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>704C7995-96E7-435D-89F3-531C1C775E31</string>
+	<key>IDESourceControlProjectName</key>
+	<string>huggr</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>28EC920DC01A2E36ADE769D75DE23DA7BA3A90B4</key>
+		<string>https://github.com/a3rosol/huggr.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>huggr/platforms/ios/huggr.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>28EC920DC01A2E36ADE769D75DE23DA7BA3A90B4</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/a3rosol/huggr.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>28EC920DC01A2E36ADE769D75DE23DA7BA3A90B4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>28EC920DC01A2E36ADE769D75DE23DA7BA3A90B4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>huggr</string>
+		</dict>
+	</array>
+</dict>
+</plist>
