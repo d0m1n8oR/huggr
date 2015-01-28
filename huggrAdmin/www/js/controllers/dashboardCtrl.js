@@ -1,6 +1,18 @@
 .controller('dashboardCtrl', function($scope, $firebase) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
+    /*Code 1:
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=743531212395536&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+Code 2:<div class="fb-activity" data-app-id="743531212395536" data-site="developers.facebook.com" data-action="likes, recommends" data-colorscheme="light" data-header="true"></div>*/
+
     $scope.request = {
         message: "",
         subject: ""
