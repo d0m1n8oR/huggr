@@ -47,8 +47,7 @@
                     i++;
                 }
                 toast.pop("Blocked user");
-                $ionicHistory.goBack();
-                return 1;
+                $state.go('app.home');
             });
         }); //end set
 
@@ -101,7 +100,8 @@
                     var chatID = data.$getRecord(otherProfileID).chatID;
                     console.log(chatID);
                     $state.go('app.chat', {
-                        chatID: chatID
+                        chatID: chatID,
+                        chatTitle: $scope.data.displayName
                     });
                 })
             }

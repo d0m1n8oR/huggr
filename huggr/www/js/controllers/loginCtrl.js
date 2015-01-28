@@ -22,8 +22,6 @@
                 loadGoogleRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
 
@@ -75,8 +73,6 @@
                 loadFacebookRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
                         //update signin information

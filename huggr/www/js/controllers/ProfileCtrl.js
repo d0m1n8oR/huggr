@@ -155,7 +155,7 @@
                         i++;
                     }
                     toast.pop("Unblocked user");
-                    $state.go('app.profile')
+                    $state.go('app.home')
                     return 1;
                 });
             });
