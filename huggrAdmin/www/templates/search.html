@@ -4,7 +4,7 @@
     </ion-nav-buttons>
     <ion-tabs class="tabs-striped tabs-color-assertive">
 
-        <ion-tab title="Open" icon="ion-person">
+        <ion-tab title="Users" icon="ion-person">
             <ion-header-bar class="bar-positive"></ion-header-bar>
 
             <ion-content class="has-header">
@@ -45,15 +45,15 @@
                 <ion-item ng-repeat="item in userData" item="item" class="item-thumbnail-left">
                     <img ng-src="{{item.picture}}">
                     <h2>{{item.firstName}} {{item.lastname}}     #{{item.profileID}}</h2>
-                    <p>{{item.gender}} {{item.rating}}<i class="icon ion-star"></i>
+                    <p>Gender: {{item.gender}} | Rating: {{item.rating}}<i class="icon ion-star"></i>
                     </p>
-                    <p> {{item.numberHuggs}} {{item.reqTime | date:'dd.MM.yyyy HH:mm'}} {{item.age}}</p>
-                    <p>{{item.lastSeenTime | date:'dd.MM.yyyy HH:mm'}} {{item.email}}</p>
+                    <p>Number of Huggs: {{item.numberHuggs}} | Register Time: {{item.reqTime | date:'dd.MM.yyyy HH:mm'}} | Age: {{item.age}}</p>
+                    <p>Time last seen: {{item.lastSeenTime | date:'dd.MM.yyyy HH:mm'}} | Email: {{item.email}}</p>
                 </ion-item>
                 </div>
             </ion-content>
         </ion-tab>
-        <ion-tab title="Closed" icon="sp-huggr override-sptabs">
+        <ion-tab title="Huggs" icon="sp-huggr override-sptabs">
             <ion-header-bar class="bar-positive"></ion-header-bar>
             <ion-content class="has-header">
                 <div class="bar item-input-inset padding-top">
@@ -77,19 +77,20 @@
                     </select>
                 </label>
                 <ion-item ng-repeat="item in huggData" item="item">
-                    <div class="item-thumbnail-right">
-                        <img ng-src="{{item.reqPicture}}">
-                    </div>
                     <div class="item-thumbnail-left">
-                        <img ng-src="{{item.answerPicture}}">
+                        <img ng-src="{{item.reqPicture}}">
+                        <div class="item-thumbnail-right">
+                            <img ng-src="{{item.answerPicture}}">
+                            <h2>#{{item.huggID}} between {{item.reqFirstName}} and {{item.answerFirstName}}</h2>
+                            <p>Info on {{item.reqFirstName}}</p>
+                            <p>Gender: {{item.reqGender}} | Rating: {{item.reqRating}} <i class="icon ion-star"></i> # {{item.reqProfileID}}</p>
+                            <p>Info on {{item.answerFirstName}}</p>
+                            <p>Gender: {{item.answerGender}} | Rating: {{item.answerRating}} <i class="icon ion-star"></i> # {{item.answerProfileID}}</p>
+                            <p> <i class="icon ion-clock"> </i>{{item.reqTime | date:'dd.MM.yyyy HH:mm'}} <i class="icon ion-clock"> </i>{{item.answerTime | date:'dd.MM.yyyy HH:mm'}} <i class="ion ion-location"> </i> {{item.reqLocation}}</p>
+                        </div>
                     </div>
-                    <h2>#{{item.huggID}} between {{item.reqFirstname}} and {{item.answerFirstName}}</h2>
-                    <p>{{item.reqGender}} {{item.reqRating}}<i class="icon ion-star"></i> #{{item.reqProfileID}}</p>
-                    <p>{{item.answerGender}} {{item.answerRating}}<i class="icon ion-star"></i> #{{item.answerProfileID}}</p>
-                    <p> <i class="icon ion-clock"> </i>{{item.reqTime | date:'dd.MM.yyyy HH:mm'}} <i class="icon ion-clock"> </i>{{item.answerTime | date:'dd.MM.yyyy HH:mm'}} </p>
-                    <p> <i class="button icon-left ion-location button-clear button-dark"> </i> {{item.reqLocation}} </p>
+
                 </ion-item>
-                </div>
             </ion-content>
         </ion-tab>
     </ion-tabs>
