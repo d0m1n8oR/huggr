@@ -1,28 +1,13 @@
 .controller('dashboardCtrl', function($scope, $firebase) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
-    /*Code 1:
-    <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=743531212395536&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-Code 2:<div class="fb-activity" data-app-id="743531212395536" data-site="developers.facebook.com" data-action="likes, recommends" data-colorscheme="light" data-header="true"></div>*/
-
-    $scope.request = {
-        message: "",
-        subject: ""
-    };
-
+    //show data from support Requests using Data Binding
     var supportObject = $firebase(ref.child("admin").child("support").orderByChild('time').limitToFirst(4)).$asObject();
     supportObject.$bindTo($scope, "supportData").then(function() {
 
     }); // end bindTo
 
+    //Initialize object for Statistics
     $scope.statistics = {
         huggNumber: null,
         userNumber: null,
@@ -31,8 +16,7 @@ Code 2:<div class="fb-activity" data-app-id="743531212395536" data-site="develop
         connected: null
     }
 
-
-
+    //Function to get Quick statistics
     $scope.getStats = function() {
 
         $scope.statistics.chatMessages = null;
@@ -59,9 +43,9 @@ Code 2:<div class="fb-activity" data-app-id="743531212395536" data-site="develop
             }
 
         })
-
     }
 
+    //function to check for connection
     $scope.connection = function() {
         var connectedRef = new Firebase("https://huggr.firebaseio.com/.info/connected");
         connectedRef.on("value", function(snap) {
@@ -73,7 +57,8 @@ Code 2:<div class="fb-activity" data-app-id="743531212395536" data-site="develop
             }
         });
     }
-    $scope.connection();
 
+    //start function on startup
+    $scope.connection();
     $scope.getStats();
 })

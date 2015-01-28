@@ -1,64 +1,12 @@
 .controller('statisticsCtrl', function($scope, $firebase, $q) {
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
-    $scope.statistics = {
-        huggNumber: null,
-        userNumber: null,
-        chatNumber: null,
-        chatMessages: null,
-        connected: null
-    }
-
-    $scope.getStats = function() {
-
-        $scope.statistics.chatMessages = null;
-
-        var huggObject = $firebase(ref.child("hugg")).$asObject();
-        huggObject.$loaded().then(function(obj) {
-            $scope.statistics.huggNumber = Object.keys(obj).length - 3;
-        });
-
-        var userObject = $firebase(ref.child("users").child("data")).$asObject();
-        userObject.$loaded().then(function(obj) {
-            $scope.statistics.userNumber = Object.keys(obj).length - 3;
-        })
-
-        var chatObject = $firebase(ref.child("chat")).$asObject();
-        chatObject.$loaded().then(function(obj) {
-            $scope.statistics.chatNumber = Object.keys(obj).length - 3;
-            var i = 0;
-
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key) && key != "$$conf" && key != "$id" && key != "$priority" && obj[key].message != null) {
-                    $scope.statistics.chatMessages = $scope.statistics.chatMessages + Object.keys(obj[key].message).length;
-                }
-            }
-
-        })
-
-    }
 
     $scope.legend = {
         stats: null,
         gender: null,
         status: null
     }
-
-    $scope.connection = function() {
-        var connectedRef = new Firebase("https://huggr.firebaseio.com/.info/connected");
-        connectedRef.on("value", function(snap) {
-            if (snap.val() === true) {
-                $scope.statistics.connected = true;
-
-            } else {
-                $scope.statistics.connected = false;
-            }
-        });
-    }
-    $scope.connection();
-
-    $scope.getStats();
-
 
     $scope.date = {
         start: null,
@@ -72,10 +20,6 @@
     $scope.setToNow = function() {
         $scope.date.end = new Date(Date.now());
     }
-
-
-
-
 
     $scope.callStats = function() {
         if ($scope.date.end != null && $scope.date.end.getTime() <= Date.now()) {
@@ -314,7 +258,6 @@
         })
     }
 
-    var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
 
     $scope.geoDats = [];
@@ -340,24 +283,22 @@
         return deferred.promise;
     };
 
-$scope.heatmapData = [ //only for debugging
-  new google.maps.LatLng(37.782, -122.447),
-  new google.maps.LatLng(37.782, -122.445),
-  new google.maps.LatLng(37.782, -122.443),
-  new google.maps.LatLng(37.782, -122.441),
-  new google.maps.LatLng(37.782, -122.439),
-  new google.maps.LatLng(37.782, -122.437),
-  new google.maps.LatLng(37.782, -122.435),
-  new google.maps.LatLng(37.785, -122.447),
-  new google.maps.LatLng(37.785, -122.445),
-  new google.maps.LatLng(37.785, -122.443),
-  new google.maps.LatLng(37.785, -122.441),
-  new google.maps.LatLng(37.785, -122.439),
-  new google.maps.LatLng(37.785, -122.437),
-  new google.maps.LatLng(37.785, -122.435)
-];
-
-
+    $scope.heatmapData = [ //only for debugging
+        new google.maps.LatLng(37.782, -122.447),
+        new google.maps.LatLng(37.782, -122.445),
+        new google.maps.LatLng(37.782, -122.443),
+        new google.maps.LatLng(37.782, -122.441),
+        new google.maps.LatLng(37.782, -122.439),
+        new google.maps.LatLng(37.782, -122.437),
+        new google.maps.LatLng(37.782, -122.435),
+        new google.maps.LatLng(37.785, -122.447),
+        new google.maps.LatLng(37.785, -122.445),
+        new google.maps.LatLng(37.785, -122.443),
+        new google.maps.LatLng(37.785, -122.441),
+        new google.maps.LatLng(37.785, -122.439),
+        new google.maps.LatLng(37.785, -122.437),
+        new google.maps.LatLng(37.785, -122.435)
+    ];
 
     $scope.initGraph = function() {
         var date = Date.now();
@@ -369,11 +310,14 @@ $scope.heatmapData = [ //only for debugging
 
     $scope.initGraph();
 
+    console.log($scope.heatmapData);
+
     var heatmap;
     $scope.getHuggs().then(function(data) {
         $scope.$on('mapInitialized', function(map) {
             heatmap = map.heatmapLayers.huggr;
             console.log("init");
+            
         });
     });
 
