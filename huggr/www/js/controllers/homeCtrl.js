@@ -95,62 +95,73 @@
 
     //wait for ref to load before continuing
     function getHuggs() {
-        var deferred = $q.defer();
+            var deferred = $q.defer();
 
-        $scope.orderHuggRef.$loaded().then(function(data) {
-            var i = 0;
-            //parse all elements of returning array
-            while (data.$keyAt(i) != null) {
+            $scope.orderHuggRef.$loaded().then(function(data) {
+                var i = 0;
+                //parse all elements of returning array
+                while (data.$keyAt(i) != null) {
 
-                function load() {
-                    var def = $q.defer();
-                    def.resolve(data.$getRecord(data.$keyAt(i)));
-                    return def.promise
-                }; //end function
-                //check whether filter gender of searching person and gender of requestor match
-                //check whether gender of searching person and filter of requestor match
-                //check whether current user's profile ID is among the blocked profile IDs
-                load().then(function(record) {
-                    if (record.reqProfileID != $scope.currentUser.profileID) {
+                    function load() {
+                        var def = $q.defer();
+                        def.resolve(data.$getRecord(data.$keyAt(i)));
+                        return def.promise
+                    }; //end function
+                    //check whether filter gender of searching person and gender of requestor match
+                    //check whether gender of searching person and filter of requestor match
+                    //check whether current user's profile ID is among the blocked profile IDs
+                    load().then(function(record) {
+                        if (record.reqProfileID != $scope.currentUser.profileID) {
 
-                        //check whether user is blocked in results                            
-                        if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
+                            //check whether user is blocked in results                            
+                            if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
 
-                            //calc distance
-                            var radius = 6371;
-                            var diffLat = ($scope.positions.lat - record.reqLat) * (Math.PI / 180);
-                            var diffLon = ($scope.positions.lng - record.reqLong) * (Math.PI / 180);
-                            var a =
-                                Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                                Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.positions.lat) * (Math.PI / 180)) *
-                                Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
-                            var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                            var distance = radius * b;
+                                //calc distance
+                                var radius = 6371;
+                                var diffLat = ($scope.positions.lat - record.reqLat) * (Math.PI / 180);
+                                var diffLon = ($scope.positions.lng - record.reqLong) * (Math.PI / 180);
+                                var a =
+                                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.positions.lat) * (Math.PI / 180)) *
+                                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                var distance = radius * b;
 
-                            //check for distance within range and save to JSON
-                            if (distance <= 10) {
-                                huggArray.hugg.push({
-                                    "lat": record.reqLat,
-                                    "long": record.reqLong
-                                }); //end push
-                            } // end if
+                                //check for distance within range and save to JSON
+                                if (distance <= 10) {
+                                    huggArray.hugg.push({
+                                        "obj": new google.maps.LatLng(record.reqLat, record.reqLong),
+                                        "lat": record.reqLat,
+                                        "long": record.reqLong
+                                    }); //end push
+                                } // end if
 
-                        } //end if
-                    } // end if
-                }); //end then
-                i++;
-            } //end while
-            deferred.resolve(huggArray);
+                            } //end if
+                        } // end if
+                    }); //end then
+                    i++;
+                } //end while
+                deferred.resolve(huggArray);
 
-            //This is the return value
-        }); //end load huggRef
-        return deferred.promise;
-    } //end function
+                //This is the return value
+            }); //end load huggRef
+            return deferred.promise;
+        } //end function 
 
     getHuggs().then(function(array) {
         //this is the array to display the coordinates
         console.log(array);
+        var latlngbounds = new google.maps.LatLngBounds(); //let the google api decide the optimal pan&zoom level
+        for (var i = 0; i < array.length; i++) {
+            latlngbounds.extend(array[i].hugg.obj);
+            console.log(array[i].obj);
+        }
+        var center = latlngbounds.getCenter();
         $scope.resultList = array;
+        console.log(center);
+        //$scope.resultList.centerLat = center.k;
+        //$scope.resultList.centerLng = center.D;
+        $scope.map.fitBounds(latlngbounds); //show correctly fitted map
     });
 
 })

@@ -50,8 +50,10 @@
         </ion-list>
         <div class="card">
             <div class="item item-text-wrap">
+                Live Map
                 <map class="ui-map" zoom="14" center="[{{positions.lat}}, {{positions.lng}}]" scrollwheel="false" draggable="false">
                     <marker position="{{positions.lat}}, {{positions.lng}}" title="You are here"></marker>
+                    <marker ng-repeat="hugs in resultList.hugg" position="{{hugs.obj.k}}, {{hugs.obj.D}}" title="hugg partners" icon="img/huggrico.png"></marker>
                 </map>
             </div>
         </div>

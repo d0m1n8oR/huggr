@@ -4,10 +4,6 @@
 		"selected_items":
 		[
 			[
-				"lat",
-				"latlngbounds〔variable〕"
-			],
-			[
 				"moda",
 				"modalData"
 			],
@@ -443,38 +439,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "www/templates/modals/googleMaps.html",
-			"settings":
-			{
-				"buffer_size": 905,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "www/js/controllers/homeCtrl.js",
-			"settings":
-			{
-				"buffer_size": 6893,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "www/js/controllers/resultCtrl.js",
-			"settings":
-			{
-				"buffer_size": 7436,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "www/templates/home.html",
-			"settings":
-			{
-				"buffer_size": 3470,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -620,18 +584,29 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/emse/Documents/huggr/huggr/www",
-		"/Users/emse/Documents/huggr/huggr/www/js",
-		"/Users/emse/Documents/huggr/huggr/www/js/controllers",
-		"/Users/emse/Documents/huggr/huggr/www/js/factories",
-		"/Users/emse/Documents/huggr/huggr/www/lib/ngCordova",
-		"/Users/emse/Documents/huggr/huggr/www/lib/ngCordova/dist",
-		"/Users/emse/Documents/huggr/huggr/www/templates",
-		"/Users/emse/Documents/huggr/huggr/www/templates/modals"
+		"/Users/emse/Documents/huggr/huggrAdmin/scss",
+		"/Users/emse/Documents/huggr/huggrAdmin/www",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/js",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/js/controllers",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates"
 	],
 	"file_history":
 	[
-		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates/statistics.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates/dashboard.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/js/controllers/statisticsCtrl.js",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/js/controllers/dashboardCtrl.js",
+		"/Users/emse/Documents/huggr/huggrAdmin/scss/ionic.app.scss",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/index.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates/menu.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates/supportoverview.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/www/templates/search.html",
+		"/Users/emse/Documents/huggr/huggrAdmin/gulpfile.js",
+		"/Users/emse/Documents/huggr/huggrAdmin/package.json",
+		"/Users/emse/Documents/huggr/huggrAdmin/npm-debug.log",
+		"/Users/emse/Documents/huggr/huggrAdmin/ionic.project",
+		"/Users/emse/Documents/huggr/huggrAdmin/config.xml",
+		"/Users/emse/Documents/huggr/huggrAdmin/bower.json",
 		"/Users/emse/Documents/huggr/huggr/www/templates/invite.html",
 		"/Users/emse/Documents/huggr/huggr/scss/ionic.app.scss",
 		"/Users/emse/Documents/huggr/huggr/www/js/factories/toast.js",
@@ -719,6 +694,7 @@
 		"/Users/emse/Documents/huggr/myApp/package.json",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/Gruntfile.js",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/index.html",
+		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/dashboard.html",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_nav.scss",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/sections/_nav-off-canvas.scss",
@@ -743,22 +719,7 @@
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_lock-screen.scss",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/signin.html",
 		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/views/pages/splash.html",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_splash.scss",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/.sublime-grunt.cache",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/Gruntfile.coffee",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/ui/_var.scss",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/global/_var.scss",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/main.scss",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/scripts/shared/main.coffee",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/.sass-cache/443a68d9bed82e3c52117d47009c06d908a182e8/main.scssc",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/node_modules/grunt-contrib-uglify/node_modules/uglify-js/lib/mozilla-ast.js",
-		"/Users/emse/Downloads/AngularJS/huggr/huggr/node_modules/express/Makefile",
-		"/Users/emse/Documents/.bowerrc",
-		"/Users/emse/Library/Application Support/Sublime Text 3/Packages/HTML-CSS-JS Prettify/.jsbeautifyrc",
-		"/Users/emse/Downloads/AngularJS/square/square/bower.json",
-		"/Users/emse/Downloads/AngularJS/square/square/Gruntfile.coffee",
-		"/Users/emse/Downloads/AngularJS/square/square/client/bower_components/mocha/Readme.md",
-		"/Users/emse/Downloads/AngularJS/square/square/client/bower_components/angular/README.md"
+		"/Users/emse/Downloads/AngularJS/huggr/huggr/client/styles/pages/_splash.scss"
 	],
 	"find":
 	{
@@ -783,7 +744,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"obj",
+			"col ",
+			"<div class=\"row\">",
+			"<div class=\"col card\">",
+			"        <div class=\"row\">\n",
+			"geoDats",
+			"console",
+			"ion-item",
+			"/ion-item",
+			"ion-item",
+			"<div class=\"col\">",
+			"        <div class=\"row\">",
+			"overr",
+			"padding-top",
 			"huggr",
 			"$button-facebook-bg",
 			"huggr",
@@ -898,19 +871,7 @@
 			"rating",
 			"popover",
 			"item",
-			"{{item",
-			"item",
-			"-circled",
-			"profilectr",
-			"10000",
-			"profilectr",
-			"blockUs",
-			"blocked",
-			"$set",
-			"h1",
-			"h4",
-			"currentUser",
-			"blockUser"
+			"{{item"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -964,231 +925,8 @@
 	"groups":
 	[
 		{
-			"selected": 2,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "www/templates/modals/googleMaps.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 905,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								809,
-								809
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
-							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "www/js/controllers/homeCtrl.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6893,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6543,
-								6543
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1543.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "www/js/controllers/resultCtrl.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7436,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2663,
-								2836
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 482.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 3,
-					"file": "www/templates/home.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3470,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3038,
-								3047
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 103.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -1209,18 +947,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.455555555556,
 			1.0
 		],
 		"rows":
@@ -1238,7 +969,7 @@
 	{
 		"height": 0.0
 	},
-	"project": "huggr.sublime-project",
+	"project": "huggrAdmin.sublime-project",
 	"replace":
 	{
 		"height": 42.0

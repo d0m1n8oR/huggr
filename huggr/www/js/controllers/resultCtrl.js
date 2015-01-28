@@ -52,7 +52,7 @@
                 for (var i = 0; i < $scope.zoom.length; i++) {
                     latlngbounds.extend($scope.zoom[i]);
                 }
-                var center = latlngbounds.getCenter()
+                var center = latlngbounds.getCenter();
                 $scope.modalData.centerLat = center.k;
                 $scope.modalData.centerLng = center.D;
                 $scope.map.fitBounds(latlngbounds); //show correctly fitted map

@@ -1,0 +1,29 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "hooks"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "node_modules"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "plugins"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "resources"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "scss"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "www"
+		}
+	]
+}
