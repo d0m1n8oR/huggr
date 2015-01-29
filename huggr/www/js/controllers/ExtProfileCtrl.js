@@ -75,7 +75,6 @@
                     while ($scope.chatRef.$getRecord(newChatID) != null) {
                         newChatID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
                     }
-                    console.log(newChatID);
                     $firebase(ref.child("chat").child(newChatID)).$set({
                         profileIDA: $scope.currentUser.profileID,
                         profileIDB: otherProfileID,
@@ -97,10 +96,8 @@
                     })
                 })
             } else {
-                console.log("already existing");
                 $scope.chatUserRef.$loaded().then(function(data) {
                     var chatID = data.$getRecord(otherProfileID).chatID;
-                    console.log(chatID);
                     $state.go('app.chat', {
                         chatID: chatID,
                         chatTitle: $scope.data.displayName

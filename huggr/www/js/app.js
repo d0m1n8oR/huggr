@@ -75,6 +75,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
                 resolve: {
                     "currentAuth": ["Auth",
                         function(Auth) {
+                            console.log(Auth.$requireAuth());
                             return Auth.$requireAuth();
                         }
                     ]

@@ -1,4 +1,6 @@
-.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $q) {
+.controller('homeCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications, $q, currentAuth) {
+    
+    console.log(currentAuth);
 
     $scope.currentUser = localstorage.getObject('userData');
 
