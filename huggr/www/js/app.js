@@ -9,13 +9,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
 .run(function($ionicPlatform, $rootScope, $state, $firebase, $firebaseAuth, Auth, UserInfo) {
     $ionicPlatform.ready(function() {
 
-        $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
-            // We can catch the error thrown when the $requireAuth promise is rejected
-            // and redirect the user back to the login page
-            if (error === "AUTH_REQUIRED") {
-                $state.go("index");
-            }
-        });
+        
         $rootScope.Object = Object;
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -27,6 +21,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMap',
             StatusBar.styleDefault();
         }
     });
+    
+    $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+            // We can catch the error thrown when the $requireAuth promise is rejected
+            // and redirect the user back to the login page
+            if (error === "AUTH_REQUIRED") {
+                $state.go("index");
+            }
+        });
 
 })
 
