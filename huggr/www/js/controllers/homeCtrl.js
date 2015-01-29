@@ -149,19 +149,8 @@
         } //end function 
 
     getHuggs().then(function(array) {
-        //this is the array to display the coordinates
-        console.log(array);
-        var latlngbounds = new google.maps.LatLngBounds(); //let the google api decide the optimal pan&zoom level
-        for (var i = 0; i < array.length; i++) {
-            latlngbounds.extend(array[i].hugg.obj);
-            console.log(array[i].obj);
-        }
-        var center = latlngbounds.getCenter();
         $scope.resultList = array;
-        console.log(center);
-        //$scope.resultList.centerLat = center.k;
-        //$scope.resultList.centerLng = center.D;
-        $scope.map.fitBounds(latlngbounds); //show correctly fitted map
+        console.log($scope.resultList);
     });
 
 })
