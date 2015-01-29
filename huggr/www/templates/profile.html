@@ -19,7 +19,6 @@
                         <p><span ng-show="currentUser.age">{{currentUser.age}} years old</span><span ng-hide="currentUser.age">You haven't set your birthday yet</span>
                         </p>
                     </div>
-
                     <div class="item item-body">
                         <img class="full-image rounded" ng-src="{{currentUser.picture}}">
                         <p>
@@ -31,10 +30,9 @@
                         <p><span>Last seen {{currentUser.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
                         </p>
                         <p>
-                            <span>Your current Rating:</span>
-                            <div ng-init="userRatingForView = star.rating - 1"></div>
-                            <div class="star-rating" star-rating rating-value="userRatingForView" data-max="5"></div>
-                            <a href="" class="subdued">Number of huggs: {{currentUser.numberHuggs}}</a>
+                            <span>Rating: {{currentUser.rating | number :0}} <i class="icon ion-star"></i></span>
+                            <br>
+                            <span>Number of huggs: {{currentUser.numberHuggs}}</span>
                         </p>
 
                     </div>
