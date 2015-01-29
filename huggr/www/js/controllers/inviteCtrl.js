@@ -10,6 +10,7 @@
         });
     };
 
+    //Stuff for the invite message
     var message = "Hey! I am in dire need of a hug! I am using this cool new app huggr and it would be great to have you here to hug me :)";
     var subject = "Hug me on huggr!";
     var file = "file";

@@ -38,6 +38,7 @@
 
     range = $stateParams.range;
 
+    //method to show own and foreign position on a map
     $scope.showPosition = function(lat, long) {
         $scope.zoom = []; //array which holds the positions we will use to pan and zoom our map to
         $scope.modalData.lat = lat;
@@ -106,6 +107,7 @@
                             //check whether user is blocked in results                            
                             if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
 
+                                //GOOGLE DISTANCE MATRIX API CALL
                                 var service = new google.maps.DistanceMatrixService(); + service.getDistanceMatrix({
                                     origins: [currentLat + "," + currentLong],
                                     destinations: [record.reqLat + "," + record.reqLong],

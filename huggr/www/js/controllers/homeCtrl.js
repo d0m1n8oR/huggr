@@ -2,12 +2,13 @@
 
     $scope.currentUser = localstorage.getObject('userData');
 
-    //Setze Koordinaten für Initialisierung von Maps
+    //Initialization of Map
     $scope.positions = {
         lat: 49.4677562,
         lng: 8.506636
     };
 
+    //Locate user and show info on map
     $scope.$on('mapInitialized', function(event, map) {
         $scope.map = map;
         //hole die GPS/IP-Geolocation
@@ -23,6 +24,7 @@
             });
     });
 
+    //stuff for popover
     $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
         scope: $scope,
     }).then(function(popover) {
@@ -84,6 +86,7 @@
         hugg: []
     }
 
+    //Methods to display Upcoming huggs
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
 
@@ -93,6 +96,7 @@
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
 
+    //method to get huggs in a radius of 10 km to show in the map
     //wait for ref to load before continuing
     function getHuggs() {
             var deferred = $q.defer();
@@ -107,9 +111,6 @@
                         def.resolve(data.$getRecord(data.$keyAt(i)));
                         return def.promise
                     }; //end function
-                    //check whether filter gender of searching person and gender of requestor match
-                    //check whether gender of searching person and filter of requestor match
-                    //check whether current user's profile ID is among the blocked profile IDs
                     load().then(function(record) {
                         if (record.reqProfileID != $scope.currentUser.profileID) {
 
@@ -150,7 +151,6 @@
 
     getHuggs().then(function(array) {
         $scope.resultList = array;
-        console.log($scope.resultList);
     });
 
 })

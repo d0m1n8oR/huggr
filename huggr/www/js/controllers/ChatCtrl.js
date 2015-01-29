@@ -37,11 +37,10 @@
 })
 
 .controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage, toast, $ionicScrollDelegate) {
-
     chatID = $stateParams.chatID;
     $scope.ctitle = $stateParams.chatTitle;
-    console.log("ChatID:" + chatID);
 
+    //check whether platform is IOS
     var isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
     //Reference to Firebase
@@ -54,6 +53,7 @@
 
     $scope.inputUp = function() {
         if (isIOS) $scope.data.keyboardHeight = 216;
+        //not working in browser
         //$timeout(function() {
         //  $ionicScrollDelegate.scrollBottom(true);
         //}, 300);
@@ -66,9 +66,11 @@
     };
 
     $scope.closeKeyboard = function() {
+        //not working in browser
         // cordova.plugins.Keyboard.close();
     };
 
+    //function to send message
     $scope.sendMessage = function() {
         $scope.chatList.$add({
             message: $scope.messageInput,
@@ -78,6 +80,8 @@
             name: $scope.currentUser.firstName
         }).then(function(sync) {
             var id = sync.key();
+            
+            //user feedback
             toast.pop("Message sent!");
             $scope.messageInput = '';
             $ionicScrollDelegate.scrollBottom();
@@ -85,6 +89,7 @@
         });
     };
 
+    //Data binding
     var obj = sync.$asObject();
     obj.$loaded().then(function() {
         obj.$bindTo($scope, "chatData").then(function() {

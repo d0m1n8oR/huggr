@@ -2,8 +2,7 @@
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
     
-    console.log($stateParams.supportID);
-
+    //DATA BINDING
     var supportObject = $firebase(ref.child("admin").child("support").child($stateParams.supportID)).$asObject();
     supportObject.$bindTo($scope, "supportData").then(function() {
 

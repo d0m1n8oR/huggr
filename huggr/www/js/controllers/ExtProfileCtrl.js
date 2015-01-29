@@ -1,18 +1,18 @@
-//this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
-//These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions, $ionicHistory) {
+.controller('ExtProfileCtrl', function($scope, $firebase, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
     $scope.$on("$ionicView.enter", function(scopes, states) {    });
 
+    //set stuff
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
     $scope.data = {age: null};
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
+    //get info from this user (PRofileID is in StateParams), deferred call
     var deferred = $q.defer();
     UserInfo.getProfile($scope.profileID).then(function(value) {
         $scope.data.age = value.age;
@@ -64,6 +64,8 @@
     $scope.chatUserRef = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("chat")).$asArray();
     $scope.chatRef = $firebase(ref.child("chat")).$asArray();
 
+    //start a new chat with the user
+    //method checks whether there is already a chat open
     $scope.startChat = function startChat(otherProfileID) {
         $scope.chatUserRef.$loaded().then(function(data) {
             //check whether there has been a chat between the users

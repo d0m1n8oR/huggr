@@ -1,3 +1,5 @@
+//stuff to rate users
+
 .directive('starRating',
     function() {
         return {
