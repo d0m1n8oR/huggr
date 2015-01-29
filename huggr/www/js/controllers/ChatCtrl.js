@@ -54,9 +54,9 @@
 
     $scope.inputUp = function() {
         if (isIOS) $scope.data.keyboardHeight = 216;
-        $timeout(function() {
-            $ionicScrollDelegate.scrollBottom(true);
-        }, 300);
+        //$timeout(function() {
+        //  $ionicScrollDelegate.scrollBottom(true);
+        //}, 300);
 
     };
 
