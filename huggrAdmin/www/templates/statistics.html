@@ -47,7 +47,10 @@
                     <div class="item item-divider padding-top">
                         Huggs and new registered users
                     </div>
-                    <label id="analysisLabel"></label>
+                    <ul class="line-legend">
+                        <li><span style="background-color:rgba(220,220,220,1)"></span>Huggs</li>
+                        <li><span style="background-color:rgba(151,187,205,1)"></span>Registered users</li>
+                    </ul>
                     <canvas id="analysis"></canvas>
                 </div>
             </div>
@@ -58,7 +61,12 @@
                     <div class="item item-divider padding-top">
                         Status of huggs
                     </div>
-                    <label id="statusLabel"></label>
+                    <ul class="doughnut-legend">
+                        <li><span style="background-color:#F7464A"></span>Unanswered</li>
+                        <li><span style="background-color:#46BFBD"></span>Answered</li>
+                        <li><span style="background-color:#FDB45C"></span>Accepted</li>
+                        <li><span style="background-color:#4D5360"></span>Done</li>
+                    </ul>
                     <canvas id="status"></canvas>
                 </div>
             </div>
@@ -67,11 +75,15 @@
                     <div class="item item-divider padding-top">
                         Gender of users
                     </div>
-                    <label id="genderLabel"></label>
+                    <ul class="doughnut-legend">
+                        <li><span class="color-box" style="background-color:#F7464A"> </span>Male</li>
+                        <li><span style="background-color:#46BFBD"> </span>Female</li>
+                    </ul>
                     <canvas id="gender"></canvas>
                 </div>
             </div>
         </div>
+        <!--
         {{geoDats | json}}
         <br>{{heatmapData | json}}
         <div class="card">
@@ -82,6 +94,7 @@
                 </map>
             </div>
         </div>
+-->
     </ion-content>
 
 </ion-view>

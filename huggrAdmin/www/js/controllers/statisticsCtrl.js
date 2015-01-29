@@ -143,10 +143,6 @@
 
             var ctx = document.getElementById("analysis").getContext("2d");
             var analysisChart = new Chart(ctx).Line(lineData);
-            $scope.legend.analysis = analysisChart.generateLegend();
-            //console.log("Label Data");
-            //console.log($scope.legend.analysis);
-            document.getElementById('analysisLabel').innerHTML = $scope.legend.analysis;
         })
     }
 
@@ -190,10 +186,6 @@
 
             var ctx = document.getElementById("gender").getContext("2d");
             var genderChart = new Chart(ctx).Doughnut(dData);
-            $scope.legend.gender = genderChart.generateLegend();
-            //console.log("Legend Data");
-            //console.log($scope.legend.gender);
-            document.getElementById('genderLabel').innerHTML = $scope.legend.gender;
         })
     }
 
@@ -251,10 +243,6 @@
 
             var ctx = document.getElementById("status").getContext("2d");
             var statusChart = new Chart(ctx).Doughnut(dData);
-            $scope.legend.status = statusChart.generateLegend();
-            //console.log("Legend Data");
-            //console.log($scope.legend.status);
-            document.getElementById('statusLabel').innerHTML = $scope.legend.status;
         })
     }
 

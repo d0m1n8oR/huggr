@@ -1,1 +1,7 @@
 /* Empty. Add your own CSS if you like */
+
+.color-box {
+  width: 16px;
+  height: 16px;
+  display:block;
+}
