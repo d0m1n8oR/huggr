@@ -27,7 +27,7 @@
                     <i class="icon ion-clock"> </i>{{ item.reqTime | date:'dd.MM.yyyy - HH:mm'}}
                 </p>
                 <p>
-                    <a class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}}km</a>
+                    <a class="button icon-left ion-location button-clear button-dark">{{item.distance | number : 2}} km</a> <a class=" button icon-left ion-model-s button-clear button-dark"> {{item.duration | number: 0}} min</a> 
                 </p>
                 <ion-option-button class="button-royal icon ion-map override-icon-position" ng-click="showPosition(item.lat, item.long)"></ion-option-button>
                 <ion-option-button class="button-balanced icon sp-huggr override-icon-position" ng-click="answerHugg({{item.huggID}}, {{item.profileID}})"></ion-option-button>
