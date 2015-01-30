@@ -67,6 +67,10 @@
     //start a new chat with the user
     //method checks whether there is already a chat open
     $scope.startChat = function startChat(otherProfileID) {
+        
+        otherProfileID = parseInt(otherProfileID);
+        console.log(otherProfileID);
+        
         $scope.chatUserRef.$loaded().then(function(data) {
             //check whether there has been a chat between the users
             if (data.$getRecord(otherProfileID) == null) {
