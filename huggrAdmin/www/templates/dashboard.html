@@ -10,7 +10,7 @@
                         Open support requests
                     </div>
                     <ion-item ng-repeat="item in supportData" item="item" ng-if="item.done == '0'" href="#/app/supportitem/{{item.supportID}}">
-                        <h2>Subject {{item.subject}}</h2>
+                        <h2><b>Subject:</b> {{item.subject}}</h2>
                         <p><i class="icon ion-calendar"> </i>{{item.time | date:'dd.MM.yyyy HH:mm'}}, #{{item.supportID}}</p>
                         <p><i class="ion-person"> </i>{{item.profileID}}</p>
                     </ion-item>
