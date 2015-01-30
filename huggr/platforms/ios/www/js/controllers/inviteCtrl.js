@@ -1,15 +1,6 @@
 .controller('inviteCtrl', function($scope, $cordovaContacts, $cordovaSocialSharing, toast) {
-    $scope.getContactList = function() {
-        $cordovaContacts.find({
-            filter: '',
-            multiple: true
-        }).then(function(result) {
-            $scope.contacts = result;
-        }, function(error) {
-            console.log("ERROR: " + error);
-        });
-    };
 
+    //Stuff for the invite message
     var message = "Hey! I am in dire need of a hug! I am using this cool new app huggr and it would be great to have you here to hug me :)";
     var subject = "Hug me on huggr!";
     var file = "file";

@@ -2,7 +2,7 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-        <ion-nav-buttons side="right">
+    <ion-nav-buttons side="right">
         <button menu-toggle="right" class="button button-icon icon ion-ios7-bell"><span ng-hide="notification.length == 0" class="badge badge-balanced icon-badge">{{notificationData.length}}</span>
         </button>
     </ion-nav-buttons>
@@ -12,7 +12,7 @@
             <div class="item item-avatar">
                 <img ng-src="{{data.picture}}">
                 <h2>{{data.firstName}}</h2>
-                <p><span>{{data.age}} years old </span><span>and was last seen at {{data.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
+                <p><span>{{data.age}} years old </span><span> - last seen {{data.lastSeenTime | date:'dd.MM.yyyy - HH:mm'}}</span>
                 </p>
             </div>
 
@@ -20,13 +20,17 @@
                 <img class="full-image rounded" ng-src="{{data.picture}}">
                 <p>
                     <span>{{data.hobby}}</span>
-                    <span>{{data.firstName}} has not provided any information about hobbys</span>
+                    <div ng-if="data.hobby == null">
+                        <span>{{data.firstName}} has not provided any information about hobbys</span>
+                    </div>
                 </p>
                 <p>
-                    <span>Rating:</span>
-                    <div ng-init="data.rating = star.rating - 1"></div>
-                    <div class="star-rating" star-rating rating-value="data.rating" data-max="5"></div>
-                    <a href="" class="subdued">Number of huggs: {{data.numberHuggs}}</a>
+                    <div ng-if="data.rating == '0'">
+                        <i class="ion-ios-star-outline"></i><i class="ion-ios-star-outline"></i><i class="ion-ios-star-outline"></i><i class="ion-ios-star-outline"></i><i class="ion-ios-star-outline"></i>
+                    </div>
+                    <span>Rating: {{data.rating | number :0}} <i class="icon ion-star"></i></span>
+                    <br>
+                    <span>Number of huggs: {{data.numberHuggs}}</span>
                 </p>
             </div>
             <div class="item tabs tabs-secondary tabs-icon-left">

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
-.factory("Auth", ["$firebaseAuth",
-    function($firebaseAuth) {
+.factory("Auth", ["$firebaseAuth", "$state",
+    function($firebaseAuth, $state) {
         var ref = new Firebase("https://huggr.firebaseio.com/");
         return $firebaseAuth(ref);
     }
@@ -14,7 +14,6 @@ angular.module('starter.controllers', [])
                 var ref = new Firebase("https://huggr.firebaseio.com/users/data");
                 dataRef = $firebase(ref.orderByKey().equalTo(ID.toString())).$asArray();
                 return dataRef.$loaded().then(function(data) {
-                    console.log(data.$getRecord(ID));
                     return angular.extend({}, data.$getRecord(ID)); //much shorter than transcribing properties manually
                 }).catch(function(error) {
                     console.error("Error getting UserInfo: ", error.message);
@@ -533,11 +532,10 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ChatCtrl', function($scope, $stateParams, $firebase, localstorage, toast, $ionicScrollDelegate) {
-
     chatID = $stateParams.chatID;
     $scope.ctitle = $stateParams.chatTitle;
-    console.log("ChatID:" + chatID);
 
+    //check whether platform is IOS
     var isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
     //Reference to Firebase
@@ -550,9 +548,10 @@ angular.module('starter.controllers', [])
 
     $scope.inputUp = function() {
         if (isIOS) $scope.data.keyboardHeight = 216;
-        $timeout(function() {
-            $ionicScrollDelegate.scrollBottom(true);
-        }, 300);
+        //not working in browser
+        //$timeout(function() {
+        //  $ionicScrollDelegate.scrollBottom(true);
+        //}, 300);
 
     };
 
@@ -562,9 +561,11 @@ angular.module('starter.controllers', [])
     };
 
     $scope.closeKeyboard = function() {
+        //not working in browser
         // cordova.plugins.Keyboard.close();
     };
 
+    //function to send message
     $scope.sendMessage = function() {
         $scope.chatList.$add({
             message: $scope.messageInput,
@@ -574,6 +575,8 @@ angular.module('starter.controllers', [])
             name: $scope.currentUser.firstName
         }).then(function(sync) {
             var id = sync.key();
+            
+            //user feedback
             toast.pop("Message sent!");
             $scope.messageInput = '';
             $ionicScrollDelegate.scrollBottom();
@@ -581,6 +584,7 @@ angular.module('starter.controllers', [])
         });
     };
 
+    //Data binding
     var obj = sync.$asObject();
     obj.$loaded().then(function() {
         obj.$bindTo($scope, "chatData").then(function() {
@@ -592,6 +596,7 @@ angular.module('starter.controllers', [])
 
 .controller('ChatOverviewCtrl', function($scope, $firebase, localstorage, UserInfo, $q, $filter) {
 
+    //initialize all the stuff
     $scope.currentUser = localstorage.getObject('userData');
     var sync = $firebase(new Firebase("https://huggr.firebaseio.com/users/data/" + $scope.currentUser.profileID + "/chat/"));
     $scope.chatList = sync.$asArray();
@@ -603,9 +608,8 @@ angular.module('starter.controllers', [])
         for (var i = 0; i < ($scope.chatList).length; i++) {
             $scope.bla.push($scope.chatList[i].chatID)
         };
-        //
 
-
+        //loop through list
         for (var i = 0; i < ($scope.chatList).length; i++) {
 
             var deferred = $q.defer();
@@ -618,6 +622,7 @@ angular.module('starter.controllers', [])
                         for (var i = 0; i < s.length; i++) {
                             if (s[i] == p[key].chatID) {
                                 value.chref = s[i];
+                                //add elements to list
                                 $scope.chatResults.push(value);
                             };
 
@@ -634,21 +639,21 @@ angular.module('starter.controllers', [])
 
 })
 
-//this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
-//These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions, $ionicHistory) {
+.controller('ExtProfileCtrl', function($scope, $firebase, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
     $scope.$on("$ionicView.enter", function(scopes, states) {    });
 
+    //set stuff
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
     $scope.data = {age: null};
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
+    //get info from this user (PRofileID is in StateParams), deferred call
     var deferred = $q.defer();
     UserInfo.getProfile($scope.profileID).then(function(value) {
         $scope.data.age = value.age;
@@ -683,8 +688,7 @@ angular.module('starter.controllers', [])
                     i++;
                 }
                 toast.pop("Blocked user");
-                $ionicHistory.goBack();
-                return 1;
+                $state.go('app.home');
             });
         }); //end set
 
@@ -701,6 +705,8 @@ angular.module('starter.controllers', [])
     $scope.chatUserRef = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("chat")).$asArray();
     $scope.chatRef = $firebase(ref.child("chat")).$asArray();
 
+    //start a new chat with the user
+    //method checks whether there is already a chat open
     $scope.startChat = function startChat(otherProfileID) {
         $scope.chatUserRef.$loaded().then(function(data) {
             //check whether there has been a chat between the users
@@ -710,7 +716,6 @@ angular.module('starter.controllers', [])
                     while ($scope.chatRef.$getRecord(newChatID) != null) {
                         newChatID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
                     }
-                    console.log(newChatID);
                     $firebase(ref.child("chat").child(newChatID)).$set({
                         profileIDA: $scope.currentUser.profileID,
                         profileIDB: otherProfileID,
@@ -732,12 +737,11 @@ angular.module('starter.controllers', [])
                     })
                 })
             } else {
-                console.log("already existing");
                 $scope.chatUserRef.$loaded().then(function(data) {
                     var chatID = data.$getRecord(otherProfileID).chatID;
-                    console.log(chatID);
                     $state.go('app.chat', {
-                        chatID: chatID
+                        chatID: chatID,
+                        chatTitle: $scope.data.displayName
                     });
                 })
             }
@@ -822,220 +826,229 @@ angular.module('starter.controllers', [])
 })
 .controller('ProfileCtrl', function($scope, $firebase, UserInfo, localstorage, $stateParams, notifications, toast, $state, $cordovaCamera, $http) {
 
-        /****************Tab 1****************/
-        //initialize stuff
-        $scope.currentUser = localstorage.getObject('userData');
-        var ref = new Firebase("https://huggr.firebaseio.com/");
-        notifications.sync($scope.currentUser.profileID);
-
-        $scope.userRatingForView = $scope.currentUser.rating;
-
-        //show data in profile
-        var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
-        userObject.$bindTo($scope, "currentUser").then(function() {
-            localstorage.setObject("userData", $scope.currentUser)
-        }); // end bindTo
-
-        var ownHuggObject = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asObject();
-        ownHuggObject.$bindTo($scope, "ownHuggData").then(function() {}); // end bindTo
-
-        var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
-        otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
-
-        /****************Tab 2****************/
-
-        var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
-        $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
-        $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
-
-        var mainref = new Firebase("https://huggr.firebaseio.com/");
-
-
-        $scope.connect = function(provider) {
-            if (provider == "toGoogle") {
-                connectRef.authWithOAuthPopup("google", function(err, user) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    if (user) {
-                        connectRef.onAuth(function(authData) {
-                            $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
-                                displayName: authData.google.displayName,
-                                token: authData.token,
-                                expires: authData.expires,
-                                uid: authData.uid,
-                                ID: authData.google.id,
-                                AccessToken: authData.google.accessToken,
-                                profileID: $scope.currentUser.profileID
-                            });
-                            $firebase(ref).$update({
-                                googleID: authData.google.id
-                            });
-                            toast.pop("Successfully connected");
-                        });
-
-                    }
-                });
-            }
-            if (provider == "toFacebook") {
-                connectRef.authWithOAuthPopup("facebook", function(err, user) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    if (user) {
-                        connectRef.onAuth(function(authData) {
-                            $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
-                                displayName: authData.facebook.displayName,
-                                token: authData.token,
-                                expires: authData.expires,
-                                uid: authData.uid,
-                                ID: authData.facebook.id,
-                                AccessToken: authData.facebook.accessToken,
-                                profileID: $scope.currentUser.profileID
-                            });
-                            $firebase(ref).$update({
-                                facebookID: authData.facebook.id
-                            });
-                            toast.pop("Successfully connected");
-                        });
-                    }
-                });
-            }
-        }
-
-        document.addEventListener("deviceready", function() {
-
-            var options = {
-                quality: 90,
-                destinationType: Camera.DestinationType.DATA_URL,
-                sourceType: Camera.PictureSourceType.CAMERA,
-                allowEdit: true,
-                encodingType: Camera.EncodingType.JPEG,
-                popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: false
-            };
-            $scope.takeNewPicture = function() {
-                $cordovaCamera.getPicture(options).then(function(imageData) {
-                    $http({
-                        method: 'POST',
-                        url: 'http://routefiftyfive.com/huggr/index.php',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        transformRequest: function(obj) {
-                            var str = [];
-                            for (var p in obj)
-                                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                            return str.join("&");
-                        },
-                        data: {
-                            image: imageData
-                        }
-                    }).success(function(data, status, headers, config) {
-                        $scope.currentUser.picture = data;
-                        console.log(status);
-                    });
-                }, function(err) {
-                    // error
-                });
-            };
-        }, false);
-
-
-
-        /****************Tab 3****************/
-        $scope.noBlockedUsers = true;
-
-        var blockedUserObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked")).$asObject();
-        blockedUserObject.$bindTo($scope, "blockedUserData").then(function() {
-            $scope.blockedUsers = [];
-            for (var key in $scope.blockedUserData) {
-                if ($scope.blockedUserData.hasOwnProperty(key) && key != "1000000000001" && key != "$id") { //need to filter firebase $id-object
-                    var obj = $scope.blockedUserData[key];
-                    for (var prop in obj) {
-                        if (obj.hasOwnProperty(prop)) {
-                            UserInfo.getProfile(obj[prop]).then(function(value) {
-                                $scope.returnedProfile = value;
-                                $scope.blockedUsers.push($scope.returnedProfile);
-                            });
-                        }
-                    }
-                    $scope.noBlockedUsers = true;
-                } else {
-                    $scope.noBlockedUsers = false;
-                }
-            }
-        }); // end bindTo
-
-        $scope.unblockUser = function(unblockProfileID) {
-            $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
-                var blockHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asArray();
-                blockHuggRef.$loaded().then(function(data) {
-                    var i = 0;
-                    while (data.$keyAt(i) != null) {
-                        $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(unblockProfileID)).$remove();
-                        i++;
-                    }
-                    toast.pop("Unblocked user");
-                    $state.go('app.profile')
-                    return 1;
-                });
-            });
-        };
-
-    }) //end ProfileCtrl
-
-.controller('aboutCtrl', function($scope, $cordovaGeolocation, $ionicPopover, $state, localstorage, $firebase, toast, notifications) {
+    /****************Tab 1****************/
+    //initialize stuff
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
+    notifications.sync($scope.currentUser.profileID);
 
+    $scope.userRatingForView = $scope.currentUser.rating;
+
+    //show data in profile
+    var userObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID)).$asObject();
+    userObject.$bindTo($scope, "currentUser").then(function() {
+        localstorage.setObject("userData", $scope.currentUser)
+    }); // end bindTo
+
+    //DATA BINDING
+    var ownHuggObject = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    ownHuggObject.$bindTo($scope, "ownHuggData").then(function() {}); // end bindTo
+
+    var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
+    otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
+
+    /****************Tab 2****************/
+
+    var connectRef = new Firebase("https://huggr.firebaseio.com/users/");
+    $scope.googleRef = $firebase(connectRef.child("signin").child("google")).$asArray();
+    $scope.facebookRef = $firebase(connectRef.child("signin").child("facebook")).$asArray();
+
+    var mainref = new Firebase("https://huggr.firebaseio.com/");
+
+    //function to connect to another provider
+    //Meaning you can login with Google and Facebook and end up with the same profile -> COOL
+    $scope.connect = function(provider) {
+        if (provider == "toGoogle") {
+            connectRef.authWithOAuthPopup("google", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase(mainref.child("users").child("signin").child("google").child(authData.google.id)).$set({
+                            displayName: authData.google.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.google.id,
+                            AccessToken: authData.google.accessToken,
+                            profileID: $scope.currentUser.profileID
+                        });
+                        $firebase(ref).$update({
+                            googleID: authData.google.id
+                        });
+                        toast.pop("Successfully connected");
+                    });
+
+                }
+            });
+        }
+        if (provider == "toFacebook") {
+            connectRef.authWithOAuthPopup("facebook", function(err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                if (user) {
+                    connectRef.onAuth(function(authData) {
+                        $firebase(mainref.child("users").child("signin").child("facebook").child(authData.facebook.id)).$set({
+                            displayName: authData.facebook.displayName,
+                            token: authData.token,
+                            expires: authData.expires,
+                            uid: authData.uid,
+                            ID: authData.facebook.id,
+                            AccessToken: authData.facebook.accessToken,
+                            profileID: $scope.currentUser.profileID
+                        });
+                        $firebase(ref).$update({
+                            facebookID: authData.facebook.id
+                        });
+                        toast.pop("Successfully connected");
+                    });
+                }
+            });
+        }
+    }
+
+    //Stuff to take a new picture
+    //Works only with phones
+    document.addEventListener("deviceready", function() {
+
+        var options = {
+            quality: 90,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+        $scope.takeNewPicture = function() {
+            $cordovaCamera.getPicture(options).then(function(imageData) {
+                $http({
+                    method: 'POST',
+                    url: 'http://routefiftyfive.com/huggr/index.php',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    transformRequest: function(obj) {
+                        var str = [];
+                        for (var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        return str.join("&");
+                    },
+                    data: {
+                        image: imageData
+                    }
+                }).success(function(data, status, headers, config) {
+                    $scope.currentUser.picture = data;
+                    console.log(status);
+                });
+            }, function(err) {
+                // error
+            });
+        };
+    }, false);
+
+
+
+    /****************Tab 3****************/
+    $scope.noBlockedUsers = true;
+
+    //get blocked users and show them in profile
+    var blockedUserObject = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked")).$asObject();
+    blockedUserObject.$bindTo($scope, "blockedUserData").then(function() {
+        $scope.blockedUsers = [];
+        for (var key in $scope.blockedUserData) {
+            if ($scope.blockedUserData.hasOwnProperty(key) && key != "1000000000001" && key != "$id") { //need to filter firebase $id-object
+                var obj = $scope.blockedUserData[key];
+                for (var prop in obj) {
+                    if (obj.hasOwnProperty(prop)) {
+                        UserInfo.getProfile(obj[prop]).then(function(value) {
+                            $scope.returnedProfile = value;
+                            $scope.blockedUsers.push($scope.returnedProfile);
+                        });
+                    }
+                }
+                $scope.noBlockedUsers = true;
+            } else {
+                $scope.noBlockedUsers = false;
+            }
+        }
+    }); // end bindTo
+
+    $scope.unblockUser = function(unblockProfileID) {
+        $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("blocked").child(unblockProfileID)).$remove().then(function(y) {
+            var blockHuggRef = $firebase(ref.child("hugg").orderByChild('reqProfileID').equalTo($scope.currentUser.profileID)).$asArray();
+            blockHuggRef.$loaded().then(function(data) {
+                var i = 0;
+                while (data.$keyAt(i) != null) {
+                    $firebase(ref.child("hugg").child(data.$keyAt(i)).child("blocked").child(unblockProfileID)).$remove();
+                    i++;
+                }
+                toast.pop("Unblocked user");
+                $state.go('app.home')
+                return 1;
+            });
+        });
+    };
+
+}) //end ProfileCtrl
+.controller('aboutCtrl', function($scope, $ionicPopover, localstorage, $firebase, toast, notifications) {
+
+    //initialize stuff
+    $scope.currentUser = localstorage.getObject('userData');
+    var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.request = {
         message: "",
         subject: ""
     };
 
+    //Data binding
     var userObject = $firebase(ref.child("admin").child("support").orderByChild('profileID').equalTo($scope.currentUser.profileID)).$asObject();
     userObject.$bindTo($scope, "supportData").then(function() {
 
     }); // end bindTo
 
+    //function to submit a request
     $scope.sendRequest = function sendRequest() {
-        //console.log($scope.request.message);
+
+        //check whether message was entered
         if ($scope.request.message.length > 40 && $scope.request.subject.length > 15) {
-            console.log($scope.request.message);
             var request = $scope.request.message;
+
+            //assign new supportID
             var supportID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
 
-                //check whether huggID already exists in db
-                while ($firebase(ref.child("admin").child("support").orderByKey().equalTo(supportID.toString())).$asArray().$getRecord(supportID) != null) {
-                    supportID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
-                } //end while
+            //check whether supportID already exists in db
+            while ($firebase(ref.child("admin").child("support").orderByKey().equalTo(supportID.toString())).$asArray().$getRecord(supportID) != null) {
+                supportID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
+            } //end while
 
-                $firebase(ref.child("admin").child("support").child(supportID)).$set({
-                    displayName: $scope.currentUser.displayName,
-                    firstName: $scope.currentUser.firstName,
-                    email: $scope.currentUser.email,
-                    time: Firebase.ServerValue.TIMESTAMP,
-                    request: request,
-                    done: 0,
-                    supportID: supportID,
-                    profileID: $scope.currentUser.profileID,
-                    subject: $scope.request.subject
-                }).then(function(y) {
-                    $scope.popover.hide();
-                    $scope.request = {
-                        message: "",
-                        subject: ""
-                    };
-
-                    toast.pop("Successfully sent request");
-                });
-
+            //save stuff to firebase
+            $firebase(ref.child("admin").child("support").child(supportID)).$set({
+                displayName: $scope.currentUser.displayName,
+                firstName: $scope.currentUser.firstName,
+                email: $scope.currentUser.email,
+                time: Firebase.ServerValue.TIMESTAMP,
+                request: request,
+                done: 0,
+                supportID: supportID,
+                profileID: $scope.currentUser.profileID,
+                subject: $scope.request.subject
+            }).then(function(y) {
+                $scope.popover.hide();
+                $scope.request = {
+                    message: "",
+                    subject: ""
+                };
+                toast.pop("Successfully sent request");
+            });
         } else {
             toast.pop("Please enter a longer message");
         }
     };
 
+    //methods for popover
     $ionicPopover.fromTemplateUrl('templates/popovers/requestSupport.html', {
         scope: $scope,
     }).then(function(popover) {
@@ -1066,12 +1079,13 @@ angular.module('starter.controllers', [])
 
     $scope.currentUser = localstorage.getObject('userData');
 
-    //Setze Koordinaten für Initialisierung von Maps
+    //Initialization of Map
     $scope.positions = {
         lat: 49.4677562,
         lng: 8.506636
     };
 
+    //Locate user and show info on map
     $scope.$on('mapInitialized', function(event, map) {
         $scope.map = map;
         //hole die GPS/IP-Geolocation
@@ -1087,6 +1101,7 @@ angular.module('starter.controllers', [])
             });
     });
 
+    //stuff for popover
     $ionicPopover.fromTemplateUrl('templates/popovers/hugSettings.html', {
         scope: $scope,
     }).then(function(popover) {
@@ -1148,6 +1163,7 @@ angular.module('starter.controllers', [])
         hugg: []
     }
 
+    //Methods to display Upcoming huggs
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
 
@@ -1157,79 +1173,68 @@ angular.module('starter.controllers', [])
     var otherHuggObject = $firebase(ref.child("hugg").orderByChild('answerProfileID').equalTo($scope.currentUser.profileID)).$asObject();
     otherHuggObject.$bindTo($scope, "otherHuggData").then(function() {}); // end bindTo
 
+    //method to get huggs in a radius of 10 km to show in the map
     //wait for ref to load before continuing
     function getHuggs() {
-        var deferred = $q.defer();
+            var deferred = $q.defer();
 
-        $scope.orderHuggRef.$loaded().then(function(data) {
-            var i = 0;
-            //parse all elements of returning array
-            while (data.$keyAt(i) != null) {
+            $scope.orderHuggRef.$loaded().then(function(data) {
+                var i = 0;
+                //parse all elements of returning array
+                while (data.$keyAt(i) != null) {
 
-                function load() {
-                    var def = $q.defer();
-                    def.resolve(data.$getRecord(data.$keyAt(i)));
-                    return def.promise
-                }; //end function
-                //check whether filter gender of searching person and gender of requestor match
-                //check whether gender of searching person and filter of requestor match
-                //check whether current user's profile ID is among the blocked profile IDs
-                load().then(function(record) {
-                    if (record.reqProfileID != $scope.currentUser.profileID) {
+                    function load() {
+                        var def = $q.defer();
+                        def.resolve(data.$getRecord(data.$keyAt(i)));
+                        return def.promise
+                    }; //end function
+                    load().then(function(record) {
+                        if (record.reqProfileID != $scope.currentUser.profileID) {
 
-                        //check whether user is blocked in results                            
-                        if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
+                            //check whether user is blocked in results                            
+                            if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
 
-                            //calc distance
-                            var radius = 6371;
-                            var diffLat = ($scope.positions.lat - record.reqLat) * (Math.PI / 180);
-                            var diffLon = ($scope.positions.lng - record.reqLong) * (Math.PI / 180);
-                            var a =
-                                Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                                Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.positions.lat) * (Math.PI / 180)) *
-                                Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
-                            var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                            var distance = radius * b;
+                                //calc distance
+                                var radius = 6371;
+                                var diffLat = ($scope.positions.lat - record.reqLat) * (Math.PI / 180);
+                                var diffLon = ($scope.positions.lng - record.reqLong) * (Math.PI / 180);
+                                var a =
+                                    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+                                    Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos(($scope.positions.lat) * (Math.PI / 180)) *
+                                    Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
+                                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                var distance = radius * b;
 
-                            //check for distance within range and save to JSON
-                            if (distance <= 10) {
-                                huggArray.hugg.push({
-                                    "lat": record.reqLat,
-                                    "long": record.reqLong
-                                }); //end push
-                            } // end if
+                                //check for distance within range and save to JSON
+                                if (distance <= 10) {
+                                    huggArray.hugg.push({
+                                        "obj": new google.maps.LatLng(record.reqLat, record.reqLong),
+                                        "lat": record.reqLat,
+                                        "long": record.reqLong
+                                    }); //end push
+                                } // end if
 
-                        } //end if
-                    } // end if
-                }); //end then
-                i++;
-            } //end while
-            deferred.resolve(huggArray);
+                            } //end if
+                        } // end if
+                    }); //end then
+                    i++;
+                } //end while
+                deferred.resolve(huggArray);
 
-            //This is the return value
-        }); //end load huggRef
-        return deferred.promise;
-    } //end function
+                //This is the return value
+            }); //end load huggRef
+            return deferred.promise;
+        } //end function 
 
     getHuggs().then(function(array) {
-        //this is the array to display the coordinates
-        console.log(array);
         $scope.resultList = array;
     });
 
 })
-.controller('inviteCtrl', function($scope, $cordovaContacts, $cordovaSocialSharing, toast) {
-    $scope.getContactList = function() {
-        $cordovaContacts.find({
-            filter: '',
-            multiple: true
-        }).then(function(result) {
-            $scope.contacts = result;
-        }, function(error) {
-            console.log("ERROR: " + error);
-        });
-    };
 
+.controller('inviteCtrl', function($scope, $cordovaContacts, $cordovaSocialSharing, toast) {
+
+    //Stuff for the invite message
     var message = "Hey! I am in dire need of a hug! I am using this cool new app huggr and it would be great to have you here to hug me :)";
     var subject = "Hug me on huggr!";
     var file = "file";
@@ -1298,11 +1303,14 @@ angular.module('starter.controllers', [])
 
 })
 
+//The nastiest stuff you will ever see...
+
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast, $q) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.auth = Auth;
 
+    //This function is used to check whether a user is already logged in and if he is, redirect him to the home page
     function authDataCallback(authData) {
         if (authData) {
             if (authData.provider == 'google') {
@@ -1322,8 +1330,6 @@ angular.module('starter.controllers', [])
                 loadGoogleRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
 
@@ -1375,8 +1381,6 @@ angular.module('starter.controllers', [])
                 loadFacebookRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
                         //update signin information
@@ -1424,6 +1428,7 @@ angular.module('starter.controllers', [])
         disableBack: true
     });
 
+    //Method that will be called when user clicks on a button
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
 
@@ -1781,11 +1786,7 @@ angular.module('starter.controllers', [])
     
     $scope.currentUser = localstorage.getObject('userData');
     
-    $scope.deleteAllNotifications = function()
-    {
-        notifications.deleteAllNotifications($scope.currentUser);
-    }
-    
+    //function to remove notification
     $scope.removeNotification = function(huggID)
     {
         notifications.removeNotification($scope.currentUser, huggID);
@@ -1794,122 +1795,123 @@ angular.module('starter.controllers', [])
 })
 .controller('resultCtrl', function($scope, Auth, $firebase, $stateParams, localstorage, $cordovaGeolocation, $q, $ionicLoading, $http, $state, toast, huggActions, $ionicModal) {
 
-        //initialize all the stuff
-        $scope.auth = Auth;
-        $scope.user = $scope.auth.$getAuth();
-        var ref = new Firebase("https://huggr.firebaseio.com/");
-        $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
-        $scope.currentUser = localstorage.getObject('userData');
-        //displays all huggs that suit the request
-        //if huggs are not answered, they are also not done or accepted
-        $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
+    //initialize all the stuff
+    $scope.auth = Auth;
+    $scope.user = $scope.auth.$getAuth();
+    var ref = new Firebase("https://huggr.firebaseio.com/");
+    $scope.huggRef = $firebase(ref.child("hugg")).$asArray();
+    $scope.currentUser = localstorage.getObject('userData');
+    //displays all huggs that suit the request
+    //if huggs are not answered, they are also not done or accepted
+    $scope.orderHuggRef = $firebase(ref.child("hugg").orderByChild('answered').equalTo(0).limitToFirst(100)).$asArray();
 
-        var gender;
-        var range;
+    var gender;
+    var range;
 
-        //checks what gender is filtered on
-        if ($stateParams.female == "none" && $stateParams.male == "true") {
-            gender = "male";
-        }
-        if ($stateParams.male == "none" && $stateParams.female == "true") {
-            gender = "female";
-        }
-        if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
-            gender = "both";
-        }
+    //checks what gender is filtered on
+    if ($stateParams.female == "none" && $stateParams.male == "true") {
+        gender = "male";
+    }
+    if ($stateParams.male == "none" && $stateParams.female == "true") {
+        gender = "female";
+    }
+    if (($stateParams.male == "none" && $stateParams.female == "none") || ($stateParams.male == "true" && $stateParams.female == "true")) {
+        gender = "both";
+    }
 
     //
-        $ionicModal.fromTemplateUrl('templates/modals/googleMaps.html', {
-            scope: $scope
-        }).then(function(modal) {
-            $scope.gmapsModal = modal;
+    $ionicModal.fromTemplateUrl('templates/modals/googleMaps.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.gmapsModal = modal;
+    });
+
+    $scope.modalData = {};
+    $scope.$on('mapInitialized', function(event, map) {
+        $scope.map = map;
+    });
+
+    range = $stateParams.range;
+
+    //method to show own and foreign position on a map
+    $scope.showPosition = function(lat, long) {
+        $scope.zoom = []; //array which holds the positions we will use to pan and zoom our map to
+        $scope.modalData.lat = lat;
+        $scope.modalData.long = long;
+        $scope.zoom.push(new google.maps.LatLng(lat, long)); //push the partners coordinates to the array
+        $scope.gmapsModal.show();
+        $cordovaGeolocation.getCurrentPosition().then(function(position) { //get the users current pos
+            //wandle in google Maps format um
+            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude); //important for gmaps
+            $scope.zoom.push(pos); //push users coords to array
+            var latlngbounds = new google.maps.LatLngBounds(); //let the google api decide the optimal pan&zoom level
+            for (var i = 0; i < $scope.zoom.length; i++) {
+                latlngbounds.extend($scope.zoom[i]);
+            }
+            var center = latlngbounds.getCenter();
+            $scope.modalData.centerLat = center.k;
+            $scope.modalData.centerLng = center.D;
+            $scope.map.fitBounds(latlngbounds); //show correctly fitted map
+            $scope.modalData.userlat = pos.k;
+            $scope.modalData.userlong = pos.D;
+        }, function(err) {
+            toast.pop("There was an error while we tried to locate you.");
         });
 
-        $scope.modalData = {};
-        $scope.$on('mapInitialized', function(event, map) {
-            $scope.map = map;
-        });
+    };
 
-        range = $stateParams.range;
+    $scope.answerHugg = function(huggID, profileID) {
+        huggActions.answerHugg(huggID, $scope.currentUser, profileID);
+    }
 
-        $scope.showPosition = function(lat, long) {
-            $scope.zoom = []; //array which holds the positions we will use to pan and zoom our map to
-            $scope.modalData.lat = lat;
-            $scope.modalData.long = long;
-            $scope.zoom.push(new google.maps.LatLng(lat, long)); //push the partners coordinates to the array
-            $scope.gmapsModal.show();
-            $cordovaGeolocation.getCurrentPosition().then(function(position) { //get the users current pos
-                //wandle in google Maps format um
-                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude); //important for gmaps
-                $scope.zoom.push(pos); //push users coords to array
-                var latlngbounds = new google.maps.LatLngBounds(); //let the google api decide the optimal pan&zoom level
-                for (var i = 0; i < $scope.zoom.length; i++) {
-                    latlngbounds.extend($scope.zoom[i]);
-                }
-                var center = latlngbounds.getCenter()
-                $scope.modalData.centerLat = center.k;
-                $scope.modalData.centerLng = center.D;
-                $scope.map.fitBounds(latlngbounds); //show correctly fitted map
-                $scope.modalData.userlat = pos.k;
-                $scope.modalData.userlong = pos.D;
-            }, function(err) {
-                toast.pop("There was an error while we tried to locate you.");
-            });
+    //start values
+    var currentLat = $stateParams.clat;
+    var currentLong = $stateParams.clng;
 
-        };
+    $scope.requestHugg = function() {
+        huggActions.requestHugg($scope.currentUser, gender, currentLat, currentLong);
+    }
 
-        $scope.answerHugg = function(huggID, profileID) {
-            huggActions.answerHugg(huggID, $scope.currentUser, profileID);
-        }
-
-        //start values
-        var currentLat = $stateParams.clat;
-        var currentLong = $stateParams.clng;
-
-        $scope.requestHugg = function() {
-            huggActions.requestHugg($scope.currentUser, gender, currentLat, currentLong);
-        }
-
-        //initialize JSON
-        var huggArray = {
-            hugg: []
-        }
+    //initialize JSON
+    var huggArray = {
+        hugg: []
+    }
 
 
 
-        //wait for ref to load before continuing
+    //wait for ref to load before continuing
         function getHuggs() {
-                var deferred = $q.defer();
+            var deferred = $q.defer();
 
-                $scope.orderHuggRef.$loaded().then(function(data) {
-                    var i = 0;
-                    //parse all elements of returning array
-                    while (data.$keyAt(i) != null) {
+            $scope.orderHuggRef.$loaded().then(function(data) {
+                var i = 0;
+                //parse all elements of returning array
+                while (data.$keyAt(i) != null) {
 
-                        function load() {
-                            var def = $q.defer();
-                            def.resolve(data.$getRecord(data.$keyAt(i)));
-                            return def.promise
-                        }; //end function
-                        //check whether filter gender of searching person and gender of requestor match
-                        //check whether gender of searching person and filter of requestor match
-                        //check whether current user's profile ID is among the blocked profile IDs
-                        load().then(function(record) {
-                            if (((gender == "both") || (gender != "both" && record.reqGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
+                    function load() {
+                        var def = $q.defer();
+                        def.resolve(data.$getRecord(data.$keyAt(i)));
+                        return def.promise
+                    }; //end function
+                    //check whether filter gender of searching person and gender of requestor match
+                    //check whether gender of searching person and filter of requestor match
+                    //check whether current user's profile ID is among the blocked profile IDs
+                    load().then(function(record) {
+                        if (((gender == "both") || (gender != "both" && record.reqGender == gender)) && ((record.FilterGender == "both") || (record.FilterGender != "both" && record.FilterGender == $scope.currentUser.gender)) && (record.reqProfileID != $scope.currentUser.profileID)) {
 
-                                //check whether user is blocked in results                            
-                                if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
+                            //check whether user is blocked in results                            
+                            if ((record.blocked.hasOwnProperty($scope.currentUser.profileID) == false) && ($scope.currentUser.blocked.hasOwnProperty(record.reqProfileID) == false)) {
 
-                                    //calc distance
-                                    var radius = 6371;
-                                    var diffLat = (currentLat - record.reqLat) * (Math.PI / 180);
-                                    var diffLon = (currentLong - record.reqLong) * (Math.PI / 180);
-                                    var a =
-                                        Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
-                                        Math.cos((record.reqLat) * (Math.PI / 180)) * Math.cos((currentLat) * (Math.PI / 180)) *
-                                        Math.sin(diffLon / 2) * Math.sin(diffLon / 2);
-                                    var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                                    var distance = radius * b;
+                                //GOOGLE DISTANCE MATRIX API CALL
+                                var service = new google.maps.DistanceMatrixService(); + service.getDistanceMatrix({
+                                    origins: [currentLat + "," + currentLong],
+                                    destinations: [record.reqLat + "," + record.reqLong],
+                                    travelMode: google.maps.TravelMode.DRIVING
+                                }, function(result) {
+                                    var results = result.rows[0].elements[0].distance;
+                                    var distance = results.value;
+                                    distance = (distance / 1000);
+                                    var duration = (result.rows[0].elements[0].duration.value) / 60;
 
                                     //check for distance within range and save to JSON
                                     if (distance <= range) {
@@ -1923,27 +1925,30 @@ angular.module('starter.controllers', [])
                                             "picture": record.reqPicture,
                                             "profileID": record.reqProfileID,
                                             "distance": distance,
-                                            "rating": record.reqRating
+                                            "rating": record.reqRating,
+                                            "duration": duration
                                         }); //end push
                                     } // end if
+                                });
 
-                                } //end if
-                            } // end if
-                        }); //end then
-                        i++;
-                    } //end while
-                    deferred.resolve(huggArray);
+                            } //end if
+                        } // end if
+                    }); //end then
+                    i++;
+                } //end while
+                deferred.resolve(huggArray);
 
-                    //This is the return value
-                }); //end load huggRef
-                return deferred.promise;
-            } //end function
+                //This is the return value
+            }); //end load huggRef
+            return deferred.promise;
+        } //end function
 
-        getHuggs().then(function(array) {
-            $scope.resultList = array;
-        });
+    getHuggs().then(function(array) {
+        $scope.resultList = array;
+    });
 
-    }) //end resultCTRL
+}) //end resultCTRL
+//stuff to rate users
 
 .directive('starRating',
     function() {
@@ -1988,8 +1993,7 @@ angular.module('starter.controllers', [])
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
     
-    console.log($stateParams.supportID);
-
+    //DATA BINDING
     var supportObject = $firebase(ref.child("admin").child("support").child($stateParams.supportID)).$asObject();
     supportObject.$bindTo($scope, "supportData").then(function() {
 

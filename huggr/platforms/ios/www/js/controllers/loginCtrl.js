@@ -1,8 +1,11 @@
+//The nastiest stuff you will ever see...
+
 .controller('loginCtrl', function($scope, $firebase, $ionicModal, Auth, $state, localstorage, $ionicHistory, $ionicPopover, $http, helper, toast, $q) {
 
     var ref = new Firebase("https://huggr.firebaseio.com/");
     $scope.auth = Auth;
 
+    //This function is used to check whether a user is already logged in and if he is, redirect him to the home page
     function authDataCallback(authData) {
         if (authData) {
             if (authData.provider == 'google') {
@@ -22,8 +25,6 @@
                 loadGoogleRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
 
@@ -75,8 +76,6 @@
                 loadFacebookRefCheck().then(function(data) {
                     //check whether user is already registered (if not, value is null as it is not present in DB)
                     if (data == null) {
-                        //show popup to gather additional user info for registering
-                        $scope.showPopUp(authProvider, authData);
                     } else {
                         $scope.profileID = data.profileID;
                         //update signin information
@@ -124,6 +123,7 @@
         disableBack: true
     });
 
+    //Method that will be called when user clicks on a button
     $scope.login = function(authProvider) {
         if (authProvider == "google") {
 

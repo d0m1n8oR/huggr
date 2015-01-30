@@ -2,11 +2,7 @@
     
     $scope.currentUser = localstorage.getObject('userData');
     
-    $scope.deleteAllNotifications = function()
-    {
-        notifications.deleteAllNotifications($scope.currentUser);
-    }
-    
+    //function to remove notification
     $scope.removeNotification = function(huggID)
     {
         notifications.removeNotification($scope.currentUser, huggID);

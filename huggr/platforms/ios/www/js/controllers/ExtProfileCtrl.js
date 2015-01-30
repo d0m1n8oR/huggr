@@ -1,18 +1,18 @@
-//this controller is addressed when a link like this is opened: app/profile/{pofileid}/{huggid}
-//These links are only used to show profiles of people for hugging whereas the "ProfileCtrl" is used to show the own profile
-.controller('ExtProfileCtrl', function($scope, $firebase, Auth, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions, $ionicHistory) {
+.controller('ExtProfileCtrl', function($scope, $firebase, UserInfo, helper, localstorage, $stateParams, $state, toast, $q, huggActions) {
     //stuff with stateParams
     //In the hugg results when clicking on a offered hugg the user is refered to this page
     //The params are the profileID of the user that offers the hugg and the huggID
     //The huggID is needed so that the answer to the hugg can be mapped on the right huggID
     $scope.$on("$ionicView.enter", function(scopes, states) {    });
 
+    //set stuff
     $scope.huggID = $stateParams.huggID;
     $scope.profileID = $stateParams.profileID;
     $scope.data = {age: null};
     $scope.currentUser = localstorage.getObject('userData');
     var ref = new Firebase("https://huggr.firebaseio.com/");
 
+    //get info from this user (PRofileID is in StateParams), deferred call
     var deferred = $q.defer();
     UserInfo.getProfile($scope.profileID).then(function(value) {
         $scope.data.age = value.age;
@@ -47,8 +47,7 @@
                     i++;
                 }
                 toast.pop("Blocked user");
-                $ionicHistory.goBack();
-                return 1;
+                $state.go('app.home');
             });
         }); //end set
 
@@ -65,6 +64,8 @@
     $scope.chatUserRef = $firebase(ref.child("users").child("data").child($scope.currentUser.profileID).child("chat")).$asArray();
     $scope.chatRef = $firebase(ref.child("chat")).$asArray();
 
+    //start a new chat with the user
+    //method checks whether there is already a chat open
     $scope.startChat = function startChat(otherProfileID) {
         $scope.chatUserRef.$loaded().then(function(data) {
             //check whether there has been a chat between the users
@@ -74,7 +75,6 @@
                     while ($scope.chatRef.$getRecord(newChatID) != null) {
                         newChatID = Math.floor(Math.random() * (9999999999 - 1000000000 + 1) + 1000000000);
                     }
-                    console.log(newChatID);
                     $firebase(ref.child("chat").child(newChatID)).$set({
                         profileIDA: $scope.currentUser.profileID,
                         profileIDB: otherProfileID,
@@ -96,12 +96,11 @@
                     })
                 })
             } else {
-                console.log("already existing");
                 $scope.chatUserRef.$loaded().then(function(data) {
                     var chatID = data.$getRecord(otherProfileID).chatID;
-                    console.log(chatID);
                     $state.go('app.chat', {
-                        chatID: chatID
+                        chatID: chatID,
+                        chatTitle: $scope.data.displayName
                     });
                 })
             }
