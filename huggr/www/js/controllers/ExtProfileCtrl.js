@@ -89,7 +89,8 @@
                                 chatID: newChatID
                             }).then(function(y) {
                                 $state.go('app.chat', {
-                                    chatID: newChatID
+                                    chatID: newChatID,
+                                    chatTitle: $scope.data.displayName
                                 });
                             });
                         })
